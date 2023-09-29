@@ -1,4 +1,4 @@
-﻿@model BookListViewModel
+﻿@model HomeIndexViewModel
 @{
     ViewData["Title"] = "Trang Chủ";
 
@@ -70,7 +70,7 @@
         routes.PageNumber = i;
         string active = @Nav.Active(i, current.PageNumber);
 
-        <a asp-action="Index" asp-all-route-data="@routes"
+        <a asp-action="Index" asp-all-route-data="@routes" asp-route-id="@Model.Id"
             class="btn btn-outline-primary @active">@i</a>
     }
 }

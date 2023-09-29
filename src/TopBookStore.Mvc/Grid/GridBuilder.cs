@@ -6,7 +6,7 @@ namespace TopBookStore.Mvc.Grid;
 // store route in session and retrieve it
 public class GridBuilder
 {
-    private const string routeKey = "route";
+    private const string RouteKey = "route";
 
     private readonly ISession _session;
 
@@ -15,7 +15,7 @@ public class GridBuilder
     public GridBuilder(ISession session)
     {
         _session = session;
-        Routes = _session.GetObject<RouteDictionary>(routeKey) ?? new RouteDictionary();
+        Routes = _session.GetObject<RouteDictionary>(RouteKey) ?? new RouteDictionary();
     }
 
     // use this constructor when you need to add new route
@@ -36,7 +36,7 @@ public class GridBuilder
 
     public void SaveRouteDirection()
     {
-        _session.SetObject(routeKey, Routes);
+        _session.SetObject(RouteKey, Routes);
     }
 
     public int GetTotalPages(int count)

@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using TopBookStore.Domain.Entities;
+using TopBookStore.Domain.Interfaces;
 using TopBookStore.Infrastructure.Persistence;
+using TopBookStore.Infrastructure.Repositories;
+using TopBookStore.Mvc.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,8 @@ var TopBookStoreCS = builder.Configuration.GetConnectionString("TopBookStoreCS")
 builder.Services.AddDbContext<TopBookStoreContext>(options =>
     options.UseSqlServer(TopBookStoreCS));
 
+builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,14 +43,16 @@ app.UseSession();
 
 app.UseAuthorization();
 
-// https://localhost:xxxxx/author/list/page-1/size-10/sort-lastname-desc
-// app.MapControllerRoute(
-//     name: "page_sort",
-//     pattern: "{controller}/{action}/page-{pagenumber}/size-{pagesize}/sort-{sortfield}-{sortdirection}"
-// );
+app.UseMiddleware<CategoriesMiddlewar>();
+
+//localhost:xxxxx/author/list/page-1/size-10/sort-lastname-desc
+app.MapControllerRoute(
+    name: "page_sort",
+    pattern: "{controller}/{action}/page-{pagenumber}/size-{pagesize}/sort-{sortfield}-{sortdirection}/{id?}"
+);
 app.MapControllerRoute(
     name: "paging",
-    pattern: "{controller}/{action}/page-{pagenumber}/size-{pagesize}"
+    pattern: "{controller}/{action}/page-{pagenumber}/size-{pagesize}/{id?}"
 );
 app.MapControllerRoute(
     name: "default",

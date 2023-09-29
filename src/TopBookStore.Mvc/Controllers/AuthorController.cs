@@ -18,8 +18,7 @@ public class AuthorController : Controller
         _data = new Repository<Author>(context);
     }
 
-    public RedirectToActionResult Index() => RedirectToAction("List");
-
+    [Route("[controller]")]
     public async Task<ViewResult> List(GridDTO values)
     {
         GridBuilder builder = new(HttpContext.Session, values);

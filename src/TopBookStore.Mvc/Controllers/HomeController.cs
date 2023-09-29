@@ -25,12 +25,6 @@ public class HomeController : Controller
 
     public async Task<ViewResult> Index(GridDTO values, string? id)
     {
-        ISession session = HttpContext.Session;
-
-        session.SetListObject("categories", await _data.Categories.ListAllAsync(
-            new QueryOptions<Category> { OrderBy = c => c.Name }
-        ));
-
         GridBuilder builber = new(HttpContext.Session, values);
 
         QueryOptions<Book> options = new()
@@ -40,16 +34,17 @@ public class HomeController : Controller
             PageNumber = builber.CurrentRoute.PageNumber
         };
 
-        if (id is not null)
+        if (id is not null && id != string.Empty)
         {
             options.Where = b => b.CategoryId == id;
         }
 
-        BookListViewModel vm = new()
+        HomeIndexViewModel vm = new()
         {
             Books = await _data.Books.ListAllAsync(options),
             CurrentRoute = builber.CurrentRoute,
-            TotalPages = builber.GetTotalPages(_data.Books.Count)
+            TotalPages = builber.GetTotalPages(_data.Books.Count),
+            Id = id ?? string.Empty
         };
 
         return View(vm);
