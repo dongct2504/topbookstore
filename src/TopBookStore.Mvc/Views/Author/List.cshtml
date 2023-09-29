@@ -1,0 +1,55 @@
+@model AuthorListViewModel
+@{
+    ViewData["Title"] = "Tác Giả";
+
+    RouteDictionary current = Model.CurrentRoute;
+    RouteDictionary routes = Model.CurrentRoute.Clone();
+}
+
+<h1>Các Tác Giả</h1>
+
+<table class="table table-bordered table-striped table-md">
+    <thead class="bg-dark text-white">
+        <tr>
+            <th>Tác Giả</th>
+            <th>Những Cuốn Sách</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Author author in Model.Authors)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@author.AuthorId">
+                        @author.FullName
+                    </a>
+                </td>
+                <td>
+                    @foreach (Book book in author.Books)
+                    {
+                        <p>
+                            <a asp-action="Details" asp-controller="Book" asp-route-id="@book.BookId"
+                                asp-route-slug="@book.Title.Slug()">
+                                @book.Title
+                            </a>
+                        </p>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* paging links *@
+@{
+    routes = Model.CurrentRoute.Clone(); // current.Clone();
+
+    for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        routes.PageNumber = i;
+        string active = @Nav.Active(i, current.PageNumber);
+
+        <a asp-action="List" asp-all-route-data="@routes"
+            class="btn btn-outline-primary @active">@i</a>
+    }
+}

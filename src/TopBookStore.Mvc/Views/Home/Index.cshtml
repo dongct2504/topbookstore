@@ -1,0 +1,76 @@
+﻿@model BookListViewModel
+@{
+    ViewData["Title"] = "Trang Chủ";
+
+    RouteDictionary current = Model.CurrentRoute;
+    RouteDictionary routes = Model.CurrentRoute.Clone();
+}
+
+<h1>Tất cả sách</h1>
+
+<form asp-controller="Cart" asp-action="Add" method="post">
+    <table class="table table-bordered table-striped table-md">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th>
+                    Tiêu Đề
+                </th>
+                <th>
+                    Giá Thành
+                </th>
+                <th>
+                    Tác Giả
+                </th>
+                <th>
+                    Số trang
+                </th>
+                <th>
+                    Ngày Phát Hành
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Book book in Model.Books)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@book.BookId"
+                            asp-route-slug="@book.Title.Slug()">
+                            @book.Title
+                        </a>
+                    </td>
+                    <td>
+                        @book.Price.ToString("#,##0.00 VND")
+                    </td>
+                    <td>
+                        @foreach (Author author in book.Authors)
+                        {
+                            <a asp-controller="Author" asp-action="Details" asp-route-id="@author.AuthorId">
+                                @author.FullName
+                            </a>
+                        }
+                    </td>
+                    <td>
+                        @book.NumberOfPages
+                    </td>
+                    <td>
+                        @book.PulicationDate?.ToString("dd/MM/yyyy")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+@{
+    routes = Model.CurrentRoute.Clone();
+
+    for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        routes.PageNumber = i;
+        string active = @Nav.Active(i, current.PageNumber);
+
+        <a asp-action="Index" asp-all-route-data="@routes"
+            class="btn btn-outline-primary @active">@i</a>
+    }
+}
