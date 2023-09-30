@@ -3,7 +3,7 @@ using TopBookStore.Mvc.Grid;
 
 namespace TopBookStore.Mvc.Models;
 
-public class HomeIndexViewModel
+public class BookListViewModel
 {
     public List<Book> Books { get; set; } = new();
     public List<Category> Categories { get; set; } = new();

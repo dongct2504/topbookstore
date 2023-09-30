@@ -38,7 +38,7 @@ public class HomeController : Controller
             options.Where = b => b.CategoryId == id;
         }
 
-        HomeIndexViewModel vm = new()
+        BookListViewModel vm = new()
         {
             Books = await _data.Books.ListAllAsync(options),
             CurrentRoute = builber.CurrentRoute,
