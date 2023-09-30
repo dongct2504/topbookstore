@@ -6,22 +6,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TopBookStore.Domain.Entities;
 
-public partial class Cart
+[Table("LineItem")]
+public partial class LineItem
 {
     [Key]
-    public int CartId { get; set; }
+    public int LineItemId { get; set; }
 
     public int Quantity { get; set; }
 
-    public int CustomerId { get; set; }
+    public int InvoiceId { get; set; }
 
     public int BookId { get; set; }
 
     [ForeignKey("BookId")]
-    [InverseProperty("Carts")]
+    [InverseProperty("LineItems")]
     public virtual Book Book { get; set; } = null!;
 
-    [ForeignKey("CustomerId")]
-    [InverseProperty("Carts")]
-    public virtual Customer Customer { get; set; } = null!;
+    [ForeignKey("InvoiceId")]
+    [InverseProperty("LineItems")]
+    public virtual Invoice Invoice { get; set; } = null!;
 }

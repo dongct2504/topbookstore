@@ -11,8 +11,15 @@ public partial class Customer
     [Key]
     public int CustomerId { get; set; }
 
-    [StringLength(100)]
-    public string Name { get; set; } = null!;
+    [StringLength(80)]
+    public string FirstName { get; set; } = null!;
+
+    [StringLength(80)]
+    public string LastName { get; set; } = null!;
+
+    [StringLength(80)]
+    [Unicode(false)]
+    public string Email { get; set; } = null!;
 
     public int AddressId { get; set; }
 
@@ -24,5 +31,5 @@ public partial class Customer
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
     [InverseProperty("Customer")]
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

@@ -14,6 +14,9 @@ public partial class Book
     [StringLength(100)]
     public string Title { get; set; } = null!;
 
+    [StringLength(200)]
+    public string BookDescription { get; set; } = null!;
+
     [StringLength(13)]
     [Unicode(false)]
     public string Isbn13 { get; set; } = null!;
@@ -40,7 +43,7 @@ public partial class Book
     public virtual Category Category { get; set; } = null!;
 
     [InverseProperty("Book")]
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+    public virtual ICollection<LineItem> LineItems { get; set; } = new List<LineItem>();
 
     [ForeignKey("PublisherId")]
     [InverseProperty("Books")]

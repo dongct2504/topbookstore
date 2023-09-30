@@ -24,9 +24,12 @@ public partial class Address
     [Unicode(false)]
     public string? ZipCode { get; set; }
 
+    [StringLength(50)]
+    public string? Country { get; set; }
+
     [InverseProperty("Address")]
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
     [InverseProperty("Address")]
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

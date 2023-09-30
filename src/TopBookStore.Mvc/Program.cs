@@ -45,10 +45,14 @@ app.UseAuthorization();
 
 app.UseMiddleware<CategoriesMiddlewar>();
 
-//localhost:xxxxx/author/list/page-1/size-10/sort-lastname-desc
+// //localhost:xxxxx/author/list/page-1/size-10/sort-lastname-desc
+// app.MapControllerRoute(
+//     name: "page_sort",
+//     pattern: "{controller}/{action}/page-{pagenumber}/size-{pagesize}/sort-{sortfield}-{sortdirection}/{id?}"
+// );
 app.MapControllerRoute(
-    name: "page_sort",
-    pattern: "{controller}/{action}/page-{pagenumber}/size-{pagesize}/sort-{sortfield}-{sortdirection}/{id?}"
+    name: "paging_books",
+    pattern: "{controller}/{action}/{page-{pagenumber}/size-{pagesize}/filter-{authorid}-{categoryid}-{priceid}"
 );
 app.MapControllerRoute(
     name: "paging",

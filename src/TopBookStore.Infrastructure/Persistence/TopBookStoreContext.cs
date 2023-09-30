@@ -28,9 +28,9 @@ public partial class TopBookStoreContext : DbContext
 
     public virtual DbSet<Customer> Customers { get; set; }
 
-    public virtual DbSet<Order> Orders { get; set; }
+    public virtual DbSet<Invoice> Invoices { get; set; }
 
-    public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+    public virtual DbSet<LineItem> LineItems { get; set; }
 
     public virtual DbSet<Publisher> Publishers { get; set; }
 
@@ -42,31 +42,32 @@ public partial class TopBookStoreContext : DbContext
     {
         modelBuilder.Entity<Address>(entity =>
         {
-            entity.HasKey(e => e.AddressId).HasName("PK__Addresse__091C2AFB9C6559D7");
+            entity.HasKey(e => e.AddressId).HasName("PK__Addresse__091C2AFB640EEC03");
 
             entity.Property(e => e.AddressId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Author>(entity =>
         {
-            entity.HasKey(e => e.AuthorId).HasName("PK__Authors__70DAFC3422C77C9D");
+            entity.HasKey(e => e.AuthorId).HasName("PK__Authors__70DAFC34ED95EED3");
 
             entity.Property(e => e.AuthorId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Book>(entity =>
         {
-            entity.HasKey(e => e.BookId).HasName("PK__Books__3DE0C2071F44F3F8");
+            entity.HasKey(e => e.BookId).HasName("PK__Books__3DE0C20757FA4BA1");
 
             entity.Property(e => e.BookId).ValueGeneratedNever();
+            entity.Property(e => e.BookDescription).HasDefaultValueSql("('')");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Books)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Books__CategoryI__2A4B4B5E");
+                .HasConstraintName("FK__Books__CategoryI__2B3F6F97");
 
             entity.HasOne(d => d.Publisher).WithMany(p => p.Books)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Books__Publisher__2B3F6F97");
+                .HasConstraintName("FK__Books__Publisher__2C3393D0");
 
             entity.HasMany(d => d.Authors).WithMany(p => p.Books)
                 .UsingEntity<Dictionary<string, object>>(
@@ -74,83 +75,82 @@ public partial class TopBookStoreContext : DbContext
                     r => r.HasOne<Author>().WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__BookAutho__Autho__2F10007B"),
+                        .HasConstraintName("FK__BookAutho__Autho__300424B4"),
                     l => l.HasOne<Book>().WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__BookAutho__BookI__2E1BDC42"),
+                        .HasConstraintName("FK__BookAutho__BookI__2F10007B"),
                     j =>
                     {
-                        j.HasKey("BookId", "AuthorId").HasName("PK__BookAuth__6AED6DC419FFDEA8");
+                        j.HasKey("BookId", "AuthorId").HasName("PK__BookAuth__6AED6DC491C16CE3");
                         j.ToTable("BookAuthors");
                     });
         });
 
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.CartId).HasName("PK__Carts__51BCD7B768BC408C");
+            entity.HasKey(e => e.CartId).HasName("PK__Carts__51BCD7B78AAD4AEC");
 
             entity.Property(e => e.CartId).ValueGeneratedNever();
 
             entity.HasOne(d => d.Book).WithMany(p => p.Carts)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Carts__BookId__403A8C7D");
+                .HasConstraintName("FK__Carts__BookId__4316F928");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Carts)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Carts__CustomerI__3F466844");
+                .HasConstraintName("FK__Carts__CustomerI__4222D4EF");
         });
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0B3DC72986");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0BF1AC1538");
         });
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64D89B19DABC");
+            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64D843AB8183");
 
             entity.Property(e => e.CustomerId).ValueGeneratedNever();
 
             entity.HasOne(d => d.Address).WithMany(p => p.Customers)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Customers__Addre__33D4B598");
+                .HasConstraintName("FK__Customers__Addre__34C8D9D1");
         });
 
-        modelBuilder.Entity<Order>(entity =>
+        modelBuilder.Entity<Invoice>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BCF97A27808");
+            entity.HasKey(e => e.InvoiceId).HasName("PK__Invoices__D796AAB5F572F06C");
 
-            entity.Property(e => e.OrderId).ValueGeneratedNever();
+            entity.Property(e => e.InvoiceId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
+            entity.HasOne(d => d.Address).WithMany(p => p.Invoices)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Orders__Customer__36B12243");
+                .HasConstraintName("FK__Invoices__Addres__398D8EEE");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.Invoices)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Invoices__Custom__38996AB5");
         });
 
-        modelBuilder.Entity<OrderDetail>(entity =>
+        modelBuilder.Entity<LineItem>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D36C6DE03BF5");
+            entity.HasKey(e => e.LineItemId).HasName("PK__LineItem__8A871B8E4DE425D4");
 
-            entity.Property(e => e.OrderDetailId).ValueGeneratedNever();
-            entity.Property(e => e.Quantity).HasDefaultValueSql("((1))");
+            entity.Property(e => e.LineItemId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Address).WithMany(p => p.OrderDetails)
+            entity.HasOne(d => d.Book).WithMany(p => p.LineItems)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__OrderDeta__Addre__3A81B327");
+                .HasConstraintName("FK__LineItem__BookId__3E52440B");
 
-            entity.HasOne(d => d.Book).WithMany(p => p.OrderDetails)
+            entity.HasOne(d => d.Invoice).WithMany(p => p.LineItems)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__OrderDeta__BookI__3C69FB99");
-
-            entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__OrderDeta__Order__3B75D760");
+                .HasConstraintName("FK__LineItem__Invoic__3D5E1FD2");
         });
 
         modelBuilder.Entity<Publisher>(entity =>
         {
-            entity.HasKey(e => e.PublisherId).HasName("PK__Publishe__4C657FAB5B5E99E7");
+            entity.HasKey(e => e.PublisherId).HasName("PK__Publishe__4C657FAB1636ABAD");
 
             entity.Property(e => e.PublisherId).ValueGeneratedNever();
         });

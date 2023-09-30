@@ -8,22 +8,21 @@ using TopBookStore.Infrastructure.Persistence;
 using TopBookStore.Infrastructure.UnitOfWork;
 using TopBookStore.Mvc.Grid;
 using TopBookStore.Mvc.Models;
-using TopBookStore.Mvc.Sessions;
 
 namespace TopBookStore.Mvc.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
     private readonly ITopBookStoreUnitOfWork _data;
 
-    public HomeController(ILogger<HomeController> logger, TopBookStoreContext context)
+    public HomeController(TopBookStoreContext context)
     {
-        _logger = logger;
         _data = new TopBookStoreUnitOfWork(context);
     }
 
-    public async Task<ViewResult> Index(GridDTO values, string? id)
+    public RedirectToActionResult Index(string? id) => RedirectToAction("List", new { id });
+
+    public async Task<ViewResult> List(GridDTO values, string? id)
     {
         GridBuilder builber = new(HttpContext.Session, values);
 
