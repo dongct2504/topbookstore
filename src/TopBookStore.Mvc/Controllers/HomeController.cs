@@ -5,7 +5,7 @@ using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
 using TopBookStore.Infrastructure.Persistence;
-using TopBookStore.Infrastructure.UnitOfWork;
+using TopBookStore.Infrastructure.Repositories;
 using TopBookStore.Mvc.Grid;
 using TopBookStore.Mvc.Models;
 
@@ -13,11 +13,11 @@ namespace TopBookStore.Mvc.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ITopBookStoreUnitOfWork _data;
+    private readonly IRepository<Book> _data;
 
     public HomeController(TopBookStoreContext context)
     {
-        _data = new TopBookStoreUnitOfWork(context);
+        _data = new Repository<Book>(context);
     }
 
     public RedirectToActionResult Index(string? id) => RedirectToAction("List", new { id });
@@ -40,9 +40,9 @@ public class HomeController : Controller
 
         BookListViewModel vm = new()
         {
-            Books = await _data.Books.ListAllAsync(options),
+            Books = await _data.ListAllAsync(options),
             CurrentRoute = builber.CurrentRoute,
-            TotalPages = builber.GetTotalPages(_data.Books.Count),
+            TotalPages = builber.GetTotalPages(_data.Count),
             Id = id ?? string.Empty
         };
 
