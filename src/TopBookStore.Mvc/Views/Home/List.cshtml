@@ -24,9 +24,8 @@
                 <th>
                     Tác Giả
                 </th>
-                <th>
-                    Số trang
-                </th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -53,8 +52,17 @@
                             </a>
                         }
                     </td>
-                    <td>
-                        @book.NumberOfPages?.ToString("N0")
+                    <td class="text-center">
+                        <a class="btn btn-success" asp-controller="Order" asp-action="BuyItem"
+                            asp-route-id="@book.BookId">
+                            Mua Ngay
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-primary" asp-controller="Cart" asp-action="Add"
+                            asp-route-id="@book.BookId">
+                            Thêm Vào Giỏ
+                        </a>
                     </td>
                 </tr>
             }
