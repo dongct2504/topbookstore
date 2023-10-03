@@ -18,6 +18,8 @@ public class AuthorController : Controller
         _data = new Repository<Author>(context);
     }
 
+    public RedirectToActionResult Index() => RedirectToAction("List");
+
     public async Task<ViewResult> List(GridDTO values)
     {
         GridBuilder builder = new(HttpContext.Session, values);
@@ -38,5 +40,16 @@ public class AuthorController : Controller
         };
 
         return View(vm);
+    }
+
+    public async Task<ViewResult> Details(int id)
+    {
+        Author author = await _data.GetAsync(new QueryOptions<Author>
+        {
+            Where = a => a.AuthorId == id,
+            Includes = "Books"
+        }) ?? new Author();
+
+        return View(author);
     }
 }

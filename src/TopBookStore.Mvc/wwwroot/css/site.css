@@ -39,6 +39,16 @@ a {
 }
 
 .navbar .dropdown-menu {
-  max-height: 200px; /* Set the desired height here */
+  max-height: 300px; /* Set the desired height here */
   overflow-y: auto; /* Enable vertical scrolling if necessary */
+}
+
+.navbar-hide {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-out;
+}
+
+.navbar-show {
+  transform: translateY(0);
+  transition: transform 0.3s ease-in;
 }

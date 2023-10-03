@@ -17,7 +17,7 @@ public static class StringExtensions
         return sb.ToString().Replace(' ', '-').ToLower();
     }
 
-    public static bool EqualNoCase(this string str, string strToCompare) =>
+    public static bool EqualsNoCase(this string str, string strToCompare) =>
         str.ToLower() == strToCompare.ToLower();
 
     public static int ToInt(this string str)

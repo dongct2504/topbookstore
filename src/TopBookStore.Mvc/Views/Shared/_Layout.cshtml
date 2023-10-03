@@ -8,19 +8,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TopBookStore.Mvc</title>
+    <title>@ViewData["Title"] - TopBookStore</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark 
-            border-bottom box-shadow mb-3 fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom box-shadow
+            mb-3 fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">
-                    TopBookStore
+                    <span class="fab fa-readme"></span>&nbsp;TopBookStore
                 </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
@@ -28,18 +30,13 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="/">
-                                Trang chủ
-                            </a>
-                        </li>
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 me-auto">
                         <li class="nav-item dropdown">
                             <a class="nav-link text-white dropdown-toggle" 
                                 role="button" id="dropdownCategory"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Thể Loại
+                                <span class="fas fa-book-open"></span>&nbsp;Thể Loại
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownCategory">
                                 @foreach (Category c in categories)
@@ -54,13 +51,32 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area=""
-                                asp-controller="Book" asp-action="List">
-                                Lọc Sách
+                                asp-controller="Book" asp-action="Index">
+                                <span class="fas fa-filter"></span>&nbsp;Lọc Sách
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Author"
-                                asp-action="Index">Tác Giả</a>
+                                asp-action="Index">
+                                <span class="fas fa-feather-alt"></span>&nbsp;Tác Giả
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav flew-grow-1 ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Cart"
+                                asp-action="Index">
+                                <span class="fas fa-shopping-cart"></span>&nbsp;Giỏ Hàng
+                                <span class="badge badge-light"></span>
+                            </a>
+                        </li>
+                        <partial name="_LoginPartial" />
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="admin"
+                                asp-controller="Home" asp-action="Index">
+                                <span class="fas fa-cog"></span>&nbsp;Admin
+                            </a>
                         </li>
                     </ul>
                 </div>

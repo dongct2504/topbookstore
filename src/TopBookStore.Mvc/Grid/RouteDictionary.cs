@@ -5,10 +5,11 @@ namespace TopBookStore.Mvc.Grid;
 
 public class RouteDictionary : Dictionary<string, string>
 {
+    // get, set these DTOs properties for routing
     public int PageNumber
     {
-        get => GetIntValue(nameof(GridDTO.PageNumber));
-        set => this[nameof(GridDTO.PageNumber)] = value.ToString();
+        get => GetIntValue(nameof(GridDTO.PageNumber)); // get a value int
+        set => this[nameof(GridDTO.PageNumber)] = value.ToString(); // so set it's key a string
     }
 
     public int PageSize
@@ -29,6 +30,32 @@ public class RouteDictionary : Dictionary<string, string>
         set => this[nameof(GridDTO.SortDirection)] = value;
     }
 
+    // get, set these DTOs properties for filtering
+    public string CategoryFilter
+    {
+        get => Get(nameof(GridDTO.CategoryId)) ?? GridDTO.DefaultFilter;
+        set => this[nameof(GridDTO.CategoryId)] = value;
+    }
+
+    public string PriceFilter
+    {
+        get => Get(nameof(GridDTO.Price)) ?? GridDTO.DefaultFilter;
+        set => this[nameof(GridDTO.Price)] = value;
+    }
+
+    public string NumberOfPagesFilter
+    {
+        get => Get(nameof(GridDTO.NumberOfPages)) ?? GridDTO.DefaultFilter;
+        set => this[nameof(GridDTO.NumberOfPages)] = value;
+    }
+
+    public string AuthorFilter
+    {
+        // get => GetIntValue(nameof(GridDTO.AuthorId));
+        get => Get(nameof(GridDTO.AuthorId)) ?? GridDTO.DefaultFilter;
+        set => this[nameof(GridDTO.AuthorId)] = value;
+    }
+
     private int GetIntValue(string key) =>
         int.TryParse(Get(key), out int intValue) ? intValue : 0;
 
@@ -38,7 +65,7 @@ public class RouteDictionary : Dictionary<string, string>
     {
         this[nameof(GridDTO.SortField)] = fieldName;
 
-        if (current.SortField.EqualNoCase(fieldName) && current.SortField == "asc")
+        if (current.SortField.EqualsNoCase(fieldName) && current.SortField == "asc")
         {
             this[nameof(GridDTO.SortDirection)] = "desc";
         }
@@ -48,9 +75,13 @@ public class RouteDictionary : Dictionary<string, string>
         }
     }
 
+    public void ClearFilters() =>
+        CategoryFilter = PriceFilter = NumberOfPagesFilter = AuthorFilter = GridDTO.DefaultFilter;
+    
     // // does not create new instances of referenced objects (and mutable objects)
     // public RouteDictionary Clone() => (RouteDictionary)MemberwiseClone();
 
+    // manually clone.
     public RouteDictionary Clone()
     {
         RouteDictionary clone = new();

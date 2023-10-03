@@ -20,14 +20,24 @@ public class QueryOptions<T>
     public string[] GetIncludes() => includes;
 
     // public properties for sorting, filtering, and paging
-    public Expression<Func<T, bool>> Where { get; set; } = null!;
+    public List<Expression<Func<T, bool>>> WhereClauses { get; set; } = null!;
+    public Expression<Func<T, bool>> Where
+    {
+        set
+        {
+            // if WhereClauses is null then create a new one
+            WhereClauses ??= new List<Expression<Func<T, bool>>>();
+            WhereClauses.Add(value);
+        }
+    }
+
     public Expression<Func<T, object>> OrderBy { get; set; } = null!;
     public string OrderByDirection { get; set; } = "asc"; // only if have orderby to invoke this
     public int PageNumber { get; set; }
     public int PageSize { get; set; }
 
     public bool HasInclude => includes != Array.Empty<string>();
-    public bool HasWhere => Where is not null;
+    public bool HasWhere => WhereClauses is not null;
     public bool HasOrderBy => OrderBy is not null;
     public bool HasPaging => PageSize > 0 && PageNumber > 0;
 }

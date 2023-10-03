@@ -1,4 +1,6 @@
 using TopBookStore.Application.DTOs;
+using TopBookStore.Domain.Entities;
+using TopBookStore.Domain.Extensions;
 using TopBookStore.Mvc.Sessions;
 
 namespace TopBookStore.Mvc.Grid;
@@ -28,7 +30,13 @@ public class GridBuilder
             PageNumber = values.PageNumber,
             PageSize = values.PageSize,
             SortField = values.SortField,
-            SortDirection = values.SortDirection
+            SortDirection = values.SortDirection,
+
+            // set filter segments
+            CategoryFilter = values.CategoryId,
+            PriceFilter = values.Price,
+            NumberOfPagesFilter = values.NumberOfPages,
+            AuthorFilter = values.AuthorId
         };
 
         SaveRouteDirection();
@@ -46,4 +54,24 @@ public class GridBuilder
     }
 
     public RouteDictionary CurrentRoute => Routes;
+
+    public void LoadFilterSegments(string[] filter)
+    {
+        Routes.CategoryFilter = filter[0];
+        Routes.PriceFilter = filter[1];
+        Routes.NumberOfPagesFilter = filter[2];
+        Routes.AuthorFilter = filter[3];
+    }
+
+    public void ClearFilterSegments() => Routes.ClearFilters();
+
+    // filter flags
+    public bool IsFilterByCategory => Routes.CategoryFilter != GridDTO.DefaultFilter;
+    public bool IsFilterByPrice => Routes.PriceFilter != GridDTO.DefaultFilter;
+    public bool IsFilterByNumberOfPages => Routes.NumberOfPagesFilter != GridDTO.DefaultFilter;
+    public bool IsFilterByAuthor => Routes.AuthorFilter != GridDTO.DefaultFilter;
+
+    // sort flags
+    public bool IsSortByCategory => Routes.SortField.EqualsNoCase(nameof(Category));
+    public bool IsSortByPrice => Routes.SortField.EqualsNoCase(nameof(Book.Price));
 }

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
@@ -52,7 +53,10 @@ public class Repository<T> : IRepository<T> where T : class
 
         if (options.HasWhere)
         {
-            query = query.Where(options.Where);
+            foreach (Expression<Func<T, bool>> expression in options.WhereClauses)
+            {
+                query = query.Where(expression);
+            }
             count = query.Count(); // get filter count
         }
 

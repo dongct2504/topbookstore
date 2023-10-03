@@ -1,0 +1,130 @@
+@model BookListViewModel
+@{
+    ViewData["Title"] = "Lọc Sách";
+
+    RouteDictionary current = Model.CurrentRoute;
+    RouteDictionary routes = Model.CurrentRoute.Clone();
+}
+
+<h1>Lọc Sách</h1>
+
+<form class="m-3" asp-action="FilterBooks" method="get">
+    <div class="row g-1 align-items-center">
+        <div class="col-md-auto">
+            <label class="form-label">Thể Loại:</label>
+        </div>
+        <div class="col-md-auto me-3">
+            <select name="filter" class="form-select m-2"
+                asp-items="@(new SelectList(
+                    Model.Categories, "CategoryId", "Name", current.CategoryFilter))">
+                <option value="@GridDTO.DefaultFilter">Tất Cả</option>
+            </select>
+        </div>
+
+        <div class="col-md-auto">
+            <label class="form-label">Giá Cả:</label>
+        </div>
+        <div class="col-md-auto me-3">
+            <select name="filter" class="form-select m-2"
+                asp-items="@(new SelectList(
+                    Model.Prices, "Key", "Value", current.PriceFilter))">
+                <option value="@GridDTO.DefaultFilter">Tất Cả</option>
+            </select>
+        </div>
+
+        <div class="col-md-auto">
+            <label class="form-label">Số Trang:</label>
+        </div>
+        <div class="col-md-auto me-3">
+            <select name="filter" class="form-select m2"
+                asp-items="@(new SelectList(
+                    Model.NumberOfPages, "Key", "Value", current.NumberOfPagesFilter))">
+                <option value="@GridDTO.DefaultFilter">Tất Cả</option>
+            </select>
+        </div>
+
+        <div class="col-md-auto">
+            <label class="form-label">Tác Giả:</label>
+        </div>
+        <div class="col-md-auto me-3">
+            <select name="filter" class="form-select m-2"
+                asp-items="@(new SelectList(
+                    Model.Authors, "AuthorId", "FullName", current.AuthorFilter))">
+                <option value="@GridDTO.DefaultFilter">Tất Cả</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Send</button>
+        <button type="submit" class="btn btn-secondary"
+            name="clear" value="true">Clear</button>
+    </div>
+</form>
+
+<form asp-controller="Cart" asp-action="Add">
+    <table class="table table-bordered table-striped table-md">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th>
+                    Tiêu Đề
+                </th>
+                <th>
+                    Giá Thành
+                </th>
+                <th>
+                    Thể Loại
+                </th>
+                <th>
+                    Tác Giả
+                </th>
+                <th>
+                    Số trang
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Book book in Model.Books)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@book.BookId" 
+                            asp-route-slug="@book.Title.Slug()">
+                            @book.Title
+                        </a>
+                    </td>
+                    <td>
+                        @book.Price.ToString("#,##0.00 VND")
+                    </td>
+                    <td>
+                        @book.Category.Name
+                    </td>
+                    <td>
+                        @foreach (Author author in book.Authors)
+                        {
+                            <a asp-controller="Author" asp-action="Details" 
+                                asp-route-id="@author.AuthorId">
+                                @author.FullName
+                            </a>
+                        }
+                    </td>
+                    <td>
+                        @book.NumberOfPages?.ToString("N")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+@{
+    routes = Model.CurrentRoute.Clone();
+
+    for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        routes.PageNumber = i;
+        string active = @Nav.Active(i, current.PageNumber);
+
+        <a asp-action="List" asp-all-route-data="@routes" asp-route-id="@Model.Id"
+            class="btn btn-outline-primary @active">@i</a>
+    }
+}
