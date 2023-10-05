@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.DTOs;
+using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Queries;
-using TopBookStore.Infrastructure.Persistence;
-using TopBookStore.Infrastructure.Repositories;
 using TopBookStore.Mvc.Grid;
 using TopBookStore.Mvc.Models;
 
@@ -11,11 +10,11 @@ namespace TopBookStore.Mvc.Controllers;
 
 public class AuthorController : Controller
 {
-    private readonly Repository<Author> _data;
+    private readonly IAuthorService _authorService;
 
-    public AuthorController(TopBookStoreContext context)
+    public AuthorController(IAuthorService authorService)
     {
-        _data = new Repository<Author>(context);
+        _authorService = authorService;
     }
 
     public RedirectToActionResult Index() => RedirectToAction("List");
@@ -24,19 +23,13 @@ public class AuthorController : Controller
     {
         GridBuilder builder = new(HttpContext.Session, values);
 
-        QueryOptions<Author> options = new()
-        {
-            Includes = "Books",
-            OrderByDirection = builder.CurrentRoute.SortDirection,
-            PageNumber = builder.CurrentRoute.PageNumber,
-            PageSize = builder.CurrentRoute.PageSize,
-        };
+        AuthorListDTO authorListDTO = await _authorService.GetAllAuthorsAsync(values);
 
         AuthorListViewModel vm = new()
         {
-            Authors = await _data.ListAllAsync(options),
+            Authors = authorListDTO.Authors.ToList(),
             CurrentRoute = builder.CurrentRoute,
-            TotalPages = builder.GetTotalPages(_data.Count)
+            TotalPages = builder.GetTotalPages(authorListDTO.TotalCount)
         };
 
         return View(vm);
@@ -44,11 +37,7 @@ public class AuthorController : Controller
 
     public async Task<ViewResult> Details(int id)
     {
-        Author author = await _data.GetAsync(new QueryOptions<Author>
-        {
-            Where = a => a.AuthorId == id,
-            Includes = "Books"
-        }) ?? new Author();
+        Author author = await _authorService.GetAuthorByIdAsync(id);
 
         return View(author);
     }

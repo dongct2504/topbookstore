@@ -6,7 +6,7 @@ public interface IRepository<T> where T : class
 {
     Task<IEnumerable<T>> ListAllAsync(QueryOptions<T> options);
 
-    int Count { get; }
+    Task<int> CountAsync();
 
     Task<T?> GetAsync(int id);
     Task<T?> GetAsync(string id);

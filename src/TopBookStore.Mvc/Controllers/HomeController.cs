@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.DTOs;
+using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
@@ -13,11 +14,11 @@ namespace TopBookStore.Mvc.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IRepository<Book> _data;
+    private readonly IBookService _bookService;
 
-    public HomeController(TopBookStoreContext context)
+    public HomeController(IBookService bookService)
     {
-        _data = new Repository<Book>(context);
+        _bookService = bookService;
     }
 
     public RedirectToActionResult Index(string? id) => RedirectToAction("List", new { id });
@@ -26,23 +27,13 @@ public class HomeController : Controller
     {
         GridBuilder builber = new(HttpContext.Session, values);
 
-        QueryOptions<Book> options = new()
-        {
-            Includes = "Authors, Category",
-            PageSize = builber.CurrentRoute.PageSize,
-            PageNumber = builber.CurrentRoute.PageNumber
-        };
-
-        if (id is not null && id != string.Empty)
-        {
-            options.Where = b => b.CategoryId == id;
-        }
+        BookListDTO bookListDTO = await _bookService.GetBooksByCategoryAsync(values, id);
 
         BookListViewModel vm = new()
         {
-            Books = await _data.ListAllAsync(options),
+            Books = bookListDTO.Books.ToList(),
             CurrentRoute = builber.CurrentRoute,
-            TotalPages = builber.GetTotalPages(_data.Count),
+            TotalPages = builber.GetTotalPages(bookListDTO.TotalCount),
             Id = id ?? string.Empty
         };
 

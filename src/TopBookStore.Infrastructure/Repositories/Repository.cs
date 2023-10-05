@@ -23,8 +23,8 @@ public class Repository<T> : IRepository<T> where T : class
     public async Task<IEnumerable<T>> ListAllAsync(QueryOptions<T> options) =>
         await BuildQuery(options).ToListAsync();
 
-    // if count is null (where is not use) then use _dbst.Count()
-    public int Count => count ?? _dbset.Count();
+    // if count is null (where is not use) then use _dbset.CountAsync()
+    public async Task<int> CountAsync() => count ?? await _dbset.CountAsync();
 
     public virtual async Task<T?> GetAsync(int id) =>
         await _dbset.FindAsync(id);

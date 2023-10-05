@@ -5,6 +5,8 @@ using TopBookStore.Infrastructure.Persistence;
 using TopBookStore.Infrastructure.Repositories;
 using TopBookStore.Mvc.Middleware;
 using TopBookStore.Infrastructure.Identity;
+using TopBookStore.Application.Interfaces;
+using TopBookStore.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +32,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(ApplicationDbContextCS));
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
 
 var app = builder.Build();
 

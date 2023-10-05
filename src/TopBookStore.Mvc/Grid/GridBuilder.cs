@@ -1,3 +1,4 @@
+using TopBookStore.Application.Commond;
 using TopBookStore.Application.DTOs;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Extensions;
@@ -12,13 +13,15 @@ public class GridBuilder
 
     private readonly ISession _session;
 
-    protected RouteDictionary Routes { get; set; }
-
     public GridBuilder(ISession session)
     {
         _session = session;
         Routes = _session.GetObject<RouteDictionary>(RouteKey) ?? new RouteDictionary();
     }
+
+    protected RouteDictionary Routes { get; set; }
+
+    public RouteDictionary CurrentRoute => Routes;
 
     // use this constructor when you need to add new route
     public GridBuilder(ISession session, GridDTO values)
@@ -39,13 +42,10 @@ public class GridBuilder
             AuthorFilter = values.AuthorId
         };
 
-        SaveRouteDirection();
+        SaveRouteSegments();
     }
 
-    public void SaveRouteDirection()
-    {
-        _session.SetObject(RouteKey, Routes);
-    }
+    public void SaveRouteSegments() => _session.SetObject(RouteKey, Routes);
 
     public int GetTotalPages(int count)
     {
@@ -53,25 +53,7 @@ public class GridBuilder
         return (count + size - 1) / size; // (10 books + 4 - 1) / 4 = 3.25 = 3
     }
 
-    public RouteDictionary CurrentRoute => Routes;
-
-    public void LoadFilterSegments(string[] filter)
-    {
-        Routes.CategoryFilter = filter[0];
-        Routes.PriceFilter = filter[1];
-        Routes.NumberOfPagesFilter = filter[2];
-        Routes.AuthorFilter = filter[3];
-    }
+    public void LoadFilterSegments(string[] filter) => Routes.LoadFilterSegments(filter);
 
     public void ClearFilterSegments() => Routes.ClearFilters();
-
-    // filter flags
-    public bool IsFilterByCategory => Routes.CategoryFilter != GridDTO.DefaultFilter;
-    public bool IsFilterByPrice => Routes.PriceFilter != GridDTO.DefaultFilter;
-    public bool IsFilterByNumberOfPages => Routes.NumberOfPagesFilter != GridDTO.DefaultFilter;
-    public bool IsFilterByAuthor => Routes.AuthorFilter != GridDTO.DefaultFilter;
-
-    // sort flags
-    public bool IsSortByCategory => Routes.SortField.EqualsNoCase(nameof(Category));
-    public bool IsSortByPrice => Routes.SortField.EqualsNoCase(nameof(Book.Price));
 }

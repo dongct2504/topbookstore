@@ -1,10 +1,27 @@
 using TopBookStore.Application.DTOs;
+using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Extensions;
 
-namespace TopBookStore.Mvc.Grid;
+namespace TopBookStore.Application.Commond;
 
 public class RouteDictionary : Dictionary<string, string>
 {
+    public RouteDictionary() { }
+
+    public RouteDictionary(GridDTO values)
+    {
+        PageNumber = values.PageNumber;
+        PageSize = values.PageSize;
+        SortField = values.SortField;
+        SortDirection = values.SortDirection;
+
+        // set filter segments
+        CategoryFilter = values.CategoryId;
+        PriceFilter = values.Price;
+        NumberOfPagesFilter = values.NumberOfPages;
+        AuthorFilter = values.AuthorId;
+    }
+
     // get, set these DTOs properties for routing
     public int PageNumber
     {
@@ -75,9 +92,6 @@ public class RouteDictionary : Dictionary<string, string>
         }
     }
 
-    public void ClearFilters() =>
-        CategoryFilter = PriceFilter = NumberOfPagesFilter = AuthorFilter = GridDTO.DefaultFilter;
-    
     // // does not create new instances of referenced objects (and mutable objects)
     // public RouteDictionary Clone() => (RouteDictionary)MemberwiseClone();
 
@@ -93,4 +107,26 @@ public class RouteDictionary : Dictionary<string, string>
 
         return clone;
     }
+
+    public void LoadFilterSegments(string[] filter)
+    {
+        CategoryFilter = filter[0];
+        PriceFilter = filter[1];
+        NumberOfPagesFilter = filter[2];
+        AuthorFilter = filter[3];
+    }
+
+    public void ClearFilters() =>
+        CategoryFilter = PriceFilter = NumberOfPagesFilter = AuthorFilter = GridDTO.DefaultFilter;
+
+
+    // filter flags
+    public bool IsFilterByCategory => CategoryFilter != GridDTO.DefaultFilter;
+    public bool IsFilterByPrice => PriceFilter != GridDTO.DefaultFilter;
+    public bool IsFilterByNumberOfPages => NumberOfPagesFilter != GridDTO.DefaultFilter;
+    public bool IsFilterByAuthor => AuthorFilter != GridDTO.DefaultFilter;
+
+    // sort flags
+    public bool IsSortByCategory => SortField.EqualsNoCase(nameof(Category));
+    public bool IsSortByPrice => SortField.EqualsNoCase(nameof(Book.Price));
 }
