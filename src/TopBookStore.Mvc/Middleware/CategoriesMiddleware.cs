@@ -1,7 +1,7 @@
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
-using TopBookStore.Mvc.Sessions;
+using TopBookStore.Mvc.Extensions;
 
 namespace TopBookStore.Mvc.Middleware;
 

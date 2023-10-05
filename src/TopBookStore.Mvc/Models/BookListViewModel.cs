@@ -11,7 +11,7 @@ public class BookListViewModel
     public int TotalPages { get; set; }
     public string Id { get; set; } = string.Empty;
 
-    // data for dropdowns (no need for category)
+    // data for dropdowns
     public List<Category> Categories { get; set; } = new();
     public Dictionary<string, string> Prices =>
         new()

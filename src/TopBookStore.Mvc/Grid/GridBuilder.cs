@@ -1,7 +1,7 @@
 using TopBookStore.Application.DTOs;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Extensions;
-using TopBookStore.Mvc.Sessions;
+using TopBookStore.Mvc.Extensions;
 
 namespace TopBookStore.Mvc.Grid;
 

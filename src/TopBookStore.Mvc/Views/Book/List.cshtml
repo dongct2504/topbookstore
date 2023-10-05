@@ -74,9 +74,6 @@
                 <th>
                     Thể Loại
                 </th>
-                <th>
-                    Tác Giả
-                </th>
                 <th></th>
                 <th></th>
             </tr>
@@ -96,15 +93,6 @@
                     </td>
                     <td>
                         @book.Category.Name
-                    </td>
-                    <td>
-                        @foreach (Author author in book.Authors)
-                        {
-                            <a asp-controller="Author" asp-action="Details" 
-                                asp-route-id="@author.AuthorId">
-                                @author.FullName
-                            </a>
-                        }
                     </td>
                     <td class="text-center">
                         <a class="btn btn-success" asp-controller="Order" asp-action="BuyItem"

@@ -1,5 +1,5 @@
 ﻿@{
-    List<Category> categories = Context.Session.GetListObject<Category>("categories") ?? new();
+    List<Category> categories = Context.Session.GetObject<List<Category>>("categories") ?? new();
 }
 
 <!DOCTYPE html>

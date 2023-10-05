@@ -1,4 +1,5 @@
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace TopBookStore.Domain.Extensions;
 
@@ -22,8 +23,14 @@ public static class StringExtensions
 
     public static int ToInt(this string str)
     {
-        _ = int.TryParse(str, out int id);
-        return id;
+        if (int.TryParse(str, out int id))
+        {
+            return id;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public static string Capitalize(this string str) =>
