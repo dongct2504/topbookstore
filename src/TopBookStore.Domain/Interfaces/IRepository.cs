@@ -4,7 +4,7 @@ using TopBookStore.Domain.Queries;
 
 public interface IRepository<T> where T : class
 {
-    Task<List<T>> ListAllAsync(QueryOptions<T> options);
+    Task<IEnumerable<T>> ListAllAsync(QueryOptions<T> options);
 
     int Count { get; }
 

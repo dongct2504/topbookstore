@@ -5,7 +5,7 @@ namespace TopBookStore.Mvc.Models;
 
 public class AuthorListViewModel
 {
-    public List<Author> Authors { get; set; } = new();
+    public IEnumerable<Author> Authors { get; set; } = new List<Author>();
     public RouteDictionary CurrentRoute { get; set; } = new();
     public int TotalPages { get; set; }
 }

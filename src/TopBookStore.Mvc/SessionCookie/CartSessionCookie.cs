@@ -6,7 +6,7 @@ using TopBookStore.Mvc.Extensions;
 
 namespace TopBookStore.Mvc.SessionCookie;
 
-public class CartSession
+public class CartSessionCookie
 {
     private const string CartKey = "mycart";
     private const string CountKey = "mycount";
@@ -18,7 +18,7 @@ public class CartSession
     private List<Cart> ListCartSession { get; set; } = null!;
     private List<CartDTO> ListCartCookie { get; set; } = null!;
 
-    public CartSession(HttpContext httpContext)
+    public CartSessionCookie(HttpContext httpContext)
     {
         _session = httpContext.Session;
         _requestCookies = httpContext.Request.Cookies;
@@ -73,4 +73,8 @@ public class CartSession
             _responseCookies.SetInt32(CountKey, ListCartCookie.Count);
         }
     }
+
+    public decimal Subtotal => ListCartSession.Sum(i => i.SubTotal);
+    public int? Count => _session.GetInt32(CountKey) ?? _requestCookies.GetInt32(CountKey);
+    public IEnumerable<Cart> List => ListCartSession;
 }

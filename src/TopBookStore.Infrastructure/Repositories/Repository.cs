@@ -20,7 +20,7 @@ public class Repository<T> : IRepository<T> where T : class
         _dbset = _context.Set<T>(); // _context.Books()
     }
 
-    public async Task<List<T>> ListAllAsync(QueryOptions<T> options) =>
+    public async Task<IEnumerable<T>> ListAllAsync(QueryOptions<T> options) =>
         await BuildQuery(options).ToListAsync();
 
     // if count is null (where is not use) then use _dbst.Count()

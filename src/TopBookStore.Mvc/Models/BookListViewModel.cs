@@ -5,14 +5,14 @@ namespace TopBookStore.Mvc.Models;
 
 public class BookListViewModel
 {
-    public List<Book> Books { get; set; } = new();
+    public IEnumerable<Book> Books { get; set; } = new List<Book>();
 
     public RouteDictionary CurrentRoute { get; set; } = new();
     public int TotalPages { get; set; }
     public string Id { get; set; } = string.Empty;
 
     // data for dropdowns
-    public List<Category> Categories { get; set; } = new();
+    public IEnumerable<Category> Categories { get; set; } = new List<Category>();
     public Dictionary<string, string> Prices =>
         new()
         {
@@ -29,5 +29,5 @@ public class BookListViewModel
             { "100to500", "Từ 100 đến 500 trang" },
             { "over500", "500 trang trở lên" }
         };
-    public List<Author> Authors { get; set; } = new();
+    public IEnumerable<Author> Authors { get; set; } = new List<Author>();
 }

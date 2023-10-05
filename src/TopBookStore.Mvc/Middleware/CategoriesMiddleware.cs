@@ -19,7 +19,7 @@ public class CategoriesMiddlewar
     {
         if (!categorySet)
         {
-            List<Category> categories = await data.ListAllAsync(new QueryOptions<Category>()
+            IEnumerable<Category> categories = await data.ListAllAsync(new QueryOptions<Category>()
             {
                 OrderBy = c => c.Name
             });
