@@ -47,7 +47,6 @@ public class CartSessionCookie
                 {
                     Cart cart = new()
                     {
-                        Book = book,
                         Quantity = storedItem.Quantity
                     };
                 }
@@ -74,7 +73,6 @@ public class CartSessionCookie
         }
     }
 
-    public decimal Subtotal => ListCartSession.Sum(i => i.SubTotal);
     public int? Count => _session.GetInt32(CountKey) ?? _requestCookies.GetInt32(CountKey);
     public IEnumerable<Cart> List => ListCartSession;
 }

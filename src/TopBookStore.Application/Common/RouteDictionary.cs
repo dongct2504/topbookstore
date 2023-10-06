@@ -127,6 +127,5 @@ public class RouteDictionary : Dictionary<string, string>
     public bool IsFilterByAuthor => AuthorFilter != GridDTO.DefaultFilter;
 
     // sort flags
-    public bool IsSortByCategory => SortField.EqualsNoCase(nameof(Category));
     public bool IsSortByPrice => SortField.EqualsNoCase(nameof(Book.Price));
 }

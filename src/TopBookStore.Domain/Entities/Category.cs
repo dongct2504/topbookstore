@@ -13,9 +13,10 @@ public partial class Category
     [Unicode(false)]
     public string CategoryId { get; set; } = null!;
 
-    [StringLength(100)]
+    [StringLength(80)]
     public string Name { get; set; } = null!;
 
-    [InverseProperty("Category")]
+    [ForeignKey("CategoryId")]
+    [InverseProperty("Categories")]
     public virtual ICollection<Book> Books { get; set; } = new List<Book>();
 }

@@ -13,15 +13,9 @@ public partial class Cart
 
     public int Quantity { get; set; }
 
-    public int CustomerId { get; set; }
+    [InverseProperty("Cart")]
+    public virtual ICollection<Book> Books { get; set; } = new List<Book>();
 
-    public int BookId { get; set; }
-
-    [ForeignKey("BookId")]
-    [InverseProperty("Carts")]
-    public virtual Book Book { get; set; } = null!;
-
-    [ForeignKey("CustomerId")]
-    [InverseProperty("Carts")]
-    public virtual Customer Customer { get; set; } = null!;
+    [InverseProperty("Cart")]
+    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 }

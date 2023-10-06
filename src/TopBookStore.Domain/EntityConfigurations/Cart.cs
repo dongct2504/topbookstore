@@ -7,7 +7,7 @@ namespace TopBookStore.Domain.Entities;
 public partial class Cart
 {
     [JsonIgnore]
-    public decimal SubTotal => Book.Price * Quantity;
+    public decimal SubTotal => Books.Sum(b => b.Price * Quantity);
 }
 
 public class CartMetaData

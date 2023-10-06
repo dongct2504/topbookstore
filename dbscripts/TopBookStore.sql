@@ -12,98 +12,103 @@ USE TopBookStore;
 
 CREATE TABLE Authors
 (
-    AuthorId INT PRIMARY KEY,
-    FirstName NVARCHAR(100) NOT NULL,
-    LastName NVARCHAR(100) NOT NULL,
-    PhoneNumber VARCHAR(15)
-);
-
-CREATE TABLE Categories
-(
-    CategoryId VARCHAR(30) PRIMARY KEY,
-    Name NVARCHAR(100) NOT NULL
+  AuthorId INT NOT NULL PRIMARY KEY,
+  FirstName NVARCHAR(60) NOT NULL,
+  LastName NVARCHAR(60) NOT NULL,
+  PhoneNumber VARCHAR(15)
 );
 
 CREATE TABLE Publishers
 (
-    PublisherId INT PRIMARY KEY,
-    Name NVARCHAR(100) NOT NULL,
-    PhoneNumber VARCHAR(15)
+  PublisherId INT NOT NULL PRIMARY KEY,
+  Name NVARCHAR(80) NOT NULL,
 );
 
-CREATE TABLE Books
+CREATE TABLE Categories
 (
-    BookId INT PRIMARY KEY,
-    Title NVARCHAR(100) NOT NULL,
-    BookDescription NVARCHAR(200) NOT NULL DEFAULT '',
-    Isbn13 VARCHAR(13) NOT NULL,
-    Price MONEY NOT NULL,
-    NumberOfPages INT,
-    PulicationDate DATETIME,
-    CategoryId VARCHAR(30) NOT NULL,
-    PublisherId INT NOT NULL,
-    FOREIGN KEY (CategoryId) REFERENCES Categories(CategoryId),
-    FOREIGN KEY (PublisherId) REFERENCES Publishers(PublisherId)
-);
-
--- Junction Table
-CREATE TABLE BookAuthors
-(
-    BookId INT NOT NULL,
-    AuthorId INT NOT NULL,
-    PRIMARY KEY (BookId, AuthorId),
-    FOREIGN KEY (BookId) REFERENCES Books(BookId),
-    FOREIGN KEY (AuthorId) REFERENCES Authors(AuthorId)
-);
-
-CREATE TABLE Addresses
-(
-    AddressId INT PRIMARY KEY,
-    Street NVARCHAR(100),
-    District NVARCHAR(50),
-    City NVARCHAR(50),
-    ZipCode VARCHAR(10),
-    Country NVARCHAR(50)
-);
-
-CREATE TABLE Customers
-(
-    CustomerId INT PRIMARY KEY,
-    FirstName NVARCHAR(80) NOT NULL,
-    LastName NVARCHAR(80) NOT NULL,
-    Email VARCHAR(80) NOT NULL,
-    AddressId INT NOT NULL,
-    FOREIGN KEY (AddressId) REFERENCES Addresses(AddressId)
-);
-
-CREATE TABLE Invoices
-(
-    InvoiceId INT NOT NULL PRIMARY KEY,
-    InvoiceDate DATETIME NOT NULL,
-    TotalAmount MONEY NOT NULL DEFAULT 0,
-    CustomerId INT NOT NULL,
-    AddressId INT NOT NULL,
-
-    FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId),
-    FOREIGN KEY (AddressId) REFERENCES Addresses(AddressId)
-);
-
-CREATE TABLE LineItem
-(
-    LineItemId INT NOT NULL PRIMARY KEY,
-    Quantity INT NOT NULL DEFAULT 0,
-    InvoiceId INT NOT NULL,
-    BookId INT NOT NULL,
-    FOREIGN KEY (InvoiceID) REFERENCES Invoices(InvoiceId),
-    FOREIGN KEY (BookId) REFERENCES Books(BookId)
+  CategoryId VARCHAR(30) NOT NULL PRIMARY KEY,
+  Name NVARCHAR(80) NOT NULL
 );
 
 CREATE TABLE Carts
 (
-    CartId INT PRIMARY KEY,
-    Quantity INT NOT NULL DEFAULT 0,
-    CustomerId INT NOT NULL,
-    BookId INT NOT NULL,
-    FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId),
-    FOREIGN KEY (BookId) REFERENCES Books(BookId)
+  CartId INT NOT NULL PRIMARY KEY,
+  Quantity INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE Customers
+(
+  CustomerId INT NOT NULL PRIMARY KEY,
+  FirstName NVARCHAR(80) NOT NULL,
+  LastName NVARCHAR(80) NOT NULL,
+  PhoneNumber VARCHAR(15),
+  Debt MONEY NOT NULL DEFAULT 0,
+  Street NVARCHAR(80),
+  District NVARCHAR(50),
+  City NVARCHAR(30),
+  Country NVARCHAR(30),
+  CartId INT NOT NULL,
+  CONSTRAINT FK_Customers_Carts FOREIGN KEY (CartId) REFERENCES Carts(CartId)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE Orders
+(
+  OrderId INT NOT NULL PRIMARY KEY,
+  OrderDate DATETIME NOT NULL,
+  State VARCHAR(30) DEFAULT 'awaiting'
+    CHECK (state = 'awaiting' OR state = 'paid' OR state = 'sent'),
+  Quantity INT NOT NULL DEFAULT 0,
+  CustomerId INT NOT NULL,
+  CONSTRAINT FK_Orders_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE Receipts
+(
+  ReceiptId INT NOT NULL PRIMARY KEY,
+  Amount MONEY NOT NULL,
+  CustomerId INT NOT NULL,
+  CONSTRAINT FK_Receipts_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE Books
+(
+  BookId INT NOT NULL PRIMARY KEY,
+  Title NVARCHAR(80) NOT NULL,
+  Description NVARCHAR(MAX) NOT NULL,
+  Isbn13 VARCHAR(13) NOT NULL,
+  Inventory INT NOT NULL,
+  Price MONEY NOT NULL,
+  DiscountPercent DEC(3, 2) NOT NULL,
+  NumberOfPages INT,
+  PulicationDate DATETIME NOT NULL,
+  AuthorId INT NOT NULL,
+  PublisherId INT NOT NULL,
+  OrderId INT NOT NULL,
+  CartId INT NOT NULL,
+  CONSTRAINT FK_Books_Authors FOREIGN KEY (AuthorId) REFERENCES Authors(AuthorId)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT FK_Books_Publishers FOREIGN KEY (PublisherId) REFERENCES Publishers(PublisherId)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT FK_Books_Orders FOREIGN KEY (OrderId) REFERENCES Orders(OrderId)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT FK_Books_Carts FOREIGN KEY (CartId) REFERENCES Carts(CartId)
+);
+
+CREATE TABLE BookCategories
+(
+  BookId INT NOT NULL,
+  CategoryId VARCHAR(30) NOT NULL,
+  PRIMARY KEY (BookId, CategoryId),
+  CONSTRAINT FK_BookCategories_Books FOREIGN KEY (BookId) REFERENCES Books(BookId)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT FK_BookCategories_Categories FOREIGN KEY (CategoryId) REFERENCES Categories(CategoryId)
 );

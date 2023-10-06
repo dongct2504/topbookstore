@@ -39,9 +39,12 @@
                         @book.Price.ToString("#,##0.00 VND")
                     </td>
                     <td>
-                        <a asp-action="Index" asp-route-id="@book.CategoryId">
-                            @book.Category.Name
-                        </a>
+                        @foreach (Category category in book.Categories)
+                        {
+                            <a asp-action="Home" asp-route-id="@category.CategoryId">
+                                @category.Name
+                            </a>
+                        }
                     </td>
                     <td class="text-center">
                         <a class="btn btn-success" asp-controller="Order" asp-action="BuyItem"

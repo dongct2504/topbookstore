@@ -92,7 +92,10 @@
                         @book.Price.ToString("#,##0.00 VND")
                     </td>
                     <td>
-                        @book.Category.Name
+                        @foreach (Category category in book.Categories)
+                        {
+                            @category.Name
+                        }
                     </td>
                     <td class="text-center">
                         <a class="btn btn-success" asp-controller="Order" asp-action="BuyItem"

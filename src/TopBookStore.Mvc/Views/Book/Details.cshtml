@@ -19,19 +19,21 @@
             </tr>
             <tr>
                 <td>Thể Loại:</td>
-                <td>@Model.Category.Name</td>
+                <td>
+                    @foreach (Category category in Model.Categories)
+                    {
+                        <a asp-action="Home" asp-route-id="@category.CategoryId">
+                            @category.Name
+                        </a>
+                    }
+                </td>
             </tr>
             <tr>
                 <td>Tác Giả</td>
                 <td>
-                    @foreach (Author author in Model.Authors)
-                    {
-                        <p>
-                            <a asp-controller="Author" asp-action="Details">
-                                @author.FullName
-                            </a>
-                        </p>
-                    }
+                    <a asp-controller="Author" asp-action="Details">
+                        @Model.Author.FullName
+                    </a>
                 </td>
             </tr>
             <tr>
@@ -51,6 +53,6 @@
         </div>
 
         <h3>Mô Tả</h3>
-        <p>@Model.BookDescription</p>
+        <p>@Model.Description</p>
     </div>
 </div>

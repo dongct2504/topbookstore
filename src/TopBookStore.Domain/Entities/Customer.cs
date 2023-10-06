@@ -17,19 +17,34 @@ public partial class Customer
     [StringLength(80)]
     public string LastName { get; set; } = null!;
 
-    [StringLength(80)]
+    [StringLength(15)]
     [Unicode(false)]
-    public string Email { get; set; } = null!;
+    public string? PhoneNumber { get; set; }
 
-    public int AddressId { get; set; }
+    [Column(TypeName = "money")]
+    public decimal Debt { get; set; }
 
-    [ForeignKey("AddressId")]
+    [StringLength(80)]
+    public string? Street { get; set; }
+
+    [StringLength(50)]
+    public string? District { get; set; }
+
+    [StringLength(30)]
+    public string? City { get; set; }
+
+    [StringLength(30)]
+    public string? Country { get; set; }
+
+    public int CartId { get; set; }
+
+    [ForeignKey("CartId")]
     [InverseProperty("Customers")]
-    public virtual Address Address { get; set; } = null!;
+    public virtual Cart Cart { get; set; } = null!;
 
     [InverseProperty("Customer")]
-    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
     [InverseProperty("Customer")]
-    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+    public virtual ICollection<Receipt> Receipts { get; set; } = new List<Receipt>();
 }

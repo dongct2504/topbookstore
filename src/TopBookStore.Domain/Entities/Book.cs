@@ -11,39 +11,47 @@ public partial class Book
     [Key]
     public int BookId { get; set; }
 
-    [StringLength(100)]
+    [StringLength(80)]
     public string Title { get; set; } = null!;
 
-    [StringLength(200)]
-    public string BookDescription { get; set; } = null!;
+    public string Description { get; set; } = null!;
 
     [StringLength(13)]
     [Unicode(false)]
     public string Isbn13 { get; set; } = null!;
 
+    public int Inventory { get; set; }
+
     [Column(TypeName = "money")]
     public decimal Price { get; set; }
+
+    [Column(TypeName = "decimal(3, 2)")]
+    public decimal DiscountPercent { get; set; }
 
     public int? NumberOfPages { get; set; }
 
     [Column(TypeName = "datetime")]
-    public DateTime? PulicationDate { get; set; }
+    public DateTime PulicationDate { get; set; }
 
-    [StringLength(30)]
-    [Unicode(false)]
-    public string CategoryId { get; set; } = null!;
+    public int AuthorId { get; set; }
 
     public int PublisherId { get; set; }
 
-    [InverseProperty("Book")]
-    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
+    public int OrderId { get; set; }
 
-    [ForeignKey("CategoryId")]
+    public int CartId { get; set; }
+
+    [ForeignKey("AuthorId")]
     [InverseProperty("Books")]
-    public virtual Category Category { get; set; } = null!;
+    public virtual Author Author { get; set; } = null!;
 
-    [InverseProperty("Book")]
-    public virtual ICollection<LineItem> LineItems { get; set; } = new List<LineItem>();
+    [ForeignKey("CartId")]
+    [InverseProperty("Books")]
+    public virtual Cart Cart { get; set; } = null!;
+
+    [ForeignKey("OrderId")]
+    [InverseProperty("Books")]
+    public virtual Order Order { get; set; } = null!;
 
     [ForeignKey("PublisherId")]
     [InverseProperty("Books")]
@@ -51,5 +59,5 @@ public partial class Book
 
     [ForeignKey("BookId")]
     [InverseProperty("Books")]
-    public virtual ICollection<Author> Authors { get; set; } = new List<Author>();
+    public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 }

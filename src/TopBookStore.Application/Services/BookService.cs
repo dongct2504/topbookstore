@@ -21,7 +21,7 @@ public class BookService : IBookService
     {
         QueryOptions<Book> options = new()
         {
-            Includes = "Authors, Category",
+            Includes = "Author, Categories",
             OrderByDirection = values.SortDirection,
             PageSize = values.PageSize,
             PageNumber = values.PageNumber
@@ -34,7 +34,7 @@ public class BookService : IBookService
     {
         QueryOptions<Book> options = new()
         {
-            Includes = "Authors, Category",
+            Includes = "Author, Categories",
             OrderByDirection = values.SortDirection,
             PageSize = values.PageSize,
             PageNumber = values.PageNumber
@@ -42,7 +42,7 @@ public class BookService : IBookService
 
         if (id is not null)
         {
-            options.Where = b => b.CategoryId == id;
+            options.Where = b => b.Categories.Any(c => c.CategoryId == id);
         };
 
         BookListDTO dto = new()
@@ -58,7 +58,7 @@ public class BookService : IBookService
     {
         QueryOptions<Book> options = new()
         {
-            Includes = "Authors, Category",
+            Includes = "Author, Categories",
             OrderByDirection = values.SortDirection,
             PageNumber = values.PageNumber,
             PageSize = values.PageSize
@@ -69,7 +69,7 @@ public class BookService : IBookService
         // filter
         if (route.IsFilterByCategory)
         {
-            options.Where = b => b.CategoryId == route.CategoryFilter;
+            options.Where = b => b.Categories.Any(c => c.CategoryId == route.CategoryFilter);
         }
         if (route.IsFilterByPrice)
         {
@@ -115,16 +115,12 @@ public class BookService : IBookService
             if (authorId > 0)
             {
                 // to filter the books by author, use the LINQ Any() method. 
-                options.Where = b => b.Authors.Any(a => a.AuthorId == authorId);
+                options.Where = b => b.AuthorId == authorId;
             }
         }
 
         // sort
-        if (route.IsSortByCategory)
-        {
-            options.OrderBy = b => b.Category.Name;
-        }
-        else if (route.IsSortByPrice)
+        if (route.IsSortByPrice)
         {
             options.OrderBy = b => b.Price;
         }
@@ -143,7 +139,7 @@ public class BookService : IBookService
         Book book = await _data.GetAsync(new QueryOptions<Book>
         {
             Where = b => b.BookId == id,
-            Includes = "Authors, Category"
+            Includes = "Author, Categories"
         }) ?? new Book();
 
         return book;
