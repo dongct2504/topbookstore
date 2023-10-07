@@ -14,7 +14,8 @@ public partial class Receipt
     [Column(TypeName = "money")]
     public decimal Amount { get; set; }
 
-    public int CustomerId { get; set; }
+    [StringLength(450)]
+    public string CustomerId { get; set; } = null!;
 
     [ForeignKey("CustomerId")]
     [InverseProperty("Receipts")]

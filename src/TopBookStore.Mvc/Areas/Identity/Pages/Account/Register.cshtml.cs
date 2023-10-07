@@ -18,7 +18,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using TopBookStore.Domain.Entities;
 using TopBookStore.Infrastructure.Identity;
+using TopBookStore.Infrastructure.Persistence;
 
 namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
 {
@@ -30,13 +32,15 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly TopBookStoreContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            TopBookStoreContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +48,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -75,6 +80,14 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            [Required]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -114,6 +127,8 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -122,6 +137,17 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    // Create a new Customer entity and associate it with the ApplicationUser
+                    Customer customer = new()
+                    {
+                        CustomerId = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName
+                    };
+
+                    _context.Customers.Add(customer);
+                    await _context.SaveChangesAsync();
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

@@ -45,13 +45,11 @@ public partial class Book
     [InverseProperty("Books")]
     public virtual Author Author { get; set; } = null!;
 
-    [ForeignKey("CartId")]
-    [InverseProperty("Books")]
-    public virtual Cart Cart { get; set; } = null!;
+    [InverseProperty("Book")]
+    public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
-    [ForeignKey("OrderId")]
-    [InverseProperty("Books")]
-    public virtual Order Order { get; set; } = null!;
+    [InverseProperty("Book")]
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     [ForeignKey("PublisherId")]
     [InverseProperty("Books")]

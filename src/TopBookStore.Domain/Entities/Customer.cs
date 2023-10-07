@@ -9,7 +9,7 @@ namespace TopBookStore.Domain.Entities;
 public partial class Customer
 {
     [Key]
-    public int CustomerId { get; set; }
+    public string CustomerId { get; set; } = null!;
 
     [StringLength(80)]
     public string FirstName { get; set; } = null!;
@@ -38,9 +38,8 @@ public partial class Customer
 
     public int CartId { get; set; }
 
-    [ForeignKey("CartId")]
-    [InverseProperty("Customers")]
-    public virtual Cart Cart { get; set; } = null!;
+    [InverseProperty("Customer")]
+    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
     [InverseProperty("Customer")]
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();

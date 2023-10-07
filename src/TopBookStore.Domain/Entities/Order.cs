@@ -20,12 +20,13 @@ public partial class Order
 
     public int Quantity { get; set; }
 
-    public int CustomerId { get; set; }
-
-    [InverseProperty("Order")]
-    public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+    [StringLength(450)]
+    public string CustomerId { get; set; } = null!;
 
     [ForeignKey("CustomerId")]
     [InverseProperty("Orders")]
     public virtual Customer Customer { get; set; } = null!;
+
+    [InverseProperty("Order")]
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }
