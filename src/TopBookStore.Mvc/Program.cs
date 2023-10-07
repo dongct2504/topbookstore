@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Infrastructure.Persistence;
 using TopBookStore.Infrastructure.Repositories;
