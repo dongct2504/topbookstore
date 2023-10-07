@@ -47,8 +47,8 @@ CREATE TABLE Customers
 CREATE TABLE Carts
 (
   CartId INT NOT NULL PRIMARY KEY,
-  Quantity INT NOT NULL DEFAULT 0,
   CustomerId NVARCHAR(450) NOT NULL,
+  Amount MONEY NOT NULL DEFAULT 0,
   
   -- When a customer is deleted, all associated cart records should be deleted as well.
   CONSTRAINT FK_Carts_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
@@ -61,7 +61,6 @@ CREATE TABLE Orders
   OrderDate DATETIME NOT NULL,
   State VARCHAR(30) DEFAULT 'awaiting'
     CHECK (state = 'awaiting' OR state = 'paid' OR state = 'sent'),
-  Quantity INT NOT NULL DEFAULT 0,
   CustomerId NVARCHAR(450) NOT NULL,
 
   CONSTRAINT FK_Orders_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)

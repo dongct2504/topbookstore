@@ -15,7 +15,7 @@ public class CartSessionCookie
     private readonly IRequestCookieCollection _requestCookies;
     private readonly IResponseCookies _responseCookies;
 
-    private List<Cart> ListCartSession { get; set; } = null!;
+    private List<CartItem> ListCartSession { get; set; } = null!;
     private List<CartDTO> ListCartCookie { get; set; } = null!;
 
     public CartSessionCookie(HttpContext httpContext)
@@ -27,7 +27,7 @@ public class CartSessionCookie
 
     public async void Load(Repository<Book> data)
     {
-        ListCartSession = _session.GetObject<List<Cart>>(CartKey) ?? new List<Cart>();
+        ListCartSession = _session.GetObject<List<CartItem>>(CartKey) ?? new List<CartItem>();
         ListCartCookie = _requestCookies.GetObject<List<CartDTO>>(CartKey) ?? new List<CartDTO>();
 
         if (ListCartCookie.Count > ListCartSession.Count)
@@ -45,9 +45,9 @@ public class CartSessionCookie
                 // if that book is null then it have been deleted
                 if (book is not null)
                 {
-                    Cart cart = new()
+                    CartItem cartItem = new()
                     {
-                        Quantity = storedItem.Quantity
+                        Quantity = 1
                     };
                 }
             }
@@ -74,5 +74,5 @@ public class CartSessionCookie
     }
 
     public int? Count => _session.GetInt32(CountKey) ?? _requestCookies.GetInt32(CountKey);
-    public IEnumerable<Cart> List => ListCartSession;
+    public IEnumerable<CartItem> List => ListCartSession;
 }

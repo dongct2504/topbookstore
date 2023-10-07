@@ -18,8 +18,6 @@ public partial class Order
     [Unicode(false)]
     public string? State { get; set; }
 
-    public int Quantity { get; set; }
-
     [StringLength(450)]
     public string CustomerId { get; set; } = null!;
 
