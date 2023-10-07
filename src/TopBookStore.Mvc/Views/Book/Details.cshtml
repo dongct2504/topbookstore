@@ -22,7 +22,7 @@
                 <td>
                     @foreach (Category category in Model.Categories)
                     {
-                        <a asp-action="Home" asp-route-id="@category.CategoryId">
+                        <a asp-controller="Home" asp-action="List" asp-route-id="@category.CategoryId">
                             @category.Name
                         </a>
                     }
