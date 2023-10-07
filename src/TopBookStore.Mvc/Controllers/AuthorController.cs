@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Entities;
-using TopBookStore.Domain.Queries;
 using TopBookStore.Mvc.Grid;
 using TopBookStore.Mvc.Models;
 
