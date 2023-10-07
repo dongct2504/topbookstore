@@ -145,17 +145,17 @@ public class BookService : IBookService
         return book;
     }
 
-    public Task CreateBook(Book book)
+    public Task CreateBookAsync(Book book)
     {
         throw new NotImplementedException();
     }
 
-    public Task DeleteBook(int id)
+    public Task DeleteBookAsync(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task UpdateBook(Book book)
+    public Task UpdateBookAsync(Book book)
     {
         throw new NotImplementedException();
     }

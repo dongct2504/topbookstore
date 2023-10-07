@@ -10,7 +10,7 @@ public interface IBookService
     Task<BookListDTO> FilterBooksAsync(GridDTO values);
     Task<Book> GetBookByIdAsync(int id);
 
-    Task CreateBook(Book book);
-    Task UpdateBook(Book book);
-    Task DeleteBook(int id);
+    Task CreateBookAsync(Book book);
+    Task UpdateBookAsync(Book book);
+    Task DeleteBookAsync(int id);
 }
