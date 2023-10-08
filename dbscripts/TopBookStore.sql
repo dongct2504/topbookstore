@@ -90,9 +90,9 @@ CREATE TABLE Books
   PulicationDate DATETIME NOT NULL,
   AuthorId INT NOT NULL,
   PublisherId INT NOT NULL,
-  OrderId INT NOT NULL,
-  CartId INT NOT NULL,
 
+  -- A Author or Publisher can be deleted only if all books related to those tables
+  -- are deleted
   CONSTRAINT FK_Books_Authors FOREIGN KEY (AuthorId) REFERENCES Authors(AuthorId)
     ON DELETE NO ACTION,
   CONSTRAINT FK_Books_Publishers FOREIGN KEY (PublisherId) REFERENCES Publishers(PublisherId)

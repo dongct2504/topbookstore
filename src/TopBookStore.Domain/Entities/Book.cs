@@ -37,10 +37,6 @@ public partial class Book
 
     public int PublisherId { get; set; }
 
-    public int OrderId { get; set; }
-
-    public int CartId { get; set; }
-
     [ForeignKey("AuthorId")]
     [InverseProperty("Books")]
     public virtual Author Author { get; set; } = null!;

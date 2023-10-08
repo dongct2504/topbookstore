@@ -58,10 +58,10 @@ VALUES
     (2, 200000, 'CUS002');
 
 -- Insert data into Books table
-INSERT INTO Books (BookId, Title, Description, Isbn13, Inventory, Price, DiscountPercent, NumberOfPages, PulicationDate, AuthorId, PublisherId, OrderId, CartId)
+INSERT INTO Books (BookId, Title, Description, Isbn13, Inventory, Price, DiscountPercent, NumberOfPages, PulicationDate, AuthorId, PublisherId)
 VALUES
-    (1, N'Bắt trẻ đồng xanh', N'Cuốn sách kể về chuyến phiêu lưu của một nhóm bạn thời thơ ấu.', '9781234567890', 10, 50000, 0.2, 200, '2022-01-01', 1, 1, 1, 1),
-    (2, N'Dế Mèn phiêu lưu ký', N'Cuốn sách kể về cuộc phiêu lưu của Dế Mèn và những người bạn.', '9789876543210', 5, 45000, 0.1, 150, '2022-02-01', 2, 2, 2, 2);
+    (1, N'Bắt trẻ đồng xanh', N'Cuốn sách kể về chuyến phiêu lưu của một nhóm bạn thời thơ ấu.', '9781234567890', 10, 50000, 0.2, 200, '2022-01-01', 1, 1),
+    (2, N'Dế Mèn phiêu lưu ký', N'Cuốn sách kể về cuộc phiêu lưu của Dế Mèn và những người bạn.', '9789876543210', 5, 45000, 0.1, 150, '2022-02-01', 2, 2);
 
 -- Insert data into OrderDetails table
 INSERT INTO OrderDetails (OrderDetailId, Quantity, BookId, OrderId)
