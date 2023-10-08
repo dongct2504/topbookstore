@@ -33,12 +33,6 @@ public class Repository<T> : IRepository<T> where T : class
     public virtual async Task<T?> GetAsync(QueryOptions<T> options) =>
         await BuildQuery(options).FirstOrDefaultAsync();
 
-    public void Insert(T entity) => _dbset.Add(entity);
-    public void Update(T entity) => _dbset.Update(entity);
-    public void Delete(T entity) => _dbset.Remove(entity);
-
-    public void Save() => _context.SaveChanges();
-
     private IQueryable<T> BuildQuery(QueryOptions<T> options)
     {
         IQueryable<T> query = _dbset; // ex: _context.Books;
@@ -79,4 +73,8 @@ public class Repository<T> : IRepository<T> where T : class
 
         return query;
     }
+
+    public void Insert(T entity) => _dbset.Add(entity);
+    public void Delete(T entity) => _dbset.Remove(entity);
+    public void DeleteRange(T entity) => _dbset.RemoveRange(entity);
 }

@@ -6,6 +6,7 @@ using TopBookStore.Mvc.Middleware;
 using TopBookStore.Infrastructure.Identity;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Application.Services;
+using TopBookStore.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<ITopBookStoreUnitOfWork, TopBookStoreUnitOfWork>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 
@@ -55,11 +57,6 @@ app.UseAuthorization();
 
 app.UseMiddleware<CategoriesMiddlewar>();
 
-// //localhost:xxxxx/author/list/page-1/size-10/sort-lastname-desc
-// app.MapControllerRoute(
-//     name: "page_sort",
-//     pattern: "{controller}/{action}/page-{pagenumber}/size-{pagesize}/sort-{sortfield}-{sortdirection}/{id?}"
-// );
 app.MapControllerRoute(
     name: "paging_books",
     pattern: "{controller}/{action}/page-{pagenumber}/size-{pagesize}/filter-{categoryid}-{price}-{numberofpages}-{authorid}"

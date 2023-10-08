@@ -1,15 +1,10 @@
-using TopBookStore.Domain.Entities;
-
 namespace TopBookStore.Domain.Interfaces;
 
-public interface ITopBookStoreUnitOfWork
+public interface ITopBookStoreUnitOfWork : IDisposable
 {
-    IRepository<Book> Books { get; }
-    IRepository<Category> Categories { get; }
-    IRepository<Author> Authors { get; }
-
-    void DeleteCurrentBookAuthors(Book book);
-    void LoadCurrentBookAuthors(Book book, int[] authorIds);
+    IBookRepository Books { get; }
+    ICategoryRepository Categories { get; }
+    IAuthorRepository Authors { get; }
 
     void Save();
 }
