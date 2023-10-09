@@ -18,7 +18,7 @@ public class HomeController : Controller
 
     public RedirectToActionResult Index(string? id) => RedirectToAction("List", new { id });
 
-    public async Task<ViewResult> List(GridDTO values, string? id)
+    public async Task<ViewResult> List(GridDTO values, int? id)
     {
         GridBuilder builber = new(HttpContext.Session, values);
 
@@ -29,7 +29,7 @@ public class HomeController : Controller
             Books = bookListDTO.Books.ToList(),
             CurrentRoute = builber.CurrentRoute,
             TotalPages = builber.GetTotalPages(bookListDTO.TotalCount),
-            Id = id ?? string.Empty
+            Id = id ?? 0
         };
 
         return View(vm);

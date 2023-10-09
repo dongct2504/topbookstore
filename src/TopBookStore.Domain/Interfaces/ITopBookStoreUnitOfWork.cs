@@ -6,5 +6,5 @@ public interface ITopBookStoreUnitOfWork : IDisposable
     ICategoryRepository Categories { get; }
     IAuthorRepository Authors { get; }
 
-    void Save();
+    Task SaveAsync();
 }

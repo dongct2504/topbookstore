@@ -26,7 +26,7 @@ CREATE TABLE Publishers
 
 CREATE TABLE Categories
 (
-  CategoryId VARCHAR(30) NOT NULL PRIMARY KEY,
+  CategoryId INT NOT NULL PRIMARY KEY,
   Name NVARCHAR(80) NOT NULL
 );
 
@@ -128,7 +128,7 @@ CREATE TABLE CartItems
 CREATE TABLE BookCategories
 (
   BookId INT NOT NULL,
-  CategoryId VARCHAR(30) NOT NULL,
+  CategoryId INT NOT NULL,
   PRIMARY KEY (BookId, CategoryId),
 
   CONSTRAINT FK_BookCategories_Books FOREIGN KEY (BookId) REFERENCES Books(BookId)

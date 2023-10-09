@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Admin";
+}
+
+<h1 class="text-center">Quản Lý</h1>
+
+<div class="p-4 border rounded">
+    <table id="tblData" class="table table-striped table-bordered">
+        <thead class="table-info">
+            <tr>
+                <th>
+                    <a asp-controller="Category" asp-action="Index">
+                        Quản Lý Thể Loại
+                    </a>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <a asp-controller="Book" asp-action="Index">
+                        Quản Lý Sách
+                    </a>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <a asp-controller="Author" asp-action="Index">
+                        Quản Lý Tác Giả
+                    </a>
+                </th>
+            </tr>
+        </thead>
+    </table>
+</div>

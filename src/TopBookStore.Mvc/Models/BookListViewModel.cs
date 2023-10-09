@@ -9,7 +9,7 @@ public class BookListViewModel
 
     public RouteDictionary CurrentRoute { get; set; } = new();
     public int TotalPages { get; set; }
-    public string Id { get; set; } = string.Empty;
+    public int Id { get; set; }
 
     // data for dropdowns
     public IEnumerable<Category> Categories { get; set; } = new List<Category>();

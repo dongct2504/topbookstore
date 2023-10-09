@@ -12,7 +12,7 @@ public interface IRepository<T> where T : class
     Task<T?> GetAsync(string id);
     Task<T?> GetAsync(QueryOptions<T> options);
 
-    void Insert(T entity);
-    void Delete(T entity);
-    void DeleteRange(T entity);
+    void Add(T entity);
+    void Remove(T entity);
+    void RemoveRange(T entity);
 }

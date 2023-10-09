@@ -41,7 +41,8 @@
                     <td>
                         @foreach (Category category in book.Categories)
                         {
-                            <a asp-action="Home" asp-route-id="@category.CategoryId">
+                            <a asp-controller="Book" asp-action="Details"
+                                asp-route-id="@category.CategoryId">
                                 @category.Name
                             </a>
                         }

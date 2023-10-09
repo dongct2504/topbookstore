@@ -10,9 +10,9 @@ namespace TopBookStore.Application.Services;
 
 public class BookService : IBookService
 {
-    private readonly IRepository<Book> _data;
+    private readonly ITopBookStoreUnitOfWork _data;
 
-    public BookService(IRepository<Book> data)
+    public BookService(ITopBookStoreUnitOfWork data)
     {
         _data = data;
     }
@@ -27,10 +27,10 @@ public class BookService : IBookService
             PageNumber = values.PageNumber
         };
 
-        return await _data.ListAllAsync(options);
+        return await _data.Books.ListAllAsync(options);
     }
 
-    public async Task<BookListDTO> GetBooksByCategoryAsync(GridDTO values, string? id)
+    public async Task<BookListDTO> GetBooksByCategoryAsync(GridDTO values, int? id)
     {
         QueryOptions<Book> options = new()
         {
@@ -47,8 +47,8 @@ public class BookService : IBookService
 
         BookListDTO dto = new()
         {
-            Books = await _data.ListAllAsync(options),
-            TotalCount = await _data.CountAsync()
+            Books = await _data.Books.ListAllAsync(options),
+            TotalCount = await _data.Books.CountAsync()
         };
 
         return dto;
@@ -69,7 +69,8 @@ public class BookService : IBookService
         // filter
         if (route.IsFilterByCategory)
         {
-            options.Where = b => b.Categories.Any(c => c.CategoryId == route.CategoryFilter);
+            _ = int.TryParse(route.CategoryFilter, out int categoryId) ? categoryId : 0;
+            options.Where = b => b.Categories.Any(c => c.CategoryId == categoryId);
         }
         if (route.IsFilterByPrice)
         {
@@ -127,25 +128,25 @@ public class BookService : IBookService
 
         BookListDTO dto = new()
         {
-            Books = await _data.ListAllAsync(options),
-            TotalCount = await _data.CountAsync()
+            Books = await _data.Books.ListAllAsync(options),
+            TotalCount = await _data.Books.CountAsync()
         };
 
         return dto;
     }
 
-    public async Task<Book> GetBookByIdAsync(int id)
+    public async Task<Book?> GetBookByIdAsync(int id)
     {
-        Book book = await _data.GetAsync(new QueryOptions<Book>
+        Book? book = await _data.Books.GetAsync(new QueryOptions<Book>
         {
             Where = b => b.BookId == id,
             Includes = "Author, Categories"
-        }) ?? new Book();
+        });
 
         return book;
     }
 
-    public Task CreateBookAsync(Book book)
+    public Task AddBookAsync(Book book)
     {
         throw new NotImplementedException();
     }

@@ -29,9 +29,9 @@ VALUES
 -- Insert data into Categories table
 INSERT INTO Categories (CategoryId, Name)
 VALUES
-    ('CT001', N'Thiếu nhi'),
-    ('CT002', N'Khoa học'),
-    ('CT003', N'Văn học');
+    (1, N'Thiếu nhi'),
+    (2, N'Khoa học'),
+    (3, N'Văn học');
 
 -- Insert data into Customers table
 INSERT INTO Customers (CustomerId, FirstName, LastName, PhoneNumber, Debt, Street, District, City, Country, CartId)
@@ -78,5 +78,5 @@ VALUES
 -- Insert data into BookCategories table
 INSERT INTO BookCategories (BookId, CategoryId)
 VALUES
-    (1, 'CT001'),
-    (2, 'CT003');
+    (1, 1),
+    (2, 3);

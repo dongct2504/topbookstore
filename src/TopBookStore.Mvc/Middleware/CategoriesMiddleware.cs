@@ -15,16 +15,17 @@ public class CategoriesMiddlewar
         _next = request;
     }
 
-    public async Task InvokeAsync(HttpContext context, IRepository<Category> data)
+    public async Task InvokeAsync(HttpContext context, ITopBookStoreUnitOfWork data)
     {
         if (!categorySet)
         {
-            IEnumerable<Category> categories = await data.ListAllAsync(new QueryOptions<Category>()
-            {
-                OrderBy = c => c.Name
-            });
+            IEnumerable<Category> categories = await data.Categories.ListAllAsync(
+                new QueryOptions<Category>()
+                {
+                    OrderBy = c => c.Name
+                });
             context.Session.SetObject("categories", categories);
-            
+
             categorySet = true;
         }
 

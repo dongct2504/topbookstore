@@ -44,14 +44,14 @@ public partial class TopBookStoreContext : DbContext
     {
         modelBuilder.Entity<Author>(entity =>
         {
-            entity.HasKey(e => e.AuthorId).HasName("PK__Authors__70DAFC342D8BF6B3");
+            entity.HasKey(e => e.AuthorId).HasName("PK__Authors__70DAFC347AD6D02A");
 
             entity.Property(e => e.AuthorId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Book>(entity =>
         {
-            entity.HasKey(e => e.BookId).HasName("PK__Books__3DE0C207CE05AE83");
+            entity.HasKey(e => e.BookId).HasName("PK__Books__3DE0C207A5E5B067");
 
             entity.Property(e => e.BookId).ValueGeneratedNever();
 
@@ -74,17 +74,14 @@ public partial class TopBookStoreContext : DbContext
                         .HasConstraintName("FK_BookCategories_Books"),
                     j =>
                     {
-                        j.HasKey("BookId", "CategoryId").HasName("PK__BookCate__9C7051A73E5178C6");
+                        j.HasKey("BookId", "CategoryId").HasName("PK__BookCate__9C7051A71BB6DA75");
                         j.ToTable("BookCategories");
-                        j.IndexerProperty<string>("CategoryId")
-                            .HasMaxLength(30)
-                            .IsUnicode(false);
                     });
         });
 
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.CartId).HasName("PK__Carts__51BCD7B75FE9051F");
+            entity.HasKey(e => e.CartId).HasName("PK__Carts__51BCD7B7F0637800");
 
             entity.Property(e => e.CartId).ValueGeneratedNever();
 
@@ -93,7 +90,7 @@ public partial class TopBookStoreContext : DbContext
 
         modelBuilder.Entity<CartItem>(entity =>
         {
-            entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__488B0B0A2222E986");
+            entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__488B0B0A87FFDB43");
 
             entity.Property(e => e.CartItemId).ValueGeneratedNever();
 
@@ -104,17 +101,19 @@ public partial class TopBookStoreContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0BDE513AA9");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0B68D74488");
+
+            entity.Property(e => e.CategoryId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64D8F8D1F2CB");
+            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64D8F4BBD26C");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BCF302CE2EF");
+            entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BCF75075ECA");
 
             entity.Property(e => e.OrderId).ValueGeneratedNever();
             entity.Property(e => e.State).HasDefaultValueSql("('awaiting')");
@@ -124,7 +123,7 @@ public partial class TopBookStoreContext : DbContext
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D36CB26A8667");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D36C694C15DA");
 
             entity.Property(e => e.OrderDetailId).ValueGeneratedNever();
 
@@ -135,14 +134,14 @@ public partial class TopBookStoreContext : DbContext
 
         modelBuilder.Entity<Publisher>(entity =>
         {
-            entity.HasKey(e => e.PublisherId).HasName("PK__Publishe__4C657FAB75FC2492");
+            entity.HasKey(e => e.PublisherId).HasName("PK__Publishe__4C657FAB077D6877");
 
             entity.Property(e => e.PublisherId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Receipt>(entity =>
         {
-            entity.HasKey(e => e.ReceiptId).HasName("PK__Receipts__CC08C420F868E4B9");
+            entity.HasKey(e => e.ReceiptId).HasName("PK__Receipts__CC08C420774E01CC");
 
             entity.Property(e => e.ReceiptId).ValueGeneratedNever();
 

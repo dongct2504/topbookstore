@@ -8,9 +8,9 @@ namespace TopBookStore.Application.Services;
 
 public class AuthorService : IAuthorService
 {
-    private readonly IRepository<Author> _data;
+    private readonly ITopBookStoreUnitOfWork _data;
 
-    public AuthorService(IRepository<Author> data)
+    public AuthorService(ITopBookStoreUnitOfWork data)
     {
         _data = data;
     }
@@ -27,8 +27,8 @@ public class AuthorService : IAuthorService
 
         AuthorListDTO dto = new()
         {
-            Authors = await _data.ListAllAsync(options),
-            TotalCount = await _data.CountAsync()
+            Authors = await _data.Authors.ListAllAsync(options),
+            TotalCount = await _data.Authors.CountAsync()
         };
 
         return dto;
@@ -36,7 +36,7 @@ public class AuthorService : IAuthorService
 
     public async Task<Author> GetAuthorByIdAsync(int id)
     {
-        Author author = await _data.GetAsync(new QueryOptions<Author>
+        Author author = await _data.Authors.GetAsync(new QueryOptions<Author>
         {
             Where = a => a.AuthorId == id,
             Includes = "Books"

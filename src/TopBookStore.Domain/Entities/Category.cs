@@ -9,9 +9,7 @@ namespace TopBookStore.Domain.Entities;
 public partial class Category
 {
     [Key]
-    [StringLength(30)]
-    [Unicode(false)]
-    public string CategoryId { get; set; } = null!;
+    public int CategoryId { get; set; }
 
     [StringLength(80)]
     public string Name { get; set; } = null!;
