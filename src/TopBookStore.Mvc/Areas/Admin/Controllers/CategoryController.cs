@@ -14,7 +14,10 @@ public class CategoryController : Controller
         _service = service;
     }
 
-    public ViewResult Index() => View();
+    public ViewResult Index()
+    {
+        return View();
+    }
 
     [HttpGet]
     public async Task<IActionResult> Upsert(int? id)
@@ -64,8 +67,7 @@ public class CategoryController : Controller
     [HttpGet]
     public async Task<IActionResult> GetAllCategories()
     {
-        IEnumerable<Category> categories = await _service.GetAllCategoriesAsync();
-        return Json(new { data = categories });
+        return Json(new { data = await _service.GetAllCategoriesAsync() });
     }
 
     [HttpDelete]
@@ -74,7 +76,7 @@ public class CategoryController : Controller
         Category? category = await _service.GetCategoryByIdAsync(id);
         if (category is null)
         {
-            return Json(new { success = false, message = "Lỗi Khi xóa" });
+            return Json(new { success = false, message = "Lỗi Khi xóa!" });
         }
 
         await _service.RemoveCategoryAsync(category);

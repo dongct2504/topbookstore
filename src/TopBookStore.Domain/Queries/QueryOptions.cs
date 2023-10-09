@@ -33,11 +33,8 @@ public class QueryOptions<T>
 
     public Expression<Func<T, object>> OrderBy { get; set; } = null!;
     public string OrderByDirection { get; set; } = "asc"; // only if have orderby to invoke this
-    public int PageNumber { get; set; }
-    public int PageSize { get; set; }
 
     public bool HasInclude => includes != Array.Empty<string>();
     public bool HasWhere => WhereClauses is not null;
     public bool HasOrderBy => OrderBy is not null;
-    public bool HasPaging => PageSize > 0 && PageNumber > 0;
 }

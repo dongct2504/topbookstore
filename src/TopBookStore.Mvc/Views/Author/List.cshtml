@@ -3,7 +3,6 @@
     ViewData["Title"] = "Tác Giả";
 
     RouteDictionary current = Model.CurrentRoute;
-    RouteDictionary routes = Model.CurrentRoute.Clone();
 }
 
 <h1>Các Tác Giả</h1>
@@ -40,8 +39,7 @@
     </tbody>
 </table>
 
-@* paging links *@
-@{
+@* @{
     routes = Model.CurrentRoute.Clone(); // current.Clone();
 
     for (int i = 1; i <= Model.TotalPages; i++)
@@ -52,4 +50,4 @@
         <a asp-action="List" asp-all-route-data="@routes"
             class="btn btn-outline-primary @active">@i</a>
     }
-}
+} *@

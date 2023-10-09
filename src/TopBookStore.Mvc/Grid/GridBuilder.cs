@@ -1,7 +1,5 @@
 using TopBookStore.Application.Commond;
 using TopBookStore.Application.DTOs;
-using TopBookStore.Domain.Entities;
-using TopBookStore.Domain.Extensions;
 using TopBookStore.Mvc.Extensions;
 
 namespace TopBookStore.Mvc.Grid;
@@ -30,11 +28,6 @@ public class GridBuilder
 
         Routes = new RouteDictionary
         {
-            PageNumber = values.PageNumber,
-            PageSize = values.PageSize,
-            SortField = values.SortField,
-            SortDirection = values.SortDirection,
-
             // set filter segments
             CategoryFilter = values.CategoryId,
             PriceFilter = values.Price,
@@ -46,12 +39,6 @@ public class GridBuilder
     }
 
     public void SaveRouteSegments() => _session.SetObject(RouteKey, Routes);
-
-    public int GetTotalPages(int count)
-    {
-        int size = Routes.PageSize;
-        return (count + size - 1) / size; // (10 books + 4 - 1) / 4 = 3.25 = 3
-    }
 
     public void LoadFilterSegments(string[] filter) => Routes.LoadFilterSegments(filter);
 

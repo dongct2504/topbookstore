@@ -12,6 +12,6 @@ public class BookRepository : Repository<Book>, IBookRepository
 
     public void Update(Book book)
     {
-        throw new NotImplementedException();
+        _context.Update(book);
     }
 }

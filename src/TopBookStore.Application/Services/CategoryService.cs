@@ -26,11 +26,6 @@ public class CategoryService : ICategoryService
         return await _data.Categories.GetAsync(id);
     }
 
-    public async Task<Category?> GetCategoryByIdAsync(string id)
-    {
-        return await _data.Categories.GetAsync(id);
-    }
-
     public async Task AddCategoryAsync(Category category)
     {
         _data.Categories.Add(category);

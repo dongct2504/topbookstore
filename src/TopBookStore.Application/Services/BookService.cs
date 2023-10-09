@@ -17,51 +17,43 @@ public class BookService : IBookService
         _data = data;
     }
 
-    public async Task<IEnumerable<Book>> GetAllBooksAsync(GridDTO values)
+    public async Task<IEnumerable<Book>> GetAllBooksAsync()
     {
         QueryOptions<Book> options = new()
         {
-            Includes = "Author, Categories",
-            OrderByDirection = values.SortDirection,
-            PageSize = values.PageSize,
-            PageNumber = values.PageNumber
+            Includes = "Author, Publisher, Categories",
         };
 
         return await _data.Books.ListAllAsync(options);
     }
 
-    public async Task<BookListDTO> GetBooksByCategoryAsync(GridDTO values, int? id)
+    public async Task<Book?> GetBookByIdAsync(int id)
     {
-        QueryOptions<Book> options = new()
+        Book? book = await _data.Books.GetAsync(new QueryOptions<Book>
         {
-            Includes = "Author, Categories",
-            OrderByDirection = values.SortDirection,
-            PageSize = values.PageSize,
-            PageNumber = values.PageNumber
-        };
+            Where = b => b.BookId == id,
+            Includes = "Author, Publisher, Categories"
+        });
 
-        if (id is not null)
-        {
-            options.Where = b => b.Categories.Any(c => c.CategoryId == id);
-        };
-
-        BookListDTO dto = new()
-        {
-            Books = await _data.Books.ListAllAsync(options),
-            TotalCount = await _data.Books.CountAsync()
-        };
-
-        return dto;
+        return book;
     }
 
-    public async Task<BookListDTO> FilterBooksAsync(GridDTO values)
+    public async Task<IEnumerable<Book>> GetBooksByCategoryAsync(int id)
+    {
+        QueryOptions<Book> options = new()
+        {
+            Where = b => b.Categories.Any(c => c.CategoryId == id),
+            Includes = "Author, Categories"
+        };
+
+        return await _data.Books.ListAllAsync(options);
+    }
+
+    public async Task<IEnumerable<Book>> FilterBooksAsync(GridDTO values)
     {
         QueryOptions<Book> options = new()
         {
             Includes = "Author, Categories",
-            OrderByDirection = values.SortDirection,
-            PageNumber = values.PageNumber,
-            PageSize = values.PageSize
         };
 
         RouteDictionary route = new(values);
@@ -120,44 +112,23 @@ public class BookService : IBookService
             }
         }
 
-        // sort
-        if (route.IsSortByPrice)
-        {
-            options.OrderBy = b => b.Price;
-        }
-
-        BookListDTO dto = new()
-        {
-            Books = await _data.Books.ListAllAsync(options),
-            TotalCount = await _data.Books.CountAsync()
-        };
-
-        return dto;
+        return await _data.Books.ListAllAsync(options);
     }
 
-    public async Task<Book?> GetBookByIdAsync(int id)
+    public async Task AddBookAsync(Book book)
     {
-        Book? book = await _data.Books.GetAsync(new QueryOptions<Book>
-        {
-            Where = b => b.BookId == id,
-            Includes = "Author, Categories"
-        });
-
-        return book;
-    }
-
-    public Task AddBookAsync(Book book)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteBookAsync(int id)
-    {
-        throw new NotImplementedException();
+        _data.Books.Add(book);
+        await _data.SaveAsync();
     }
 
     public Task UpdateBookAsync(Book book)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task DeleteBookAsync(Book book)
+    {
+        _data.Books.Remove(book);
+        await _data.SaveAsync();
     }
 }

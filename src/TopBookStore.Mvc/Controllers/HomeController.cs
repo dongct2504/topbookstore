@@ -9,30 +9,22 @@ namespace TopBookStore.Mvc.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IBookService _bookService;
+    private readonly IBookService _service;
 
-    public HomeController(IBookService bookService)
+    public HomeController(IBookService service)
     {
-        _bookService = bookService;
+        _service = service;
     }
 
-    public RedirectToActionResult Index(string? id) => RedirectToAction("List", new { id });
-
-    public async Task<ViewResult> List(GridDTO values, int? id)
+    public async Task<IActionResult> Index(int? id)
     {
-        GridBuilder builber = new(HttpContext.Session, values);
-
-        BookListDTO bookListDTO = await _bookService.GetBooksByCategoryAsync(values, id);
-
-        BookListViewModel vm = new()
+        // get by category id
+        if (id is not null)
         {
-            Books = bookListDTO.Books.ToList(),
-            CurrentRoute = builber.CurrentRoute,
-            TotalPages = builber.GetTotalPages(bookListDTO.TotalCount),
-            Id = id ?? 0
-        };
-
-        return View(vm);
+            return View(await _service.GetBooksByCategoryAsync(id.GetValueOrDefault()));
+        }
+        // get all
+        return View(await _service.GetAllBooksAsync());
     }
 
     public ViewResult Privacy()

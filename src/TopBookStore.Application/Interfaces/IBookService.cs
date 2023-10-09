@@ -5,12 +5,12 @@ namespace TopBookStore.Application.Interfaces;
 
 public interface IBookService
 {
-    Task<IEnumerable<Book>> GetAllBooksAsync(GridDTO values);
-    Task<BookListDTO> GetBooksByCategoryAsync(GridDTO values, int? id);
-    Task<BookListDTO> FilterBooksAsync(GridDTO values);
+    Task<IEnumerable<Book>> GetAllBooksAsync();
     Task<Book?> GetBookByIdAsync(int id);
+    Task<IEnumerable<Book>> GetBooksByCategoryAsync(int id);
+    Task<IEnumerable<Book>> FilterBooksAsync(GridDTO values);
 
     Task AddBookAsync(Book book);
     Task UpdateBookAsync(Book book);
-    Task DeleteBookAsync(int id);
+    Task DeleteBookAsync(Book book);
 }

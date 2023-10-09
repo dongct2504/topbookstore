@@ -9,11 +9,11 @@ namespace TopBookStore.Mvc.Controllers;
 
 public class AuthorController : Controller
 {
-    private readonly IAuthorService _authorService;
+    private readonly IAuthorService _service;
 
-    public AuthorController(IAuthorService authorService)
+    public AuthorController(IAuthorService service)
     {
-        _authorService = authorService;
+        _service = service;
     }
 
     public RedirectToActionResult Index() => RedirectToAction("List");
@@ -22,21 +22,22 @@ public class AuthorController : Controller
     {
         GridBuilder builder = new(HttpContext.Session, values);
 
-        AuthorListDTO authorListDTO = await _authorService.GetAllAuthorsAsync(values);
-
         AuthorListViewModel vm = new()
         {
-            Authors = authorListDTO.Authors.ToList(),
-            CurrentRoute = builder.CurrentRoute,
-            TotalPages = builder.GetTotalPages(authorListDTO.TotalCount)
+            Authors = await _service.GetAllAuthorsAsync(),
+            CurrentRoute = builder.CurrentRoute
         };
 
         return View(vm);
     }
 
-    public async Task<ViewResult> Details(int id)
+    public async Task<IActionResult> Details(int id)
     {
-        Author author = await _authorService.GetAuthorByIdAsync(id);
+        Author? author = await _service.GetAuthorByIdAsync(id);
+        if (author is null)
+        {
+            return NotFound();
+        }
 
         return View(author);
     }

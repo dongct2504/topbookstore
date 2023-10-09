@@ -3,7 +3,6 @@
     ViewData["Title"] = "Lọc Sách";
 
     RouteDictionary current = Model.CurrentRoute;
-    RouteDictionary routes = Model.CurrentRoute.Clone();
 }
 
 <h1>Lọc Sách</h1>
@@ -114,16 +113,3 @@
         </tbody>
     </table>
 </form>
-
-@{
-    routes = Model.CurrentRoute.Clone();
-
-    for (int i = 1; i <= Model.TotalPages; i++)
-    {
-        routes.PageNumber = i;
-        string active = @Nav.Active(i, current.PageNumber);
-
-        <a asp-action="List" asp-all-route-data="@routes" asp-route-id="@Model.Id"
-            class="btn btn-outline-primary @active">@i</a>
-    }
-}

@@ -66,11 +66,6 @@ public class Repository<T> : IRepository<T> where T : class
             }
         }
 
-        if (options.HasPaging)
-        {
-            query = query.PageBy(options.PageNumber, options.PageSize);
-        }
-
         return query;
     }
 

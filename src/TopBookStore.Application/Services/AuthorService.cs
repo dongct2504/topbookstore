@@ -15,32 +15,23 @@ public class AuthorService : IAuthorService
         _data = data;
     }
 
-    public async Task<AuthorListDTO> GetAllAuthorsAsync(GridDTO values)
+    public async Task<IEnumerable<Author>> GetAllAuthorsAsync()
     {
         QueryOptions<Author> options = new()
         {
-            Includes = "Books",
-            OrderByDirection = values.SortDirection,
-            PageNumber = values.PageNumber,
-            PageSize = values.PageSize,
+            Includes = "Books"
         };
 
-        AuthorListDTO dto = new()
-        {
-            Authors = await _data.Authors.ListAllAsync(options),
-            TotalCount = await _data.Authors.CountAsync()
-        };
-
-        return dto;
+        return await _data.Authors.ListAllAsync(options);
     }
 
-    public async Task<Author> GetAuthorByIdAsync(int id)
+    public async Task<Author?> GetAuthorByIdAsync(int id)
     {
-        Author author = await _data.Authors.GetAsync(new QueryOptions<Author>
+        Author? author = await _data.Authors.GetAsync(new QueryOptions<Author>
         {
             Where = a => a.AuthorId == id,
             Includes = "Books"
-        }) ?? new Author();
+        });
 
         return author;
     }

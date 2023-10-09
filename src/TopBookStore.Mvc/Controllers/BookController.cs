@@ -11,45 +11,42 @@ namespace TopBookStore.Mvc.Controllers;
 
 public class BookController : Controller
 {
-    private readonly IBookService _bookService;
-    private readonly IRepository<Category> _categoryRepository;
-    private readonly IRepository<Author> _authorRepository;
+    private readonly IBookService _service;
+    private readonly ITopBookStoreUnitOfWork _data;
 
-    public BookController(IBookService bookService, IRepository<Category> categoryRepo,
-        IRepository<Author> authorRepo)
+    public BookController(IBookService service, ITopBookStoreUnitOfWork data)
     {
-        _bookService = bookService;
-        _categoryRepository = categoryRepo;
-        _authorRepository = authorRepo;
+        _service = service;
+        _data = data;
     }
 
-    public RedirectToActionResult Index() => RedirectToAction("List");
+    public async Task<IActionResult> Index()
+    {
+        return View(await _service.GetAllBooksAsync());
+    }
 
     public async Task<ViewResult> List(GridDTO values)
     {
         GridBuilder builder = new(HttpContext.Session, values);
 
-        BookListDTO bookListDTO = await _bookService.FilterBooksAsync(values);
-
         BookListViewModel vm = new()
         {
-            Books = bookListDTO.Books.ToList(),
-            Categories = await _categoryRepository.ListAllAsync(new QueryOptions<Category>
+            Books = await _service.FilterBooksAsync(values),
+            Categories = await _data.Categories.ListAllAsync(new QueryOptions<Category>
             {
-                OrderBy = c => c.Name
+                OrderBy = a => a.Name
             }),
-            Authors = await _authorRepository.ListAllAsync(new QueryOptions<Author>
+            Authors = await _data.Authors.ListAllAsync(new QueryOptions<Author>
             {
                 OrderBy = a => a.FirstName
             }),
-            CurrentRoute = builder.CurrentRoute,
-            TotalPages = builder.GetTotalPages(bookListDTO.TotalCount)
+            CurrentRoute = builder.CurrentRoute
         };
 
         return View(vm);
     }
 
-    public RedirectToActionResult Filter(string[] filter, bool clear = false)
+    public RedirectToActionResult FilterBooks(string[] filter, bool clear = false)
     {
         // get current route segments from session
         GridBuilder builder = new(HttpContext.Session);
@@ -62,19 +59,24 @@ public class BookController : Controller
         }
         else
         {
-            builder.CurrentRoute.PageNumber = 1;
             builder.LoadFilterSegments(filter);
         }
 
         // save route data back to session and redirect to Book/List action method,
         // passing dictionary of route segment values to build URL
         builder.SaveRouteSegments();
-        return RedirectToAction("List", builder.CurrentRoute);
+
+        return RedirectToAction(nameof(List), builder.CurrentRoute);
     }
 
-    public async Task<ViewResult> Details(int id)
+    public async Task<IActionResult> Details(int id)
     {
-        Book book = await _bookService.GetBookByIdAsync(id);
+        Book? book = await _service.GetBookByIdAsync(id);
+        if (book is null)
+        {
+            return NotFound();
+        }
+
         return View(book);
     }
 }

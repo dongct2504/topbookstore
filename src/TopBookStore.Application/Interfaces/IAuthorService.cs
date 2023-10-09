@@ -5,8 +5,8 @@ namespace TopBookStore.Application.Interfaces;
 
 public interface IAuthorService
 {
-    Task<AuthorListDTO> GetAllAuthorsAsync(GridDTO values);
-    Task<Author> GetAuthorByIdAsync(int id);
+    Task<IEnumerable<Author>> GetAllAuthorsAsync();
+    Task<Author?> GetAuthorByIdAsync(int id);
 
     Task AddAuthorAsync(Author author);
     Task UpdateAuthorAsync(Author author);

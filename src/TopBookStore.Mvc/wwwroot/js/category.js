@@ -2,14 +2,15 @@ let dataTable;
 
 $(document).ready(() => {
     dataTable = $('#tblDataCategory').DataTable({
-        "ajax": {
-            "url": "/Admin/Category/GetAllCategories"
+        ajax: {
+            type: 'GET',
+            url: '/Admin/Category/GetAllCategories'
         },
-        "columns": [
-            { "data": "name", "width": "60%" },
+        columns: [
+            { data: 'name', width: '60%' },
             {
-                "data": "categoryId",
-                "render": (data) => {
+                data: 'categoryId',
+                render: (data) => {
                     return `
                         <div class="text-center">
                             <a class="btn btn-success text-white"
@@ -22,7 +23,7 @@ $(document).ready(() => {
                             </a>
                         </div>
                         `;
-                }, "width": "40%"
+                }, width: '40%'
             }
         ]
     });
@@ -30,15 +31,15 @@ $(document).ready(() => {
 
 function Delete(url) {
     swal({
-        title: "Bạn có chắc muốn xóa!",
-        text: "Khi xóa sẽ xóa vĩnh viễn và sẽ không thể hồi phục!",
-        icon: "warning",
+        title: 'Bạn có chắc muốn xóa!',
+        text: 'Khi xóa sẽ xóa vĩnh viễn và sẽ không thể hồi phục!',
+        icon: 'warning',
         buttons: true,
         dangerMode: true
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                type: "DELETE",
+                type: 'DELETE',
                 url: url,
                 success: (data) => {
                     if (data.success) { // if success is then then get the data
