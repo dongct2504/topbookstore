@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Entities;
@@ -62,13 +64,13 @@ public class BookController : Controller
     #region API CALLS
 
     [HttpGet]
-    public async Task<IActionResult> GetAllBooks()
+    public async Task<IActionResult> GetAllBooks(int? id = null)
     {
-        // // get by category id
-        // if (id is not null)
-        // {
-        //     return Json(new { data = await _service.GetBooksByCategoryAsync(id.GetValueOrDefault()) });
-        // }
+        // get by category id
+        if (id is not null)
+        {
+            return Json(new { data = await _service.GetBooksByCategoryAsync(id.GetValueOrDefault()) });
+        }
         // get all
         return Json(new { data = await _service.GetAllBooksAsync() });
     }

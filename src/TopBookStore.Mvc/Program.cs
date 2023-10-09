@@ -6,6 +6,7 @@ using TopBookStore.Infrastructure.Identity;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Application.Services;
 using TopBookStore.Infrastructure.UnitOfWork;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,8 @@ builder.Services.AddRouting(options =>
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddRazorPages();
 
 var TopBookStoreCS = builder.Configuration.GetConnectionString("TopBookStoreCS");

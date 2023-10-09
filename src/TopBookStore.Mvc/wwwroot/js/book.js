@@ -7,14 +7,25 @@ $(document).ready(() => {
             url: '/Admin/Book/GetAllBooks'
         },
         columns: [
-            { data: 'title', width: '9%' },
-            { data: 'description', width: '9%' },
-            { data: 'isbn13', width: '9%' },
-            { data: 'price', width: '9%' },
-            // { data: 'discountPercent', width: '9%' },
-            // { data: 'numberOfPages', width: '9%' },
-            // { data: 'publisher.name', width: '9%' },
-            // { data: 'publicationDate', width: '9%' },
+            { data: 'title', width: '15%' },
+            { data: 'isbn13', width: '10%' },
+            { data: 'price', width: '10%' },
+            { data: 'discountPercent', width: '10%' },
+            { data: 'numberOfPages', width: '10%' },
+            {
+                data: 'categories',
+                render: (data) => {
+                    let categories = '';
+                    data.forEach(category => {
+                        categories += category.name + ', ';
+                    });
+                    categories = categories.slice(0, -2);
+                    return categories;
+                },
+                width: '10%'
+            },
+            { data: 'author.fullName', width: '10%' },
+            { data: 'publisher.name', width: '10%' },
             {
                 data: 'bookId',
                 render: (data) => {
@@ -30,7 +41,8 @@ $(document).ready(() => {
                             </a>
                         </div>
                         `;
-                }, width: '20%'
+                },
+                width: '15%'
             }
         ]
     });
