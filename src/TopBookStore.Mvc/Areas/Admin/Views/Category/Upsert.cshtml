@@ -1,13 +1,6 @@
 @model Category
 @{
-    if (ViewBag.Action == "Add")
-    {
-        ViewData["Title"] = "Thêm Thể Loại";
-    }
-    else
-    {
-        ViewData["Title"] = "Chỉnh Sửa Thể Loại";
-    }
+    ViewData["Title"] = ViewBag.Action == "Add" ? "Thêm Thể Loại" : "Chỉnh Sửa Thể Loại";
 }
 
 <form asp-action="Upsert" method="post">
@@ -63,7 +56,7 @@
     </div>
 </form>
 
-@section Scripts
+@section scripts
 {
     <partial name="_ValidationScriptsPartial.cshtml"></partial>
 }
