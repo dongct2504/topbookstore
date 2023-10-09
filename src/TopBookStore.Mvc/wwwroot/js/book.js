@@ -2,16 +2,16 @@ let dataTable;
 
 $(document).ready(() => {
     dataTable = $('#tblDataBook').DataTable({
-        ajax: {
-            type: 'GET',
-            url: '/Admin/Book/GetAllBooks'
+        "ajax": {
+            "type": "GET",
+            "url": "/Admin/Book/GetAllBooks"
         },
         columns: [
-            { data: 'title', width: '15%' },
-            { data: 'isbn13', width: '10%' },
-            { data: 'price', width: '10%' },
-            { data: 'discountPercent', width: '10%' },
-            { data: 'numberOfPages', width: '10%' },
+            { "data": "title" },
+            { data: 'isbn13' },
+            { data: 'price' },
+            { data: 'discountPercent' },
+            { data: 'numberOfPages' },
             {
                 data: 'categories',
                 render: (data) => {
@@ -21,11 +21,10 @@ $(document).ready(() => {
                     });
                     categories = categories.slice(0, -2);
                     return categories;
-                },
-                width: '10%'
+                }
             },
-            { data: 'author.fullName', width: '10%' },
-            { data: 'publisher.name', width: '10%' },
+            { data: 'author.fullName' },
+            { data: 'publisher.name' },
             {
                 data: 'bookId',
                 render: (data) => {
@@ -41,8 +40,7 @@ $(document).ready(() => {
                             </a>
                         </div>
                         `;
-                },
-                width: '15%'
+                }
             }
         ]
     });
