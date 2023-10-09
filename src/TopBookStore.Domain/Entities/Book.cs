@@ -33,6 +33,8 @@ public partial class Book
     [Column(TypeName = "datetime")]
     public DateTime PulicationDate { get; set; }
 
+    public string? ImageUrl { get; set; }
+
     public int AuthorId { get; set; }
 
     public int PublisherId { get; set; }
