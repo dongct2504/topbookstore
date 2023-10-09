@@ -1,5 +1,7 @@
+let dataTable;
+
 $(document).ready(() => {
-    const dataTable = $('#tblDataCategory').DataTable({
+    dataTable = $('#tblDataCategory').DataTable({
         "ajax": {
             "url": "/Admin/Category/GetAllCategories"
         },
@@ -15,7 +17,7 @@ $(document).ready(() => {
                                 <span class="fas fa-edit"></span>&nbsp;Sửa
                             </a>
                             <a class="btn btn-danger text-white"
-                                href="/Admin/Category/upsert/${data}">
+                                onclick=Delete("/Admin/Category/DeleteCategory/${data}")>
                                 <span class="fas fa-trash-alt"></span>&nbsp;Xóa
                             </a>
                         </div>
@@ -25,3 +27,28 @@ $(document).ready(() => {
         ]
     });
 });
+
+function Delete(url) {
+    swal({
+        title: "Bạn có chắc muốn xóa!",
+        text: "Khi xóa sẽ xóa vĩnh viễn và sẽ không thể hồi phục!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                type: "DELETE",
+                url: url,
+                success: (data) => {
+                    if (data.success) { // if success is then then get the data
+                        toastr.success(data.message)
+                        dataTable.ajax.reload();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            })
+        }
+    });
+};

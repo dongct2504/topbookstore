@@ -39,6 +39,7 @@ public class CategoryController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Upsert(Category category)
     {
         if (ModelState.IsValid)
@@ -51,7 +52,7 @@ public class CategoryController : Controller
             {
                 await _service.UpdateCategoryAsync(category);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         ViewBag.Action = category.CategoryId == 0 ? "Add" : "Update";
@@ -67,10 +68,18 @@ public class CategoryController : Controller
         return Json(new { data = categories });
     }
 
-    // public async Task<IActionResult> AddCategory(int? id)
-    // {
+    [HttpDelete]
+    public async Task<IActionResult> DeleteCategory(int id)
+    {
+        Category? category = await _service.GetCategoryByIdAsync(id);
+        if (category is null)
+        {
+            return Json(new { success = false, message = "Lỗi Khi xóa" });
+        }
 
-    // }
+        await _service.RemoveCategoryAsync(category);
+        return Json(new { success = true, message = "Xóa thành công" });
+    }
 
     #endregion
 }

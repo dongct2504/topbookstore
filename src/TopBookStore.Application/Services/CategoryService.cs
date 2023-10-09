@@ -42,4 +42,10 @@ public class CategoryService : ICategoryService
         _data.Categories.Update(category);
         await _data.SaveAsync();
     }
+
+    public async Task RemoveCategoryAsync(Category category)
+    {
+        _data.Categories.Remove(category);
+        await _data.SaveAsync();
+    }
 }

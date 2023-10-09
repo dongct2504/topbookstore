@@ -11,4 +11,5 @@ public interface ICategoryService
 
     Task AddCategoryAsync(Category category);
     Task UpdateCategoryAsync(Category category);
+    Task RemoveCategoryAsync(Category category);
 }
