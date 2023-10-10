@@ -31,6 +31,10 @@ public class PublisherController : Controller
 
         ViewBag.Action = "Update";
         publisher = await _service.GetPublisherByIdAsync(id.GetValueOrDefault());
+        if (publisher is null)
+        {
+            return NotFound();
+        }
         return View(publisher);
     }
 
