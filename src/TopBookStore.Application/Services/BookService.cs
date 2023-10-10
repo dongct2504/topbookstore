@@ -121,9 +121,10 @@ public class BookService : IBookService
         await _data.SaveAsync();
     }
 
-    public Task UpdateBookAsync(Book book)
+    public async Task UpdateBookAsync(Book book)
     {
-        throw new NotImplementedException();
+        _data.Books.Update(book);
+        await _data.SaveAsync();
     }
 
     public async Task DeleteBookAsync(Book book)

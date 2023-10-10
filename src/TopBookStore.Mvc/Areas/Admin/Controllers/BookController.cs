@@ -54,12 +54,12 @@ public class BookController : Controller
         return View(vm);
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Upsert(Book book)
-    {
-        return View();
-    }
+    // [HttpPost]
+    // [ValidateAntiForgeryToken]
+    // public async Task<IActionResult> Upsert(Book book)
+    // {
+    //     return View();
+    // }
 
     #region API CALLS
 

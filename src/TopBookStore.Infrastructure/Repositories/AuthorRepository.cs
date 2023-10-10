@@ -13,6 +13,6 @@ public class AuthorRepository : Repository<Author>, IAuthorRepository
 
     public void Update(Author author)
     {
-        throw new NotImplementedException();
+        _context.Update(author);
     }
 }

@@ -1,28 +1,42 @@
 let dataTable;
 
 $(document).ready(() => {
-    dataTable = $('#tblDataCategory').DataTable({
-        "ajax": {
-            "type": "GET",
-            "url": "/admin/category/getAllCategories"
+    dataTable = $('#tblDataAuthor').DataTable({
+        ajax: {
+            type: "GET",
+            url: "/admin/author/getAllAuthors"
         },
-        "columns": [
-            { "data": "name" },
+        columns: [
+            { data: "firstName" },
+            { data: "lastName" },
+            { data: "phoneNumber" },
             {
-                "data": "categoryId",
-                "render": (data) => {
+                data: "books",
+                render: (data) => {
+                    let books = '';
+                    data.forEach(book => {
+                        books += book.title + ', ';
+                    });
+                    books = books.slice(0, -2);
+
+                    return books;
+                }
+            },
+            {
+                data: "authorId",
+                render: (data) => {
                     return `
                         <div class="text-center">
                             <a class="btn btn-success text-white"
-                                href="/admin/category/upsert/${data}">
+                                href="/admin/author/upsert/${data}">
                                 <span class="fas fa-edit"></span>&nbsp;Sửa
                             </a>
                             <a class="btn btn-danger text-white"
-                                onclick=Delete("/admin/category/deleteCategory/${data}")>
+                                onclick=Delete("/admin/author/deleteAuthor/${data}")>
                                 <span class="fas fa-trash-alt"></span>&nbsp;Xóa
                             </a>
                         </div>
-                        `;
+                        `
                 }
             }
         ]
@@ -63,4 +77,4 @@ function Delete(url) {
             })
         }
     });
-};
+}

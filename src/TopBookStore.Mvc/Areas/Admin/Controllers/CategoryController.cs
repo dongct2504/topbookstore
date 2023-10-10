@@ -76,11 +76,11 @@ public class CategoryController : Controller
         Category? category = await _service.GetCategoryByIdAsync(id);
         if (category is null)
         {
-            return Json(new { success = false, message = "Lỗi Khi xóa!" });
+            return Json(new { success = false, message = "Không tìm thấy thể loại bạn muốn xóa." });
         }
 
         await _service.RemoveCategoryAsync(category);
-        return Json(new { success = true, message = "Xóa thành công" });
+        return Json(new { success = true, message = "Đã Xóa thành công." });
     }
 
     #endregion

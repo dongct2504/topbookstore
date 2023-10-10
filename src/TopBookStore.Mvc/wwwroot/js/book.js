@@ -4,7 +4,7 @@ $(document).ready(() => {
     dataTable = $('#tblDataBook').DataTable({
         "ajax": {
             "type": "GET",
-            "url": "/Admin/Book/GetAllBooks"
+            "url": "/admin/book/getAllBooks"
         },
         columns: [
             { "data": "title" },
@@ -31,11 +31,11 @@ $(document).ready(() => {
                     return `
                         <div class="text-center">
                             <a class="btn btn-success text-white"
-                                href="/Admin/Book/Upsert/${data}">
+                                href="/admin/book/upsert/${data}">
                                 <span class="fas fa-edit"></span>&nbsp;Sửa
                             </a>
                             <a class="btn btn-danger text-white"
-                                onclick=Delete("/Admin/Book/DeleteBook/${data}")>
+                                onclick=Delete("/admin/book/deleteBook/${data}")>
                                 <span class="fas fa-trash-alt"></span>&nbsp;Xóa
                             </a>
                         </div>

@@ -1,4 +1,3 @@
-using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
@@ -36,18 +35,21 @@ public class AuthorService : IAuthorService
         return author;
     }
 
-    public Task AddAuthorAsync(Author author)
+    public async Task AddAuthorAsync(Author author)
     {
-        throw new NotImplementedException();
+        _data.Authors.Add(author);
+        await _data.SaveAsync();
     }
 
-    public Task DeleteAuthorAsync(int id)
+    public async Task DeleteAuthorAsync(Author author)
     {
-        throw new NotImplementedException();
+        _data.Authors.Remove(author);
+        await _data.SaveAsync();
     }
 
-    public Task UpdateAuthorAsync(Author author)
+    public async Task UpdateAuthorAsync(Author author)
     {
-        throw new NotImplementedException();
+        _data.Authors.Update(author);
+        await _data.SaveAsync();
     }
 }
