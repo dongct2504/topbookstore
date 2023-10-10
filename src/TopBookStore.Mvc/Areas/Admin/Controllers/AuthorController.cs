@@ -31,6 +31,10 @@ public class AuthorController : Controller
 
         ViewBag.Action = "Update";
         author = await _service.GetAuthorByIdAsync(id.GetValueOrDefault());
+        if (author is null)
+        {
+            return NotFound();
+        }
         return View(author);
     }
 
