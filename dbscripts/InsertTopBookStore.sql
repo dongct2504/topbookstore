@@ -2,6 +2,8 @@ USE TopBookStore;
 
 SELECT * FROM Customers;
 SELECT * FROM Categories;
+SELECT * FROM Books;
+SELECT * FROM Authors;
 
 DELETE FROM BookCategories;
 DELETE FROM Books;
@@ -15,11 +17,21 @@ DELETE FROM Categories;
 DELETE FROM Publishers;
 DELETE FROM Authors
 
+DBCC CHECKIDENT (Books, RESEED, 0)
+DBCC CHECKIDENT (Receipts, RESEED, 0)
+DBCC CHECKIDENT (OrderDetails, RESEED, 0)
+DBCC CHECKIDENT (CartItems, RESEED, 0)
+DBCC CHECKIDENT (Orders, RESEED, 0)
+DBCC CHECKIDENT (Carts, RESEED, 0)
+DBCC CHECKIDENT (Categories, RESEED, 0)
+DBCC CHECKIDENT (Publishers, RESEED, 0)
+DBCC CHECKIDENT (Authors, RESEED, 0)
+
 -- Insert data into Authors table
 INSERT INTO Authors (FirstName, LastName, PhoneNumber)
 VALUES
-    (N'Nguyễn', N'Nhật Ánh', '0987654321'),
-    (N'Nguyễn', N'Du', '0123456789');
+    (N'Nhật Ánh', N'Nguyễn', '0987654321'),
+    (N'Du', N'Nguyễn', '0123456789');
 
 -- Insert data into Publishers table
 INSERT INTO Publishers (Name)
@@ -37,8 +49,8 @@ VALUES
 -- Insert data into Customers table
 INSERT INTO Customers (CustomerId, FirstName, LastName, PhoneNumber, Debt, Street, District, City, Country, CartId)
 VALUES
-    ('CUS001', N'Nguyễn', N'Văn A', '0912345678', 0, N'Số 123', N'Quận 1', N'Thành phố Hồ Chí Minh', N'Việt Nam', 1),
-    ('CUS002', N'Trần', N'Thị B', '0909876543', 0, N'Số 456', N'Quận 2', N'Thành phố Hồ Chí Minh', N'Việt Nam', 2);
+    ('CUS001', N'Văn A', N'Nguyễn', '0912345678', 0, N'Số 123', N'Quận 1', N'Thành phố Hồ Chí Minh', N'Việt Nam', 1),
+    ('CUS002', N'Thị B', N'Trần', '0909876543', 0, N'Số 456', N'Quận 2', N'Thành phố Hồ Chí Minh', N'Việt Nam', 2);
 
 -- Insert data into Carts table
 INSERT INTO Carts (CustomerId, Amount)
