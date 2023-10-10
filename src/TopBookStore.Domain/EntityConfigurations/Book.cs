@@ -34,5 +34,5 @@ public class BookMetadata
 
     [Column(TypeName = "datetime")]
     [Required(ErrorMessage = "Vui lòng nhập ngày phát hành")]
-    public DateTime PulicationDate { get; set; }
+    public DateTime PublicationDate { get; set; }
 }

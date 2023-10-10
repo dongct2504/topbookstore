@@ -87,7 +87,7 @@ CREATE TABLE Books
   Price MONEY NOT NULL,
   DiscountPercent DEC(3, 2) NOT NULL DEFAULT 0,
   NumberOfPages INT,
-  PulicationDate DATETIME NOT NULL,
+  PublicationDate DATETIME NOT NULL,
   ImageUrl NVARCHAR(MAX),
   AuthorId INT NOT NULL,
   PublisherId INT NOT NULL,

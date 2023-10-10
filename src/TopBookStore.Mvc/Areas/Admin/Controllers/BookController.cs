@@ -1,5 +1,3 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Entities;
@@ -46,20 +44,22 @@ public class BookController : Controller
         }
 
         ViewBag.Action = "Update";
-        vm.Book = await _service.GetBookByIdAsync(id.GetValueOrDefault());
-        if (vm.Book is null)
+        Book? book = await _service.GetBookByIdAsync(id.GetValueOrDefault());
+        if (book is null)
         {
             return NotFound();
         }
+
+        vm.Book = book;
         return View(vm);
     }
 
-    // [HttpPost]
-    // [ValidateAntiForgeryToken]
-    // public async Task<IActionResult> Upsert(Book book)
-    // {
-    //     return View();
-    // }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Upsert(Book book)
+    {
+        return View();
+    }
 
     #region API CALLS
 

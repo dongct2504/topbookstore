@@ -9,17 +9,18 @@
             <h2 class="text-primary">@ViewData["Title"]</h2>
         </div>
         <div class="col-md-8 pt-4">
+            <input type="hidden" asp-for="CategoryId" />
+
             <div class="mb-3 row">
                 <div class="col-md-4">
                     <label class="form-label" asp-for="Name">Thể Loại</label>
                 </div>
                 <div class="col-md-8">
                     <input class="form-control" asp-for="Name" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <span class="text-danger" asp-validation-for="Name"></span>
                 </div>
-
-                <input type="hidden" asp-for="CategoryId" />
             </div>
+
             <div class="mb-3 row">
                 <div class="col-md-8 offset-4">
                     @if (ViewBag.Action == "Add")

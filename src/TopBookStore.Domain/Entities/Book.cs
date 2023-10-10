@@ -31,7 +31,7 @@ public partial class Book
     public int? NumberOfPages { get; set; }
 
     [Column(TypeName = "datetime")]
-    public DateTime PulicationDate { get; set; }
+    public DateTime PublicationDate { get; set; }
 
     public string? ImageUrl { get; set; }
 

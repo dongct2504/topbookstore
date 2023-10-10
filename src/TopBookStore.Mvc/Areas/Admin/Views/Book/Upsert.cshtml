@@ -1,4 +1,105 @@
 @model BookListViewModel
 @{
-    ViewData["Title"] = ViewBag.Action == "Add" ? "Thêm Thể Loại" : "Chỉnh Sửa Thể Loại";
+    ViewData["Title"] = ViewBag.Action == "Add" ? "Thêm Sách" : "Chỉnh Sửa Sách";
 }
+
+<form asp-action="Upsert" method="post">
+    <div class="row p-3 border">
+        <div class="col-md-12 border-bottom">
+            <h2 class="primary-text">@ViewData["Title"]</h2>
+        </div>
+        <div class="col-md-8 pt-4">
+            <input type="hidden" asp-for="Book.BookId" />
+
+            <div class="mb-3 row">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="@Model.Book.Title">Tiêu đề</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" asp-for="Book.Title" />
+                    <span class="text-danger" asp-validation-for="Book.Title"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Book.Description">Mô tả</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" asp-for="Book.Description" />
+                    <span class="text-danger" asp-validation-for="Book.Description"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Book.Isbn13">Isbn13</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" asp-for="Book.Isbn13" />
+                    <span class="text-danger" asp-validation-for="Book.Isbn13"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Book.Inventory">Hàng tồn kho</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" asp-for="Book.Inventory" />
+                    <span class="text-danger" asp-validation-for="Book.Inventory"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Book.Price">Giá tiền</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" asp-for="Book.Price" />
+                    <span class="text-danger" asp-validation-for="Book.Price"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Book.DiscountPercent">Giảm giá</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" asp-for="Book.DiscountPercent" />
+                    <span class="text-danger" asp-validation-for="Book.DiscountPercent"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Book.NumberOfPages">Số trang</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" asp-for="Book.NumberOfPages" />
+                    <span class="text-danger" asp-validation-for="Book.NumberOfPages"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Book.PublicationDate">Ngày sản xuất</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" asp-for="Book.PublicationDate" />
+                    <span class="text-danger" asp-validation-for="Book.PublicationDate"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Book.ImageUrl">Ảnh</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" asp-for="Book.ImageUrl" />
+                    <span class="text-danger" asp-validation-for="Book.ImageUrl"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
