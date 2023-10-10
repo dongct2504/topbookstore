@@ -1,3 +1,4 @@
+using System.Security.Policy;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Infrastructure.Persistence;
 using TopBookStore.Infrastructure.Repositories;
@@ -14,12 +15,15 @@ public class TopBookStoreUnitOfWork : ITopBookStoreUnitOfWork
 
     public IAuthorRepository Authors { get; private set; }
 
+    public IPublisherRepository Publishers { get; private set; }
+
     public TopBookStoreUnitOfWork(TopBookStoreContext context)
     {
         _context = context;
         Books = new BookRepository(_context);
         Categories = new CategoryRepository(_context);
         Authors = new AuthorRepository(_context);
+        Publishers = new PublisherRepository(_context);
     }
 
     public async Task SaveAsync()

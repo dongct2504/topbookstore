@@ -37,6 +37,7 @@ builder.Services.AddScoped<ITopBookStoreUnitOfWork, TopBookStoreUnitOfWork>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IPublisherService, PublisherService>();
 
 var app = builder.Build();
 
@@ -62,12 +63,6 @@ app.MapAreaControllerRoute(
     name: "admin",
     areaName: "Admin",
     pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
-app.MapControllerRoute(
-    name: "paging_books",
-    pattern: "{controller}/{action}/page-{pagenumber}/size-{pagesize}/filter-{categoryid}-{price}-{numberofpages}-{authorid}");
-app.MapControllerRoute(
-    name: "paging",
-    pattern: "{controller}/{action}/page-{pagenumber}/size-{pagesize}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

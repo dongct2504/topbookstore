@@ -16,23 +16,18 @@ public class AuthorService : IAuthorService
 
     public async Task<IEnumerable<Author>> GetAllAuthorsAsync()
     {
-        QueryOptions<Author> options = new()
-        {
-            Includes = "Books"
-        };
-
-        return await _data.Authors.ListAllAsync(options);
+        return await _data.Authors.ListAllAsync(new QueryOptions<Author>());
     }
 
     public async Task<Author?> GetAuthorByIdAsync(int id)
     {
-        Author? author = await _data.Authors.GetAsync(new QueryOptions<Author>
+        QueryOptions<Author> options = new QueryOptions<Author>
         {
             Where = a => a.AuthorId == id,
             Includes = "Books"
-        });
+        };
 
-        return author;
+        return await _data.Authors.GetAsync(options);
     }
 
     public async Task AddAuthorAsync(Author author)

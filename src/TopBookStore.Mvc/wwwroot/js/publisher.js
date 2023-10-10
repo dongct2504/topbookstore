@@ -1,24 +1,24 @@
 let dataTable;
 
 $(document).ready(() => {
-    dataTable = $('#tblDataCategory').DataTable({
+    dataTable = $('#tblDataPublisher').DataTable({
         ajax: {
             type: 'GET',
-            url: '/admin/category/getAllCategories'
+            url: '/admin/publisher/getAllPublishers'
         },
         columns: [
-            { data: "name" },
+            { data: 'name' },
             {
-                data: 'categoryId',
+                data: 'publisherId',
                 render: (data) => {
                     return `
                         <div class="text-center">
                             <a class="btn btn-success text-white"
-                                href="/admin/category/upsert/${data}">
+                                href="/admin/publisher/upsert/${data}">
                                 <span class="fas fa-edit"></span>&nbsp;Sửa
                             </a>
                             <a class="btn btn-danger text-white"
-                                onclick=Delete("/admin/category/deleteCategory/${data}")>
+                                onclick=Delete("/admin/publisher/deletePublisher/${data}")>
                                 <span class="fas fa-trash-alt"></span>&nbsp;Xóa
                             </a>
                         </div>

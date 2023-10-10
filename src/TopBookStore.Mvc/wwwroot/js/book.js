@@ -2,19 +2,19 @@ let dataTable;
 
 $(document).ready(() => {
     dataTable = $('#tblDataBook').DataTable({
-        "ajax": {
-            "type": "GET",
-            "url": "/admin/book/getAllBooks"
+        ajax: {
+            type: 'GET',
+            url: '/admin/book/getAllBooks'
         },
         columns: [
-            { "data": "title" },
-            { "data": "isbn13" },
-            { "data": "price" },
-            { "data": "discountPercent" },
-            { "data": "numberOfPages" },
+            { data: 'title' },
+            { data: 'isbn13' },
+            { data: 'price' },
+            { data: 'discountPercent' },
+            { data: 'numberOfPages' },
             {
-                "data": "categories",
-                "render": (data) => {
+                data: 'categories',
+                render: (data) => {
                     let categories = '';
                     data.forEach(category => {
                         categories += category.name + ', ';
@@ -23,11 +23,11 @@ $(document).ready(() => {
                     return categories;
                 }
             },
-            { "data": "author.fullName" },
-            { "data": "publisher.name" },
+            { data: 'author.fullName' },
+            { data: 'publisher.name' },
             {
-                "data": "bookId",
-                "render": (data) => {
+                data: 'bookId',
+                render: (data) => {
                     return `
                         <div class="text-center">
                             <a class="btn btn-success text-white"

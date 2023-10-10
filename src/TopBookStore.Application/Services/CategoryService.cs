@@ -16,14 +16,23 @@ public class CategoryService : ICategoryService
 
     public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
     {
-        return await _data.Categories.ListAllAsync(new QueryOptions<Category> { 
+        QueryOptions<Category> options = new()
+        {
             OrderBy = c => c.Name
-        });
+        };
+
+        return await _data.Categories.ListAllAsync(options);
     }
 
     public async Task<Category?> GetCategoryByIdAsync(int id)
     {
-        return await _data.Categories.GetAsync(id);
+        QueryOptions<Category> options = new()
+        {
+            Includes = "Books",
+            Where = c => c.CategoryId == id
+        };
+
+        return await _data.Categories.GetAsync(options);
     }
 
     public async Task AddCategoryAsync(Category category)

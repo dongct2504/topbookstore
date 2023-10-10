@@ -1,0 +1,63 @@
+@model Publisher
+@{
+    ViewData["Title"] = ViewBag.Action == "Add" ? "Thêm Thể Loại" : "Chỉnh Sửa Thể Loại";
+}
+
+<form asp-action="Upsert" method="post">
+    <div class="row p-3 border">
+        <div class="col-md-12 border-bottom">
+            <h2 class="text-primary">@ViewData["Title"]</h2>
+        </div>
+        <div class="col-md-8 pt-4">
+            <input type="hidden" asp-for="PublisherId" />
+
+            <div class="mb-3 row">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Name">Tên nhà xuất bản</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" asp-for="Name" />
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-8 offset-4">
+                    @if (ViewBag.Action == "Add")
+                    {
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary form-control">
+                                    Tạo
+                                </button>
+                            </div>
+                            <div class="col">
+                                <a asp-action="Index" class="btn btn-secondary form-control">Quay Lại</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary form-control">
+                                    Chỉnh Sửa
+                                </button>
+                            </div>
+                            <div class="col">
+                                <a class="btn btn-secondary form-control" asp-action="Index">
+                                    Quay Lại
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts
+{
+    <partial name="_ValidationScriptsPartial.cshtml"></partial>
+}

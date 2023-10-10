@@ -44,12 +44,12 @@ public partial class TopBookStoreContext : DbContext
     {
         modelBuilder.Entity<Author>(entity =>
         {
-            entity.HasKey(e => e.AuthorId).HasName("PK__Authors__70DAFC342BDDFDC3");
+            entity.HasKey(e => e.AuthorId).HasName("PK__Authors__70DAFC34BB288C7A");
         });
 
         modelBuilder.Entity<Book>(entity =>
         {
-            entity.HasKey(e => e.BookId).HasName("PK__Books__3DE0C207384D7A5D");
+            entity.HasKey(e => e.BookId).HasName("PK__Books__3DE0C20700AC1981");
 
             entity.HasOne(d => d.Author).WithMany(p => p.Books)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -70,21 +70,21 @@ public partial class TopBookStoreContext : DbContext
                         .HasConstraintName("FK_BookCategories_Books"),
                     j =>
                     {
-                        j.HasKey("BookId", "CategoryId").HasName("PK__BookCate__9C7051A7698DD4BA");
+                        j.HasKey("BookId", "CategoryId").HasName("PK__BookCate__9C7051A775B34A19");
                         j.ToTable("BookCategories");
                     });
         });
 
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.CartId).HasName("PK__Carts__51BCD7B7DE8D1B05");
+            entity.HasKey(e => e.CartId).HasName("PK__Carts__51BCD7B7388D80E5");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Carts).HasConstraintName("FK_Carts_Customers");
         });
 
         modelBuilder.Entity<CartItem>(entity =>
         {
-            entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__488B0B0A97A65ED3");
+            entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__488B0B0A8FEFD113");
 
             entity.HasOne(d => d.Book).WithMany(p => p.CartItems).HasConstraintName("FK_CartItems_Books");
 
@@ -93,17 +93,17 @@ public partial class TopBookStoreContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0B5FE2292A");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0B71B2E13F");
         });
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64D812691F0F");
+            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64D8D55DFA39");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BCFF27D1383");
+            entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BCF53E6CB3E");
 
             entity.Property(e => e.State).HasDefaultValueSql("('awaiting')");
 
@@ -112,7 +112,7 @@ public partial class TopBookStoreContext : DbContext
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D36C69ECF6EF");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D36C5C2DFC40");
 
             entity.HasOne(d => d.Book).WithMany(p => p.OrderDetails).HasConstraintName("FK_OrderDetails_Books");
 
@@ -121,12 +121,12 @@ public partial class TopBookStoreContext : DbContext
 
         modelBuilder.Entity<Publisher>(entity =>
         {
-            entity.HasKey(e => e.PublisherId).HasName("PK__Publishe__4C657FAB1CBE7E16");
+            entity.HasKey(e => e.PublisherId).HasName("PK__Publishe__4C657FABA369FC23");
         });
 
         modelBuilder.Entity<Receipt>(entity =>
         {
-            entity.HasKey(e => e.ReceiptId).HasName("PK__Receipts__CC08C420F371D5B5");
+            entity.HasKey(e => e.ReceiptId).HasName("PK__Receipts__CC08C42005B95AA7");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Receipts).HasConstraintName("FK_Receipts_Customers");
         });
