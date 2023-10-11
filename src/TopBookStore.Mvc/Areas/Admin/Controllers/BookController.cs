@@ -84,7 +84,7 @@ public class BookController : Controller
             return Json(new { success = false, message = "Lỗi khi xóa!" });
         }
 
-        await _service.DeleteBookAsync(book);
+        await _service.RemoveBookAsync(book);
         return Json(new { success = true, message = "Xóa thành công!" });
     }
 

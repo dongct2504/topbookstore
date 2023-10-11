@@ -11,8 +11,7 @@ public partial class Cart
     [Key]
     public int CartId { get; set; }
 
-    [StringLength(450)]
-    public string CustomerId { get; set; } = null!;
+    public int CustomerId { get; set; }
 
     [Column(TypeName = "money")]
     public decimal Amount { get; set; }

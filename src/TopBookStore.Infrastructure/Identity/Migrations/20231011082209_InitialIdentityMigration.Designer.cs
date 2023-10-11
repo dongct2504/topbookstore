@@ -12,7 +12,7 @@ using TopBookStore.Infrastructure.Identity;
 namespace TopBookStore.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231007054711_InitialIdentityMigration")]
+    [Migration("20231011082209_InitialIdentityMigration")]
     partial class InitialIdentityMigration
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.8")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -30,8 +30,8 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CategoryId")
-                        .HasColumnType("varchar(30)");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.HasKey("BookId", "CategoryId");
 
@@ -216,15 +216,15 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("DiscountPercent")
                         .HasColumnType("decimal(3, 2)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Inventory")
                         .HasColumnType("int");
@@ -238,17 +238,14 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.Property<int?>("NumberOfPages")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("money");
 
+                    b.Property<DateTime>("PublicationDate")
+                        .HasColumnType("datetime");
+
                     b.Property<int>("PublisherId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("PulicationDate")
-                        .HasColumnType("datetime");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -272,12 +269,10 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("money");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.HasKey("CartId");
@@ -315,10 +310,11 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Category", b =>
                 {
-                    b.Property<string>("CategoryId")
-                        .HasMaxLength(30)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(30)");
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -332,8 +328,11 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Customer", b =>
                 {
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
 
                     b.Property<int>("CartId")
                         .HasColumnType("int");
@@ -374,7 +373,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customer");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Order", b =>
@@ -385,16 +384,11 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
 
                     b.Property<string>("State")
                         .HasMaxLength(30)
@@ -463,10 +457,8 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("money");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.HasKey("ReceiptId");
 
@@ -487,22 +479,15 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -538,6 +523,8 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -699,6 +686,17 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                 {
                     b.HasOne("TopBookStore.Domain.Entities.Customer", "Customer")
                         .WithMany("Receipts")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("TopBookStore.Infrastructure.Identity.ApplicationUser", b =>
+                {
+                    b.HasOne("TopBookStore.Domain.Entities.Customer", "Customer")
+                        .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

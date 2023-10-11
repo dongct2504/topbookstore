@@ -12,10 +12,10 @@ namespace TopBookStore.Infrastructure.Identity;
 // Add profile data for application users by adding properties to the ApplicationUser class
 public class ApplicationUser : IdentityUser
 {
-    [StringLength(80)]
-    public string FirstName { get; set; } = null!;
+    public int CustomerId { get; set; }
+    public virtual Customer Customer { get; set; } = null!;
 
-    [StringLength(80)]
-    public string LastName { get; set; } = null!;
+    [NotMapped]
+    public string Role { get; set; } = string.Empty;
 }
 

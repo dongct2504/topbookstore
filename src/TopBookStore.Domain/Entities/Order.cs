@@ -18,8 +18,7 @@ public partial class Order
     [Unicode(false)]
     public string? State { get; set; }
 
-    [StringLength(450)]
-    public string CustomerId { get; set; } = null!;
+    public int CustomerId { get; set; }
 
     [ForeignKey("CustomerId")]
     [InverseProperty("Orders")]

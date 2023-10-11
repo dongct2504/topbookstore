@@ -36,15 +36,15 @@ public class AuthorService : IAuthorService
         await _data.SaveAsync();
     }
 
-    public async Task DeleteAuthorAsync(Author author)
-    {
-        _data.Authors.Remove(author);
-        await _data.SaveAsync();
-    }
-
     public async Task UpdateAuthorAsync(Author author)
     {
         _data.Authors.Update(author);
+        await _data.SaveAsync();
+    }
+
+    public async Task RemoveAuthorAsync(Author author)
+    {
+        _data.Authors.Remove(author);
         await _data.SaveAsync();
     }
 }

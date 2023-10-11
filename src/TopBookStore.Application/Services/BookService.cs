@@ -122,7 +122,7 @@ public class BookService : IBookService
         await _data.SaveAsync();
     }
 
-    public async Task DeleteBookAsync(Book book)
+    public async Task RemoveBookAsync(Book book)
     {
         _data.Books.Remove(book);
         await _data.SaveAsync();

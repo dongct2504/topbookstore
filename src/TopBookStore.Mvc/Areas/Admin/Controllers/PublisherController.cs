@@ -75,7 +75,7 @@ public class PublisherController : Controller
             return Json(new { success = false, message = "Không tìm thấy tác giả bạn muốn xóa." });
         }
 
-        await _service.DeletePublisherAsync(publisher);
+        await _service.RemovePublisherAsync(publisher);
         return Json(new { success = true, message = "Đã xóa thành công." });
     }
 

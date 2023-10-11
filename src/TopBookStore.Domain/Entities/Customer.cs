@@ -9,7 +9,7 @@ namespace TopBookStore.Domain.Entities;
 public partial class Customer
 {
     [Key]
-    public string CustomerId { get; set; } = null!;
+    public int CustomerId { get; set; }
 
     [StringLength(80)]
     public string FirstName { get; set; } = null!;

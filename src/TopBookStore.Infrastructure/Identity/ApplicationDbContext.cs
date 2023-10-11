@@ -8,7 +8,9 @@ namespace TopBookStore.Infrastructure.Identity;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
-    public DbSet<Customer> Customers { get; set; } = null!;
+    protected ApplicationDbContext(DbContextOptions options) : base(options)
+    {
+    }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

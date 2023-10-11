@@ -41,7 +41,7 @@ public class PublisherService : IPublisherService
         await _data.SaveAsync();
     }
 
-    public async Task DeletePublisherAsync(Publisher publisher)
+    public async Task RemovePublisherAsync(Publisher publisher)
     {
         _data.Publishers.Remove(publisher);
         await _data.SaveAsync();

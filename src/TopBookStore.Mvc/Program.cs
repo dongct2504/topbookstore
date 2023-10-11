@@ -25,13 +25,16 @@ builder.Services.AddControllersWithViews().AddJsonOptions(x =>
 builder.Services.AddRazorPages();
 
 var TopBookStoreCS = builder.Configuration.GetConnectionString("TopBookStoreCS");
+// builder.Services.AddDbContext<TopBookStoreContext>(options =>
+//     options.UseSqlServer(TopBookStoreCS));
+
+// var ApplicationDbContextCS = builder.Configuration.GetConnectionString("ApplicationDbContextConnection");
 builder.Services.AddDbContext<TopBookStoreContext>(options =>
     options.UseSqlServer(TopBookStoreCS));
 
-var ApplicationDbContextCS = builder.Configuration.GetConnectionString("ApplicationDbContextConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(ApplicationDbContextCS));
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
+        options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<TopBookStoreContext>();
 
 builder.Services.AddScoped<ITopBookStoreUnitOfWork, TopBookStoreUnitOfWork>();
 builder.Services.AddScoped<IBookService, BookService>();

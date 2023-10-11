@@ -76,7 +76,7 @@ public class AuthorController : Controller
             return Json(new { success = false, message = "Không tìm thấy tác giả bạn muốn xóa." });
         }
 
-        await _service.DeleteAuthorAsync(author);
+        await _service.RemoveAuthorAsync(author);
         return Json(new { success = true, message = "Đã xóa thành công." });
     }
 

@@ -17,6 +17,8 @@ public class TopBookStoreUnitOfWork : ITopBookStoreUnitOfWork
 
     public IPublisherRepository Publishers { get; private set; }
 
+    public ICustomerRepository Customers { get; private set; }
+
     public TopBookStoreUnitOfWork(TopBookStoreContext context)
     {
         _context = context;
@@ -24,6 +26,7 @@ public class TopBookStoreUnitOfWork : ITopBookStoreUnitOfWork
         Categories = new CategoryRepository(_context);
         Authors = new AuthorRepository(_context);
         Publishers = new PublisherRepository(_context);
+        Customers = new CustomerRepository(_context);
     }
 
     public async Task SaveAsync()
