@@ -2,15 +2,15 @@ let dataTable;
 
 $(document).ready(() => {
     dataTable = $('#tblDataCategory').DataTable({
-        ajax: {
-            type: 'GET',
-            url: '/admin/category/getAllCategories'
+        "ajax": {
+            "type": "GET",
+            "url": "/admin/category/getAllCategories"
         },
-        columns: [
-            { data: "name" },
+        "columns": [
+            { "data": "name" },
             {
-                data: 'categoryId',
-                render: (data) => {
+                "data": "categoryId",
+                "render": (data) => {
                     return `
                         <div class="text-center">
                             <a class="btn btn-success text-white"
@@ -31,36 +31,36 @@ $(document).ready(() => {
 
 function Delete(url) {
     Swal.fire({
-        title: 'Bạn có chắc muốn xóa?',
-        text: 'Khi xóa sẽ xóa vĩnh viễn và sẽ không thể hồi phục.',
-        icon: 'warning',
+        title: "Bạn có chắc muốn xóa?",
+        text: "Khi xóa sẽ xóa vĩnh viễn và sẽ không thể hồi phục.",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Xóa',
-        cancelButtonText: 'Hủy'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Xóa",
+        cancelButtonText: "Hủy"
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                type: 'DELETE',
+                type: "DELETE",
                 url: url,
                 success: (data) => {
                     if (data.success) { // if success is then then get the data
                         Swal.fire({
-                            title: 'Đã xóa!',
+                            title: "Đã xóa!",
                             text: data.message,
-                            icon: 'success'
+                            icon: "success"
                         });
                         dataTable.ajax.reload();
                     } else {
                         Swal.fire({
-                            title: 'Oops...',
+                            title: "Ây da!!!",
                             text: data.message,
-                            icon: 'error'
+                            icon: "error"
                         });
                     }
                 }
             })
         }
     });
-};
+}
