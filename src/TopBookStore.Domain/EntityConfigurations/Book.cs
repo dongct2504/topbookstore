@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TopBookStore.Domain.Entities;
 
+[Table("Books")]
 [MetadataType(typeof(BookMetadata))]
 public partial class Book
 {

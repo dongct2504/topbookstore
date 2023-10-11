@@ -5,7 +5,7 @@ SELECT * FROM Categories;
 SELECT * FROM Books;
 SELECT * FROM Authors;
 
-DELETE FROM BookCategories;
+DELETE FROM BookCategory;
 DELETE FROM Books;
 DELETE FROM Receipts;
 DELETE FROM OrderDetails;
@@ -22,74 +22,88 @@ DBCC CHECKIDENT (Receipts, RESEED, 0)
 DBCC CHECKIDENT (OrderDetails, RESEED, 0)
 DBCC CHECKIDENT (CartItems, RESEED, 0)
 DBCC CHECKIDENT (Orders, RESEED, 0)
+DBCC CHECKIDENT (Customers, RESEED, 0)
 DBCC CHECKIDENT (Carts, RESEED, 0)
 DBCC CHECKIDENT (Categories, RESEED, 0)
 DBCC CHECKIDENT (Publishers, RESEED, 0)
 DBCC CHECKIDENT (Authors, RESEED, 0)
 
--- Insert data into Authors table
-INSERT INTO Authors (FirstName, LastName, PhoneNumber)
+-- Insert sample Authors
+INSERT INTO Authors (LastName, FirstName, PhoneNumber)
 VALUES
-    (N'Nhật Ánh', N'Nguyễn', '0987654321'),
-    (N'Du', N'Nguyễn', '0123456789');
+    (N'Nguyễn', N'Văn A', '0901234567'),
+    (N'Trần', N'Thị B', '0912345678'),
+    (N'Lê', N'Đức C', '0923456789');
 
--- Insert data into Publishers table
+-- Insert sample Publishers
 INSERT INTO Publishers (Name)
 VALUES
-    (N'Nhà xuất bản Kim Đồng'),
-    (N'Nhà xuất bản Trẻ');
+    (N'Nhà Xuất Bản A'),
+    (N'Nhà Xuất Bản B'),
+    (N'Nhà Xuất Bản C');
 
--- Insert data into Categories table
+-- Insert sample Categories
 INSERT INTO Categories (Name)
 VALUES
-    (N'Thiếu nhi'),
-    (N'Khoa học'),
-    (N'Văn học');
+    (N'Tiểu Thuyết'),
+    (N'Truyện Ngắn'),
+    (N'Sách Kỹ Năng');
 
--- Insert data into Customers table
-INSERT INTO Customers (CustomerId, FirstName, LastName, PhoneNumber, Debt, Street, District, City, Country, CartId)
+-- Insert sample Customers
+INSERT INTO Customers (LastName, FirstName, Email, PhoneNumber, Debt, Street, District, City, Country)
 VALUES
-    ('CUS001', N'Văn A', N'Nguyễn', '0912345678', 0, N'Số 123', N'Quận 1', N'Thành phố Hồ Chí Minh', N'Việt Nam', 1),
-    ('CUS002', N'Thị B', N'Trần', '0909876543', 0, N'Số 456', N'Quận 2', N'Thành phố Hồ Chí Minh', N'Việt Nam', 2);
+    (N'Trần', N'Thị D', 'trand@gmail.com', '0987654321', 0, N'123 Đường A', N'Quận 1', N'TPHCM', N'Việt Nam'),
+    (N'Nguyễn', N'Huỳnh E', 'nguyenhe@gmail.com', '0976543210', 0, N'456 Đường B', N'Quận 2', N'TPHCM', N'Việt Nam'),
+    (N'Lê', N'Trúc F', 'letruc@gmail.com', '0965432109', 0, N'789 Đường C', N'Quận 3', N'TPHCM', N'Việt Nam');
 
--- Insert data into Carts table
-INSERT INTO Carts (CustomerId, Amount)
+-- Insert sample Carts
+INSERT INTO Carts (Amount, CustomerId)
 VALUES
-    ('CUS001', 0),
-    ('CUS002', 0);
+    (100000, 1),
+    (200000, 2),
+    (300000, 3);
 
--- Insert data into Orders table
-INSERT INTO Orders (OrderDate, State, CustomerId)
+-- Insert sample Orders
+INSERT INTO Orders (OrderDate, Amount, State, CustomerId)
 VALUES
-    ('2023-01-01', 'paid', 'CUS001'),
-    ('2023-02-01', 'awaiting', 'CUS002');
+    ('2023-10-01', 150000, 'paid', 1),
+    ('2023-10-02', 250000, 'sent', 2),
+    ('2023-10-03', 350000, 'awaiting', 3);
 
--- Insert data into Receipts table
+-- Insert sample Receipts
 INSERT INTO Receipts (Amount, CustomerId)
 VALUES
-    (100000, 'CUS001'),
-    (200000, 'CUS002');
+    (50000, 1),
+    (70000, 2),
+    (90000, 3);
 
--- Insert data into Books table
+-- Insert sample Books
 INSERT INTO Books (Title, Description, Isbn13, Inventory, Price, DiscountPercent, NumberOfPages, PublicationDate, AuthorId, PublisherId)
 VALUES
-    (N'Bắt trẻ đồng xanh', N'Cuốn sách kể về chuyến phiêu lưu của một nhóm bạn thời thơ ấu.', '9781234567890', 10, 50000, 0.2, 200, '2022-01-01', 1, 1),
-    (N'Dế Mèn phiêu lưu ký', N'Cuốn sách kể về cuộc phiêu lưu của Dế Mèn và những người bạn.', '9789876543210', 5, 45000, 0.1, 150, '2022-02-01', 2, 2);
+    (N'Sách Tiểu Thuyết 1', N'Mô tả sách tiểu thuyết 1', '9781234567890', 10, 150000, 0.1, 200, '2022-01-01', 1, 1),
+    (N'Sách Tiểu Thuyết 2', N'Mô tả sách tiểu thuyết 2', '9780987654321', 5, 200000, 0.2, 250, '2022-05-01', 2, 2),
+    (N'Sách Kỹ Năng 1', N'Mô tả sách kỹ năng 1', '9789876543210', 8, 180000, 0.15, 180, '2022-01-04', 3, 3);
 
--- Insert data into OrderDetails table
+-- Insert sample OrderDetails
 INSERT INTO OrderDetails (Quantity, BookId, OrderId)
 VALUES
-    (3, 1, 1),
-    (2, 2, 2);
+    (2, 1, 1),
+    (1, 2, 1),
+    (3, 3, 2),
+    (2, 1, 3);
 
--- Insert data into CartItems table
+-- Insert sample CartItems
 INSERT INTO CartItems (Quantity, CartId, BookId)
 VALUES
-    (2, 1, 1),
-    (1, 2, 2);
+    (1, 1, 1),
+    (2, 1, 2),
+    (3, 2, 3),
+    (1, 3, 1);
 
--- Insert data into BookCategories table
-INSERT INTO BookCategories (BookId, CategoryId)
+-- Insert sample BookCategories
+INSERT INTO BookCategory (BookId, CategoryId)
 VALUES
     (1, 1),
-    (2, 3);
+    (2, 1),
+    (2, 2),
+    (3, 3);

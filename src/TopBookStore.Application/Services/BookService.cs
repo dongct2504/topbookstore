@@ -19,7 +19,12 @@ public class BookService : IBookService
 
     public async Task<IEnumerable<Book>> GetAllBooksAsync()
     {
-        return await _data.Books.ListAllAsync(new QueryOptions<Book>());
+        QueryOptions<Book> options = new()
+        {
+            Includes = "Author, Categories, Publisher"
+        };
+
+        return await _data.Books.ListAllAsync(options);
     }
 
     public async Task<Book?> GetBookByIdAsync(int id)

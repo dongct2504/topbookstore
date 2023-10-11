@@ -199,7 +199,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasKey("AuthorId");
 
-                    b.ToTable("Author");
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Book", b =>
@@ -255,7 +255,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasIndex("PublisherId");
 
-                    b.ToTable("Book");
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Cart", b =>
@@ -276,7 +276,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.CartItem", b =>
@@ -302,7 +302,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.ToTable("CartItem");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Category", b =>
@@ -320,7 +320,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Customer", b =>
@@ -330,9 +330,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
 
                     b.Property<string>("City")
                         .HasMaxLength(30)
@@ -349,6 +346,11 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(80)
@@ -360,6 +362,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasColumnType("nvarchar(80)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasMaxLength(15)
                         .IsUnicode(false)
                         .HasColumnType("varchar(15)");
@@ -370,7 +373,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Order", b =>
@@ -399,7 +402,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.OrderDetail", b =>
@@ -425,7 +428,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Publisher", b =>
@@ -443,7 +446,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasKey("PublisherId");
 
-                    b.ToTable("Publisher");
+                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Receipt", b =>
@@ -464,7 +467,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Receipt");
+                    b.ToTable("Receipts");
                 });
 
             modelBuilder.Entity("TopBookStore.Infrastructure.Identity.ApplicationUser", b =>

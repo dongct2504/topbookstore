@@ -35,20 +35,20 @@ CREATE TABLE Customers
   CustomerId INT NOT NULL IDENTITY PRIMARY KEY,
   FirstName NVARCHAR(80) NOT NULL,
   LastName NVARCHAR(80) NOT NULL,
-  PhoneNumber VARCHAR(15),
+  Email NVARCHAR(70) NOT NULL,
+  PhoneNumber VARCHAR(15) NOT NULL,
   Debt MONEY NOT NULL DEFAULT 0,
   Street NVARCHAR(80),
   District NVARCHAR(50),
   City NVARCHAR(30),
-  Country NVARCHAR(30),
-  CartId INT NOT NULL,
+  Country NVARCHAR(30)
 );
 
 CREATE TABLE Carts
 (
   CartId INT NOT NULL IDENTITY PRIMARY KEY,
-  CustomerId INT NOT NULL,
   Amount MONEY NOT NULL DEFAULT 0,
+  CustomerId INT NOT NULL,
   
   -- When a customer is deleted, all associated cart records should be deleted as well.
   CONSTRAINT FK_Carts_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)

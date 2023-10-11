@@ -29,12 +29,14 @@ var TopBookStoreCS = builder.Configuration.GetConnectionString("TopBookStoreCS")
 //     options.UseSqlServer(TopBookStoreCS));
 
 // var ApplicationDbContextCS = builder.Configuration.GetConnectionString("ApplicationDbContextConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(TopBookStoreCS));
 builder.Services.AddDbContext<TopBookStoreContext>(options =>
     options.UseSqlServer(TopBookStoreCS));
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
         options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<TopBookStoreContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<ITopBookStoreUnitOfWork, TopBookStoreUnitOfWork>();
 builder.Services.AddScoped<IBookService, BookService>();

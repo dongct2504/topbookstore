@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TopBookStore.Infrastructure.Identity;
 using TopBookStore.Infrastructure.Persistence;
@@ -102,6 +104,34 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [StringLength(80)]
+            public string FirstName { get; set; } = null!;
+
+            [StringLength(80)]
+            public string LastName { get; set; } = null!;
+
+            [StringLength(15)]
+            [Unicode(false)]
+            public string PhoneNumber { get; set; }
+
+            public decimal Debt { get; set; }
+
+            [StringLength(80)]
+            public string Street { get; set; }
+
+            [StringLength(50)]
+            public string District { get; set; }
+
+            [StringLength(30)]
+            public string City { get; set; }
+
+            [StringLength(30)]
+            public string Country { get; set; }
+
+            public int CustomerId { get; set; }
+
+            public string Role { get; set; }
         }
 
 

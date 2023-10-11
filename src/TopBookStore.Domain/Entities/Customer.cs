@@ -17,9 +17,12 @@ public partial class Customer
     [StringLength(80)]
     public string LastName { get; set; } = null!;
 
+    [StringLength(70)]
+    public string Email { get; set; } = null!;
+
     [StringLength(15)]
     [Unicode(false)]
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = null!;
 
     [Column(TypeName = "money")]
     public decimal Debt { get; set; }
@@ -35,8 +38,6 @@ public partial class Customer
 
     [StringLength(30)]
     public string? Country { get; set; }
-
-    public int CartId { get; set; }
 
     [InverseProperty("Customer")]
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
