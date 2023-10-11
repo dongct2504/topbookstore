@@ -12,7 +12,7 @@ using TopBookStore.Infrastructure.Identity;
 namespace TopBookStore.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231011082209_InitialIdentityMigration")]
+    [Migration("20231011091748_InitialIdentityMigration")]
     partial class InitialIdentityMigration
     {
         /// <inheritdoc />
@@ -383,6 +383,9 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("money");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");

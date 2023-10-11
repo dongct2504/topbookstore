@@ -14,6 +14,9 @@ public partial class Order
     [Column(TypeName = "datetime")]
     public DateTime OrderDate { get; set; }
 
+    [Column(TypeName = "money")]
+    public decimal Amount { get; set; }
+
     [StringLength(30)]
     [Unicode(false)]
     public string? State { get; set; }

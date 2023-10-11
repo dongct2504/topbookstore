@@ -381,6 +381,9 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("money");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 

@@ -167,6 +167,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     OrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Amount = table.Column<decimal>(type: "money", nullable: false),
                     State = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
                     CustomerId = table.Column<int>(type: "int", nullable: false)
                 },

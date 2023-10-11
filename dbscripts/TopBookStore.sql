@@ -59,6 +59,7 @@ CREATE TABLE Orders
 (
   OrderId INT NOT NULL IDENTITY PRIMARY KEY,
   OrderDate DATETIME NOT NULL,
+  Amount MONEY NOT NULL,
   State VARCHAR(30) DEFAULT 'awaiting'
     CHECK (state = 'awaiting' OR state = 'paid' OR state = 'sent'),
   CustomerId INT NOT NULL,
@@ -70,7 +71,7 @@ CREATE TABLE Orders
 CREATE TABLE Receipts
 (
   ReceiptId INT NOT NULL IDENTITY PRIMARY KEY,
-  Amount MONEY NOT NULL,
+  Amount MONEY NOT NULL DEFAULT 0,
   CustomerId INT NOT NULL,
 
   CONSTRAINT FK_Receipts_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
