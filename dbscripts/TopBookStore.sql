@@ -32,7 +32,7 @@ CREATE TABLE Categories
 
 CREATE TABLE Customers
 (
-  CustomerId NVARCHAR(450) NOT NULL PRIMARY KEY,
+  CustomerId INT NOT NULL IDENTITY PRIMARY KEY,
   FirstName NVARCHAR(80) NOT NULL,
   LastName NVARCHAR(80) NOT NULL,
   PhoneNumber VARCHAR(15),
@@ -47,7 +47,7 @@ CREATE TABLE Customers
 CREATE TABLE Carts
 (
   CartId INT NOT NULL IDENTITY PRIMARY KEY,
-  CustomerId NVARCHAR(450) NOT NULL,
+  CustomerId INT NOT NULL,
   Amount MONEY NOT NULL DEFAULT 0,
   
   -- When a customer is deleted, all associated cart records should be deleted as well.
@@ -61,7 +61,7 @@ CREATE TABLE Orders
   OrderDate DATETIME NOT NULL,
   State VARCHAR(30) DEFAULT 'awaiting'
     CHECK (state = 'awaiting' OR state = 'paid' OR state = 'sent'),
-  CustomerId NVARCHAR(450) NOT NULL,
+  CustomerId INT NOT NULL,
 
   CONSTRAINT FK_Orders_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
     ON DELETE CASCADE
@@ -71,7 +71,7 @@ CREATE TABLE Receipts
 (
   ReceiptId INT NOT NULL IDENTITY PRIMARY KEY,
   Amount MONEY NOT NULL,
-  CustomerId NVARCHAR(450) NOT NULL,
+  CustomerId INT NOT NULL,
 
   CONSTRAINT FK_Receipts_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
     ON DELETE CASCADE
