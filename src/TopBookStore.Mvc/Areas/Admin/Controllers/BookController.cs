@@ -57,7 +57,7 @@ public class BookController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Upsert(BookListViewModel vm)
+    public async Task<IActionResult> Upsert(Book book)
     {
         if (ModelState.IsValid)
         {
@@ -71,10 +71,10 @@ public class BookController : Controller
                 string pathUploads = Path.Combine(webRootPath, @"imgs\books");
                 string fileExtension = Path.GetExtension(files[0].FileName);
 
-                if (vm.Book.ImageUrl is not null)
+                if (book.ImageUrl is not null)
                 {
                     // this is an update.
-                    string imagePath = Path.Combine(webRootPath, vm.Book.ImageUrl.TrimStart('\\'));
+                    string imagePath = Path.Combine(webRootPath, book.ImageUrl.TrimStart('\\'));
                     if (System.IO.File.Exists(imagePath))
                     {
                         System.IO.File.Delete(imagePath);
@@ -87,29 +87,27 @@ public class BookController : Controller
                     await files[0].CopyToAsync(fs);
                 }
 
-                vm.Book.ImageUrl = @"\imgs\books\" + fileName + fileExtension;
+                book.ImageUrl = @"\imgs\books\" + fileName + fileExtension;
             }
 
-            if (vm.Book.BookId == 0)
+            if (book.BookId == 0)
             {
-                await _service.AddBookAsync(vm.Book);
+                await _service.AddBookAsync(book);
             }
             else
             {
-                await _service.UpdateBookAsync(vm.Book);
+                await _service.UpdateBookAsync(book);
             }
             return RedirectToAction(nameof(Index));
         }
 
-        // BookListViewModel vm = new()
-        // {
-        //     Book = vm,
-        //     Categories = await _data.Categories.ListAllAsync(new QueryOptions<Category>()),
-        //     Authors = await _data.Authors.ListAllAsync(new QueryOptions<Author>()),
-        //     Publishers = await _data.Publishers.ListAllAsync(new QueryOptions<Publisher>())
-        // };
+        BookListViewModel vm = new()
+        {
+            Book = book,
+            Categories = await _data.Categories.ListAllAsync(new QueryOptions<Category>()),
+        };
 
-        ViewBag.Action = vm.Book.BookId == 0 ? "Add" : "Update";
+        ViewBag.Action = book.BookId == 0 ? "Add" : "Update";
         return View(vm);
     }
 
