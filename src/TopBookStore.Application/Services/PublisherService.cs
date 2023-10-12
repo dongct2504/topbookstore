@@ -29,6 +29,16 @@ public class PublisherService : IPublisherService
         return await _data.Publishers.GetAsync(options);
     }
 
+    public async Task<IEnumerable<Publisher>> GetPublishersByTermAsync(string term)
+    {
+        QueryOptions<Publisher> options = new()
+        {
+            Where = p => p.Name.Contains(term)
+        };
+
+        return await _data.Publishers.ListAllAsync(options);
+    }
+
     public async Task AddPublisherAsync(Publisher publisher)
     {
         _data.Publishers.Add(publisher);
@@ -46,5 +56,4 @@ public class PublisherService : IPublisherService
         _data.Publishers.Remove(publisher);
         await _data.SaveAsync();
     }
-
 }

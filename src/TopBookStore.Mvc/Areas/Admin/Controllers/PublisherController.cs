@@ -66,6 +66,14 @@ public class PublisherController : Controller
         return Json(new { data = await _service.GetAllPublishersAsync() });
     }
 
+    [HttpGet]
+    public async Task<IActionResult> SearchPublishers(string term)
+    {
+        IEnumerable<Publisher> publishers = await _service.GetPublishersByTermAsync(term);
+
+        return Json(publishers.Select(p => new { id = p.PublisherId, label = p.Name }));
+    }
+
     [HttpDelete]
     public async Task<IActionResult> DeletePublisher(int id)
     {

@@ -12,7 +12,9 @@ public class BookListViewModel
     public int TotalPages { get; set; }
     public int Id { get; set; }
 
-    // data for dropdowns
+    // data for dropdowns both for filter and display
+    public IEnumerable<Author> Authors { get; set; } = new List<Author>();
+    public IEnumerable<Publisher> Publishers { get; set; } = new List<Publisher>();
     public IEnumerable<Category> Categories { get; set; } = new List<Category>();
     public Dictionary<string, string> Prices =>
         new()
@@ -30,5 +32,4 @@ public class BookListViewModel
             { "100to500", "Từ 100 đến 500 trang" },
             { "over500", "500 trang trở lên" }
         };
-    public IEnumerable<Author> Authors { get; set; } = new List<Author>();
 }

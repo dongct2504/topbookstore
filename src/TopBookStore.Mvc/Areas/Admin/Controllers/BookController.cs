@@ -34,7 +34,8 @@ public class BookController : Controller
         {
             Book = new Book(),
             Categories = await _data.Categories.ListAllAsync(new QueryOptions<Category>()),
-            Authors = await _data.Authors.ListAllAsync(new QueryOptions<Author>())
+            Authors = await _data.Authors.ListAllAsync(new QueryOptions<Author>()),
+            Publishers = await _data.Publishers.ListAllAsync(new QueryOptions<Publisher>())
         };
 
         if (id is null)

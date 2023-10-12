@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Entities;
 
@@ -65,6 +66,14 @@ public class AuthorController : Controller
     public async Task<IActionResult> GetAllAuthors()
     {
         return Json(new { data = await _service.GetAllAuthorsAsync() });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> SearchAuthors(string term)
+    {
+        IEnumerable<Author> authors = await _service.GetAuthorsByTermAsync(term);
+
+        return Json(authors.Select(a => new { id = a.AuthorId, label = a.FullName }));
     }
 
     [HttpDelete]

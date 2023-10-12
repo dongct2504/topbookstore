@@ -6,6 +6,7 @@ public interface IPublisherService
 {
     Task<IEnumerable<Publisher>> GetAllPublishersAsync();
     Task<Publisher?> GetPublisherByIdAsync(int id);
+    Task<IEnumerable<Publisher>> GetPublishersByTermAsync(string term);
 
     Task AddPublisherAsync(Publisher category);
     Task UpdatePublisherAsync(Publisher category);

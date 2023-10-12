@@ -12,7 +12,7 @@
             <input type="hidden" asp-for="Book.BookId" />
 
             <div class="mb-3 row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label" asp-for="@Model.Book.Title">Tiêu đề</label>
                 </div>
                 <div class="col-md-8">
@@ -22,17 +22,18 @@
             </div>
 
             <div class="mb-3 row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label" asp-for="Book.Description">Mô tả</label>
                 </div>
                 <div class="col-md-8">
-                    <input class="form-control" asp-for="Book.Description" />
+                    <textarea class="form-control" rows="6"
+                        asp-for="Book.Description"></textarea>
                     <span class="text-danger" asp-validation-for="Book.Description"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label" asp-for="Book.Isbn13">Isbn13</label>
                 </div>
                 <div class="col-md-8">
@@ -42,7 +43,7 @@
             </div>
 
             <div class="mb-3 row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label" asp-for="Book.Inventory">Hàng tồn kho</label>
                 </div>
                 <div class="col-md-8">
@@ -52,7 +53,7 @@
             </div>
 
             <div class="mb-3 row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label" asp-for="Book.Price">Giá tiền</label>
                 </div>
                 <div class="col-md-8">
@@ -62,7 +63,7 @@
             </div>
 
             <div class="mb-3 row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label" asp-for="Book.DiscountPercent">Giảm giá</label>
                 </div>
                 <div class="col-md-8">
@@ -72,7 +73,7 @@
             </div>
 
             <div class="mb-3 row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label" asp-for="Book.NumberOfPages">Số trang</label>
                 </div>
                 <div class="col-md-8">
@@ -82,7 +83,7 @@
             </div>
 
             <div class="mb-3 row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label" asp-for="Book.PublicationDate">Ngày sản xuất</label>
                 </div>
                 <div class="col-md-8">
@@ -92,7 +93,51 @@
             </div>
 
             <div class="mb-3 row">
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <label class="form-label">Tác giả</label>
+                </div>
+                <div class="col-md-8">
+                    <input id="authorName" class="form-control"
+                        asp-for="Book.Author.FullName" />
+                    <input id="authorId" type="hidden" asp-for="Book.AuthorId" />
+                    <span class="text-danger" asp-validation-for="Book.Author.FullName"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-3">
+                    <label class="form-label">Nhà xuất bản</label>
+                </div>
+                <div class="col-md-8">
+                    <input id="publisherName" class="form-control" 
+                        asp-for="Book.Publisher.Name" />
+                    <input id="publisherId" type="hidden" asp-for="Book.PublisherId" />
+                    <span class="text-danger" asp-validation-for="Book.Publisher.Name"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-3">
+                    Thể loại
+                </div>
+                <div class="col-md-8 checkbox-column">
+                    @foreach (Category category in Model.Categories)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" 
+                                id="category-@category.CategoryId"
+                                checked="@CheckCategory.IsSelected(Model.Book, category)"
+                                name="categoryIds" value="@category.CategoryId">
+                            <label class="form-check-label" for="category-@category.CategoryId">
+                                @category.Name
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-3">
                     <label class="form-label" asp-for="Book.ImageUrl">Ảnh</label>
                 </div>
                 <div class="col-md-8">
@@ -100,6 +145,14 @@
                     <span class="text-danger" asp-validation-for="Book.ImageUrl"></span>
                 </div>
             </div>
+
+            <partial name="_ActionOrReturnPartial" />
         </div>
     </div>
 </form>
+
+@section scripts {
+    <script src="~/js/search/searchAuthor.js"></script>
+    <script src="~/js/search/searchPublisher.js"></script>
+    <partial name="_ValidationScriptsPartial.cshtml"></partial>
+}

@@ -30,6 +30,16 @@ public class AuthorService : IAuthorService
         return await _data.Authors.GetAsync(options);
     }
 
+    public async Task<IEnumerable<Author>> GetAuthorsByTermAsync(string term)
+    {
+        QueryOptions<Author> options = new()
+        {
+            Where = a => a.FirstName.Contains(term) || a.LastName.Contains(term)
+        };
+
+        return await _data.Authors.ListAllAsync(options);
+    }
+
     public async Task AddAuthorAsync(Author author)
     {
         _data.Authors.Add(author);
