@@ -1,14 +1,14 @@
 <div class="mb-3 row">
-    <div class="col-md-8 offset-3">
+    <div class="col-md-6 offset-md-3">
         @if (ViewBag.Action == "Add")
         {
             <div class="row">
-                <div class="col">
+                <div class="col-md mb-2">
                     <button type="submit" class="btn btn-primary form-control">
                         Tạo
                     </button>
                 </div>
-                <div class="col">
+                <div class="col-md">
                     <a asp-action="Index" class="btn btn-secondary form-control">
                         Quay Lại
                     </a>
@@ -18,12 +18,12 @@
         else
         {
             <div class="row">
-                <div class="col">
+                <div class="col-md mb-2">
                     <button type="submit" class="btn btn-primary form-control">
                         Chỉnh Sửa
                     </button>
                 </div>
-                <div class="col">
+                <div class="col-md">
                     <a class="btn btn-secondary form-control" asp-action="Index">
                         Quay Lại
                     </a>
