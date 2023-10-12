@@ -62,7 +62,7 @@ app.UseSession();
 
 app.UseAuthorization();
 
-app.UseMiddleware<CategoriesMiddlewar>();
+app.UseMiddleware<CategoriesMiddleware>();
 
 app.MapAreaControllerRoute(
     name: "admin",
