@@ -5,12 +5,12 @@ using TopBookStore.Mvc.Extensions;
 
 namespace TopBookStore.Mvc.Middleware;
 
-public class CategoriesMiddlewar
+public class CategoriesMiddleware
 {
     private readonly RequestDelegate _next;
     private bool categorySet = false;
 
-    public CategoriesMiddlewar(RequestDelegate request)
+    public CategoriesMiddleware(RequestDelegate request)
     {
         _next = request;
     }
