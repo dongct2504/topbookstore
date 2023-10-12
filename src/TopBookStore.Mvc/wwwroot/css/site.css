@@ -69,3 +69,8 @@ a {
 .form-check {
   break-inside: avoid-column; /* Prevent checkboxes from breaking across columns */
 }
+
+.image {
+  border-radius: 5px;
+  border: 1px solid beige;
+}

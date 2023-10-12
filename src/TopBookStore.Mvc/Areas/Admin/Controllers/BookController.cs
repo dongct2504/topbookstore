@@ -55,12 +55,63 @@ public class BookController : Controller
         return View(vm);
     }
 
-    // [HttpPost]
-    // [ValidateAntiForgeryToken]
-    // public async Task<IActionResult> Upsert(Book book)
-    // {
-    //     return View();
-    // }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Upsert(BookListViewModel vm)
+    {
+        if (ModelState.IsValid)
+        {
+            string webRootPath = _hostEnvironment.WebRootPath;
+
+            IFormFileCollection files = HttpContext.Request.Form.Files;
+
+            if (files.Count > 0) // has file.
+            {
+                string fileName = Guid.NewGuid().ToString(); // make it unique.
+                string pathUploads = Path.Combine(webRootPath, @"imgs\books");
+                string fileExtension = Path.GetExtension(files[0].FileName);
+
+                if (vm.Book.ImageUrl is not null)
+                {
+                    // this is an update.
+                    string imagePath = Path.Combine(webRootPath, vm.Book.ImageUrl.TrimStart('\\'));
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                }
+
+                using (FileStream fs = new(
+                    Path.Combine(pathUploads, fileName + fileExtension), FileMode.Create))
+                {
+                    await files[0].CopyToAsync(fs);
+                }
+
+                vm.Book.ImageUrl = @"\imgs\books\" + fileName + fileExtension;
+            }
+
+            if (vm.Book.BookId == 0)
+            {
+                await _service.AddBookAsync(vm.Book);
+            }
+            else
+            {
+                await _service.UpdateBookAsync(vm.Book);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // BookListViewModel vm = new()
+        // {
+        //     Book = vm,
+        //     Categories = await _data.Categories.ListAllAsync(new QueryOptions<Category>()),
+        //     Authors = await _data.Authors.ListAllAsync(new QueryOptions<Author>()),
+        //     Publishers = await _data.Publishers.ListAllAsync(new QueryOptions<Publisher>())
+        // };
+
+        ViewBag.Action = vm.Book.BookId == 0 ? "Add" : "Update";
+        return View(vm);
+    }
 
     #region API CALLS
 
