@@ -146,14 +146,14 @@
             <partial name="_ActionOrReturnPartial" />
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 p-4">
             @if (Model.BookDTO.ImageUrl is not null)
             {
-                <img src="@Model.BookDTO.ImageUrl" />
+                <img src="@Model.BookDTO.ImageUrl" width="100%" />
             }
             else
             {
-                <img class="image" src="~/imgs/books/default.jpg" />
+                <img class="image" src="~/imgs/books/default.jpg" width="330px" />
             }
         </div>
     </div>
