@@ -7,7 +7,7 @@ $(document).ready(() => {
             "url": '/admin/publisher/getAllPublishers'
         },
         "columns": [
-            { "data": "name" },
+            { "data": "name", "width": "60%" },
             {
                 "data": "publisherId",
                 "render": (data) => {
@@ -23,7 +23,8 @@ $(document).ready(() => {
                             </a>
                         </div>
                         `;
-                }
+                },
+                "width": "40%"
             }
         ]
     });

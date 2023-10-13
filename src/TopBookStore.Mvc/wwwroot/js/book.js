@@ -7,10 +7,10 @@ $(document).ready(() => {
             "url": "/admin/book/getAllBooks"
         },
         "columns": [
-            { "data": "title", "width": "15%" },
-            { "data": "price", "width": "5%" },
-            { "data": "discountPercent", "width": "5%" },
+            { "data": "title", "width": "20%" },
+            { "data": "price", "width": "10%" },
             { "data": "numberOfPages", "width": "5%" },
+            { "data": "author.fullName", "width": "20%" },
             {
                 "data": "categories",
                 "render": (data) => {
@@ -23,25 +23,23 @@ $(document).ready(() => {
                 },
                 "width": "30%"
             },
-            { "data": "author.fullName", "width": "10%" },
-            { "data": "publisher.name", "width": "10%" },
             {
                 "data": "bookId",
                 "render": (data) => {
                     return `
                         <div class="text-center">
-                            <a class="btn btn-success text-white"
+                            <a class="btn btn-success text-white mb-2 mt-2"
                                 href="/admin/book/upsert/${data}">
                                 <span class="fas fa-edit"></span>&nbsp;Sửa
                             </a>
-                            <a class="btn btn-danger text-white"
+                            <a class="btn btn-danger text-white mb-2 mt-2"
                                 onclick=Delete("/admin/book/deleteBook/${data}")>
                                 <span class="fas fa-trash-alt"></span>&nbsp;Xóa
                             </a>
                         </div>
                         `;
                 },
-                "width": "20%"
+                "width": "15%"
             }
         ]
     });

@@ -7,7 +7,7 @@ $(document).ready(() => {
             "url": "/admin/category/getAllCategories"
         },
         "columns": [
-            { "data": "name" },
+            { "data": "name", "width": "60%" },
             {
                 "data": "categoryId",
                 "render": (data) => {
@@ -23,7 +23,8 @@ $(document).ready(() => {
                             </a>
                         </div>
                         `;
-                }
+                },
+                "width": "40%"
             }
         ]
     });

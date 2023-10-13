@@ -7,9 +7,9 @@ $(document).ready(() => {
             "url": "/admin/author/getAllAuthors",
         },
         "columns": [
-            { "data": "firstName" },
-            { "data": "lastName" },
-            { "data": "phoneNumber" },
+            { "data": "firstName", "width": "25%" },
+            { "data": "lastName", "width": "25%" },
+            { "data": "phoneNumber", "width": "20%" },
             {
                 "data": "authorId",
                 "render": (data) => {
@@ -25,7 +25,8 @@ $(document).ready(() => {
                             </a>
                         </div>
                         `
-                }
+                },
+                "width": "30%"
             }
         ]
     });
