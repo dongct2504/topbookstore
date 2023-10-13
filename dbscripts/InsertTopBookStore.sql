@@ -1,13 +1,10 @@
 USE TopBookStore;
 
-SELECT *
-FROM Customers;
-SELECT *
-FROM Categories;
-SELECT *
-FROM Books;
-SELECT *
-FROM Authors;
+SELECT * FROM Customers;
+SELECT * FROM Categories;
+SELECT * FROM Books;
+SELECT * FROM BookCategory;
+SELECT * FROM Authors;
 
 DELETE FROM BookCategory;
 DELETE FROM Books;
