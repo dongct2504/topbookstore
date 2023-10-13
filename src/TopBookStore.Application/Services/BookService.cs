@@ -146,7 +146,6 @@ public class BookService : IBookService
             bookFromDb.AuthorId = bookDTO.AuthorId;
             bookFromDb.PublisherId = bookDTO.PublisherId;
 
-            // no need to await _data.SaveAsync();
             await _data.Books.AddNewCategoriesAsync(bookFromDb, bookDTO.CategoryIds, _data.Categories);
 
             // don't need to call UpdateBookAsync() - db context is tracking changes 
