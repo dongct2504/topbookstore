@@ -73,7 +73,7 @@ public class AuthorController : Controller
     {
         IEnumerable<Author> authors = await _service.GetAuthorsByTermAsync(term);
 
-        return Json(authors.Select(a => new { id = a.AuthorId, label = a.FirstName }));
+        return Json(authors.Select(a => new { id = a.AuthorId, label = a.FullName }));
     }
 
     [HttpDelete]

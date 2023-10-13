@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Interfaces;
+using TopBookStore.Application.Mappers;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
@@ -32,10 +34,8 @@ public class BookController : Controller
     {
         BookListViewModel vm = new()
         {
-            Book = new Book(),
+            BookDTO = new BookDTO(),
             Categories = await _data.Categories.ListAllAsync(new QueryOptions<Category>()),
-            Authors = await _data.Authors.ListAllAsync(new QueryOptions<Author>()),
-            Publishers = await _data.Publishers.ListAllAsync(new QueryOptions<Publisher>())
         };
 
         if (id is null)
@@ -51,30 +51,30 @@ public class BookController : Controller
             return NotFound();
         }
 
-        vm.Book = book;
+        vm.BookDTO = BookMapper.MapToDTO(book);
         return View(vm);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Upsert(Book book)
+    public async Task<IActionResult> Upsert(BookDTO bookDTO)
     {
         if (ModelState.IsValid)
         {
+            // handle image
             string webRootPath = _hostEnvironment.WebRootPath;
 
             IFormFileCollection files = HttpContext.Request.Form.Files;
-
-            if (files.Count > 0) // has file.
+            if (files.Count > 0) // has file
             {
                 string fileName = Guid.NewGuid().ToString(); // make it unique.
                 string pathUploads = Path.Combine(webRootPath, @"imgs\books");
                 string fileExtension = Path.GetExtension(files[0].FileName);
 
-                if (book.ImageUrl is not null)
+                if (bookDTO.ImageUrl is not null)
                 {
                     // this is an update.
-                    string imagePath = Path.Combine(webRootPath, book.ImageUrl.TrimStart('\\'));
+                    string imagePath = Path.Combine(webRootPath, bookDTO.ImageUrl.TrimStart('\\'));
                     if (System.IO.File.Exists(imagePath))
                     {
                         System.IO.File.Delete(imagePath);
@@ -87,27 +87,21 @@ public class BookController : Controller
                     await files[0].CopyToAsync(fs);
                 }
 
-                book.ImageUrl = @"\imgs\books\" + fileName + fileExtension;
+                bookDTO.ImageUrl = @"\imgs\books\" + fileName + fileExtension;
             }
 
-            if (book.BookId == 0)
-            {
-                await _service.AddBookAsync(book);
-            }
-            else
-            {
-                await _service.UpdateBookAsync(book);
-            }
+            await _service.UpsertBookAsync(bookDTO);
+
             return RedirectToAction(nameof(Index));
         }
 
         BookListViewModel vm = new()
         {
-            Book = book,
+            BookDTO = bookDTO,
             Categories = await _data.Categories.ListAllAsync(new QueryOptions<Category>()),
         };
 
-        ViewBag.Action = book.BookId == 0 ? "Add" : "Update";
+        ViewBag.Action = bookDTO.BookId == 0 ? "Add" : "Update";
         return View(vm);
     }
 

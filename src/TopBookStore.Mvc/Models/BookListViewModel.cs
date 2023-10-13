@@ -1,11 +1,12 @@
 using TopBookStore.Application.Commond;
+using TopBookStore.Application.DTOs;
 using TopBookStore.Domain.Entities;
 
 namespace TopBookStore.Mvc.Models;
 
 public class BookListViewModel
 {
-    public Book Book { get; set; } = new();
+    public BookDTO BookDTO { get; set; } = new();
     public IEnumerable<Book> Books { get; set; } = new List<Book>();
 
     public RouteDictionary CurrentRoute { get; set; } = new();

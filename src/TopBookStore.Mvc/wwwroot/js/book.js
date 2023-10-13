@@ -7,11 +7,10 @@ $(document).ready(() => {
             "url": "/admin/book/getAllBooks"
         },
         "columns": [
-            { "data": "title" },
-            { "data": "isbn13" },
-            { "data": "price" },
-            { "data": "discountPercent" },
-            { "data": "numberOfPages" },
+            { "data": "title", "width": "15%" },
+            { "data": "price", "width": "5%" },
+            { "data": "discountPercent", "width": "5%" },
+            { "data": "numberOfPages", "width": "5%" },
             {
                 "data": "categories",
                 "render": (data) => {
@@ -21,10 +20,11 @@ $(document).ready(() => {
                     });
                     categories = categories.slice(0, -2);
                     return categories;
-                }
+                },
+                "width": "30%"
             },
-            { "data": "author.fullName" },
-            { "data": "publisher.name" },
+            { "data": "author.fullName", "width": "10%" },
+            { "data": "publisher.name", "width": "10%" },
             {
                 "data": "bookId",
                 "render": (data) => {
@@ -40,7 +40,8 @@ $(document).ready(() => {
                             </a>
                         </div>
                         `;
-                }
+                },
+                "width": "20%"
             }
         ]
     });

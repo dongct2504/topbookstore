@@ -5,6 +5,7 @@ using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
 using TopBookStore.Domain.Extensions;
+using TopBookStore.Application.Mappers;
 
 namespace TopBookStore.Application.Services;
 
@@ -113,6 +114,45 @@ public class BookService : IBookService
         }
 
         return await _data.Books.ListAllAsync(options);
+    }
+
+    public async Task UpsertBookAsync(BookDTO bookDTO)
+    {
+        Book book = BookMapper.MapToEntity(bookDTO);
+
+        if (bookDTO.BookId == 0)
+        {
+            await AddBookAsync(book);
+        }
+        else
+        {
+            QueryOptions<Book> options = new()
+            {
+                Where = b => b.BookId == bookDTO.BookId,
+                Includes = "Categories"
+            };
+
+            Book bookFromDb = await _data.Books.GetAsync(options) ?? new Book();
+            bookFromDb.BookId = bookDTO.BookId;
+            bookFromDb.Title = bookDTO.Title;
+            bookFromDb.Description = bookDTO.Description;
+            bookFromDb.Isbn13 = bookDTO.Isbn13;
+            bookFromDb.Inventory = bookDTO.Inventory;
+            bookFromDb.Price = bookDTO.Price;
+            bookFromDb.DiscountPercent = bookDTO.DiscountPercent;
+            bookFromDb.NumberOfPages = bookDTO.NumberOfPages;
+            bookFromDb.PublicationDate = bookDTO.PublicationDate;
+            bookFromDb.ImageUrl = bookDTO.ImageUrl;
+            bookFromDb.AuthorId = bookDTO.AuthorId;
+            bookFromDb.PublisherId = bookDTO.PublisherId;
+
+            // no need to await _data.SaveAsync();
+            await _data.Books.AddNewCategoriesAsync(bookFromDb, bookDTO.CategoryIds, _data.Categories);
+
+            // don't need to call UpdateBookAsync() - db context is tracking changes 
+            // because retrieved book with categories from db at the beginning
+            await _data.SaveAsync();
+        }
     }
 
     public async Task AddBookAsync(Book book)
