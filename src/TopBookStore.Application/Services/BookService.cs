@@ -118,10 +118,12 @@ public class BookService : IBookService
 
     public async Task UpsertBookAsync(BookDTO bookDTO)
     {
-        Book book = BookMapper.MapToEntity(bookDTO);
-
         if (bookDTO.BookId == 0)
         {
+            Book book = BookMapper.MapToEntity(bookDTO);
+
+            await _data.Books.AddNewCategoriesAsync(book, bookDTO.CategoryIds, _data.Categories);
+
             await AddBookAsync(book);
         }
         else
@@ -169,6 +171,11 @@ public class BookService : IBookService
     public async Task RemoveBookAsync(Book book)
     {
         _data.Books.Remove(book);
+        await _data.SaveAsync();
+    }
+
+    public async Task SaveAsync()
+    {
         await _data.SaveAsync();
     }
 }

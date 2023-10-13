@@ -11,4 +11,5 @@ public interface IPublisherService
     Task AddPublisherAsync(Publisher category);
     Task UpdatePublisherAsync(Publisher category);
     Task RemovePublisherAsync(Publisher category);
+    Task SaveAsync();
 }

@@ -14,4 +14,5 @@ public interface IBookService
     Task AddBookAsync(Book book);
     Task UpdateBookAsync(Book book);
     Task RemoveBookAsync(Book book);
+    Task SaveAsync();
 }

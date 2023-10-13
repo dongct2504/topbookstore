@@ -128,7 +128,44 @@ public class BookController : Controller
             return Json(new { success = false, message = "Lỗi khi xóa!" });
         }
 
+        if (book.ImageUrl is not null)
+        {
+            string webRootPath = _hostEnvironment.WebRootPath;
+            string imagePath = Path.Combine(webRootPath, book.ImageUrl.TrimStart('\\'));
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+        }
+
         await _service.RemoveBookAsync(book);
+        return Json(new { success = true, message = "Xóa thành công!" });
+    }
+
+    public async Task<IActionResult> DeleteImage(int id)
+    {
+        Book? book = await _service.GetBookByIdAsync(id);
+        if (book is null)
+        {
+            return Json(new { success = false, message = "không tìm thấy sách!" });
+        }
+
+        if (book.ImageUrl is null)
+        {
+            return Json(new { success = false, message = "Không có ảnh!" });
+        }
+
+        string webRootPath = _hostEnvironment.WebRootPath;
+        string imagePath = Path.Combine(webRootPath, book.ImageUrl.TrimStart('\\'));
+        if (!System.IO.File.Exists(imagePath))
+        {
+            return Json(new { success = false, message = "Ảnh url Không còn tồn tại!" });
+        }
+
+        System.IO.File.Delete(imagePath);
+        book.ImageUrl = null;
+        await _service.SaveAsync();
+
         return Json(new { success = true, message = "Xóa thành công!" });
     }
 

@@ -124,7 +124,11 @@
                             <input class="form-check-input" type="checkbox" 
                                 id="category-@category.CategoryId"
                                 name="BookDTO.CategoryIds" value="@category.CategoryId"
-                            @(Model.BookDTO.CategoryIds.Contains(category.CategoryId) ? "checked" : "") />
+                                @if (Model.BookDTO.BookId != 0 &&
+                                    Model.BookDTO.CategoryIds.Contains(category.CategoryId))
+                                {
+                                    @Html.Raw("checked")
+                                } />
                             <label class="form-check-label" for="category-@category.CategoryId">
                                 @category.Name
                             </label>
@@ -133,9 +137,24 @@
                 </div>
             </div>
 
+            <partial name="_ActionOrReturnPartial" />
+        </div>
+
+        <div class="col-md-4 p-4">
+            <div class="mb-3 row">
+                @if (Model.BookDTO.ImageUrl is not null)
+                {
+                    <img src="@Model.BookDTO.ImageUrl" width="330px" />
+                }
+                else
+                {
+                    <img class="image" src="~/imgs/books/default.jpg" width="330px" />
+                }
+            </div>
+
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label"></label>Ảnh bìa</label>
+                    <label class="form-label"></label>Chọn ảnh</label>
                 </div>
                 <div class="col-md-9">
                     <input class="form-control" type="file" name="files" id="uploadBox" multiple />
@@ -143,18 +162,16 @@
                 </div>
             </div>
 
-            <partial name="_ActionOrReturnPartial" />
-        </div>
-
-        <div class="col-md-4 p-4">
-            @if (Model.BookDTO.ImageUrl is not null)
-            {
-                <img src="@Model.BookDTO.ImageUrl" width="100%" />
-            }
-            else
-            {
-                <img class="image" src="~/imgs/books/default.jpg" width="330px" />
-            }
+            <div class="mb-3 row">
+                <div class="col-md-3">
+                    <label class="form-label"></label>Xóa ảnh</label>
+                </div>
+                <div class="col-md-9">
+                    <a class="btn btn-danger" onclick=Delete("/admin/book/deleteImage/@Model.BookDTO.BookId")>
+                        Xóa
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </form>
@@ -163,4 +180,44 @@
     <partial name="_ValidationScriptsPartial.cshtml"></partial>
     <script src="~/js/search/searchAuthor.js"></script>
     <script src="~/js/search/searchPublisher.js"></script>
+    <script>
+        function Delete(url) {
+            Swal.fire({
+                title: "Bạn có chắc muốn xóa?",
+                text: "Khi xóa sẽ xóa vĩnh viễn và sẽ không thể hồi phục.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: url,
+                        success: (data) => {
+                            if (data.success) { // if success is then then get the data
+                                Swal.fire({
+                                    title: "Đã xóa!",
+                                    text: data.message,
+                                    icon: "success"
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "Ây da!!!",
+                                    text: data.message,
+                                    icon: "error"
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            }
+                        }
+                    })
+                }
+            });
+        }
+    </script>
 }
