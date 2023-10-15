@@ -25,7 +25,7 @@ public class BookController : Controller
         return View(await _service.GetAllBooksAsync());
     }
 
-    public async Task<ViewResult> List(GridDTO values)
+    public async Task<ViewResult> List(GridDto values)
     {
         GridBuilder builder = new(HttpContext.Session, values);
 

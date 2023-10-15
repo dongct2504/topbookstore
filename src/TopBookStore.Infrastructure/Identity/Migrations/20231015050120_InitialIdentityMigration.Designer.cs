@@ -12,7 +12,7 @@ using TopBookStore.Infrastructure.Identity;
 namespace TopBookStore.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231011104141_InitialIdentityMigration")]
+    [Migration("20231015050120_InitialIdentityMigration")]
     partial class InitialIdentityMigration
     {
         /// <inheritdoc />
@@ -235,7 +235,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(13)");
 
-                    b.Property<int?>("NumberOfPages")
+                    b.Property<int>("NumberOfPages")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")

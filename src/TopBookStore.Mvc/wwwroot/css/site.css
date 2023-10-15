@@ -72,5 +72,15 @@ a {
 
 .image {
   border-radius: 5px;
-  border: 1px solid beige;
+  border: 1px solid #258cfb;
+}
+
+.card-title {
+  height: 2.5rem;
+  overflow: hidden;
+}
+
+.card-price {
+  color: maroon;
+  height: 2.2rem;
 }

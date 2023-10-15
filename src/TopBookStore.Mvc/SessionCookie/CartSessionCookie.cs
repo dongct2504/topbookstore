@@ -16,7 +16,7 @@ public class CartSessionCookie
     private readonly IResponseCookies _responseCookies;
 
     private List<CartItem> ListCartSession { get; set; } = null!;
-    private List<CartDTO> ListCartCookie { get; set; } = null!;
+    private List<CartDto> ListCartCookie { get; set; } = null!;
 
     public CartSessionCookie(HttpContext httpContext)
     {
@@ -28,13 +28,13 @@ public class CartSessionCookie
     public async void Load(Repository<Book> data)
     {
         ListCartSession = _session.GetObject<List<CartItem>>(CartKey) ?? new List<CartItem>();
-        ListCartCookie = _requestCookies.GetObject<List<CartDTO>>(CartKey) ?? new List<CartDTO>();
+        ListCartCookie = _requestCookies.GetObject<List<CartDto>>(CartKey) ?? new List<CartDto>();
 
         if (ListCartCookie.Count > ListCartSession.Count)
         {
             ListCartSession.Clear();
 
-            foreach (CartDTO storedItem in ListCartCookie)
+            foreach (CartDto storedItem in ListCartCookie)
             {
                 Book? book = await data.GetAsync(new QueryOptions<Book>
                 {

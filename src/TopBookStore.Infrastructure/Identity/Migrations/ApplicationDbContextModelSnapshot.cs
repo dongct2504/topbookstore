@@ -232,7 +232,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(13)");
 
-                    b.Property<int?>("NumberOfPages")
+                    b.Property<int>("NumberOfPages")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")

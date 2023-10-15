@@ -8,8 +8,7 @@ public interface IBookService
     Task<IEnumerable<Book>> GetAllBooksAsync();
     Task<Book?> GetBookByIdAsync(int id);
     Task<IEnumerable<Book>> GetBooksByCategoryAsync(int id);
-    Task<IEnumerable<Book>> FilterBooksAsync(GridDTO values);
-    Task UpsertBookAsync(BookDTO bookDTO);
+    Task<IEnumerable<Book>> FilterBooksAsync(GridDto values);
 
     Task AddBookAsync(Book book);
     Task UpdateBookAsync(Book book);

@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace TopBookStore.Application.DTOs;
 
-public class GridDTO
+public class GridDto
 {
     // only for filter
     [JsonIgnore]

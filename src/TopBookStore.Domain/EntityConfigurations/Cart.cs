@@ -5,13 +5,7 @@ using System.Text.Json.Serialization;
 namespace TopBookStore.Domain.Entities;
 
 [Table("Carts")]
-[MetadataType(typeof(CartMetaData))]
 public partial class Cart
-{
-
-}
-
-public class CartMetaData
 {
 
 }

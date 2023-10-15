@@ -19,13 +19,16 @@ function Delete(url) {
                             title: "Đã xóa!",
                             text: data.message,
                             icon: "success"
+                        }).then(() => {
+                            window.location.reload();
                         });
-                        dataTable.ajax.reload();
                     } else {
                         Swal.fire({
                             title: "Ây da!!!",
                             text: data.message,
                             icon: "error"
+                        }).then(() => {
+                            window.location.reload();
                         });
                     }
                 }

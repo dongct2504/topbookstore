@@ -1,6 +1,6 @@
 namespace TopBookStore.Application.DTOs;
 
-public class CartDTO
+public class CartDto
 {
     // used when storing CartItem data to persistent cookie. Use a DTO so only store the 
     // minimal amount of data needed to restore data from database.

@@ -214,7 +214,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     Inventory = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "money", nullable: false),
                     DiscountPercent = table.Column<decimal>(type: "decimal(3,2)", nullable: false),
-                    NumberOfPages = table.Column<int>(type: "int", nullable: true),
+                    NumberOfPages = table.Column<int>(type: "int", nullable: false),
                     PublicationDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AuthorId = table.Column<int>(type: "int", nullable: false),

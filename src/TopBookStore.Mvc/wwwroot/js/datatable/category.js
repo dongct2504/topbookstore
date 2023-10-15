@@ -1,7 +1,7 @@
 let dataTable;
 
 $(document).ready(() => {
-    dataTable = $('#tblDataCategory').DataTable({
+    dataTable = $('#datatable-category').DataTable({
         "ajax": {
             "type": "GET",
             "url": "/admin/category/getAllCategories"

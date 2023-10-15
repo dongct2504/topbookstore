@@ -1,5 +1,6 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol;
+using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Entities;
 
@@ -9,10 +10,12 @@ namespace TopBookStore.Mvc.Areas.Admin.Controllers;
 public class AuthorController : Controller
 {
     private readonly IAuthorService _service;
+    private readonly IMapper _mapper;
 
-    public AuthorController(IAuthorService service)
+    public AuthorController(IAuthorService service, IMapper mapper)
     {
         _service = service;
+        _mapper = mapper;
     }
 
     public IActionResult Index()
@@ -23,29 +26,31 @@ public class AuthorController : Controller
     [HttpGet]
     public async Task<IActionResult> Upsert(int? id)
     {
-        Author? author = new();
+        AuthorDto? authorDto = new();
         if (id is null)
         {
             ViewBag.Action = "Add";
-            return View(author);
+            return View(authorDto);
         }
 
         ViewBag.Action = "Update";
-        author = await _service.GetAuthorByIdAsync(id.GetValueOrDefault());
-        if (author is null)
+        authorDto = _mapper.Map<AuthorDto>(await _service.GetAuthorByIdAsync(id.GetValueOrDefault()));
+        if (authorDto is null)
         {
             return NotFound();
         }
-        return View(author);
+        return View(authorDto);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Upsert(Author author)
+    public async Task<IActionResult> Upsert(AuthorDto authorDto)
     {
         if (ModelState.IsValid)
         {
-            if (author.AuthorId == 0) // add
+            Author author = _mapper.Map<Author>(authorDto);
+
+            if (authorDto.AuthorId == 0) // add
             {
                 await _service.AddAuthorAsync(author);
             }
@@ -56,8 +61,8 @@ public class AuthorController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        ViewBag.Action = author.AuthorId == 0 ? "Add" : "Update";
-        return View(author);
+        ViewBag.Action = authorDto.AuthorId == 0 ? "Add" : "Update";
+        return View(authorDto);
     }
 
     #region API CALLS

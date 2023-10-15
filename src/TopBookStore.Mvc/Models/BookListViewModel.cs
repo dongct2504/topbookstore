@@ -6,7 +6,7 @@ namespace TopBookStore.Mvc.Models;
 
 public class BookListViewModel
 {
-    public BookDTO BookDTO { get; set; } = new();
+    public BookDto BookDto { get; set; } = new();
     public IEnumerable<Book> Books { get; set; } = new List<Book>();
 
     public RouteDictionary CurrentRoute { get; set; } = new();

@@ -28,7 +28,7 @@ public partial class Book
     [Column(TypeName = "decimal(3, 2)")]
     public decimal DiscountPercent { get; set; }
 
-    public int? NumberOfPages { get; set; }
+    public int NumberOfPages { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime PublicationDate { get; set; }

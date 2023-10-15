@@ -3,137 +3,136 @@
     ViewData["Title"] = ViewBag.Action == "Add" ? "Thêm Sách" : "Chỉnh Sửa Sách";
 }
 
-<form asp-action="Upsert" method="post" enctype="multipart/form-data">
+<form asp-action="Upsert" id="book-upsert-form" method="post" enctype="multipart/form-data">
     <div class="row p-3 border">
         <div class="col-md-12 border-bottom">
             <h2 class="text-primary">@ViewData["Title"]</h2>
         </div>
         <div class="col-md-8 pt-4">
-            <input type="hidden" asp-for="BookDTO.BookId" />
+            <input type="hidden" asp-for="BookDto.BookId" />
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label" asp-for="@Model.BookDTO.Title">Tiêu đề</label>
+                    <label class="form-label" asp-for="@Model.BookDto.Title">Tiêu đề*</label>
                 </div>
                 <div class="col-md-9">
-                    <input class="form-control" asp-for="BookDTO.Title" />
-                    <span class="text-danger" asp-validation-for="BookDTO.Title"></span>
+                    <input class="form-control" asp-for="BookDto.Title" />
+                    <span class="text-danger" asp-validation-for="BookDto.Title"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label" asp-for="BookDTO.Description">Mô tả</label>
+                    <label class="form-label" asp-for="BookDto.Description">Mô tả*</label>
                 </div>
                 <div class="col-md-9">
-                    <textarea class="form-control" rows="6" asp-for="BookDTO.Description"></textarea>
-                    <span class="text-danger" asp-validation-for="BookDTO.Description"></span>
+                    <textarea class="form-control" rows="6" asp-for="BookDto.Description"></textarea>
+                    <span class="text-danger" asp-validation-for="BookDto.Description"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label" asp-for="BookDTO.Isbn13">Isbn13</label>
+                    <label class="form-label" asp-for="BookDto.Isbn13">Isbn13*</label>
                 </div>
                 <div class="col-md-9">
-                    <input class="form-control" asp-for="BookDTO.Isbn13" />
-                    <span class="text-danger" asp-validation-for="BookDTO.Isbn13"></span>
+                    <input class="form-control" asp-for="BookDto.Isbn13" />
+                    <span class="text-danger" asp-validation-for="BookDto.Isbn13"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label" asp-for="BookDTO.Inventory">Hàng tồn kho</label>
+                    <label class="form-label" asp-for="BookDto.Inventory">Hàng tồn kho*</label>
                 </div>
                 <div class="col-md-9">
-                    <input class="form-control" asp-for="BookDTO.Inventory" />
-                    <span class="text-danger" asp-validation-for="BookDTO.Inventory"></span>
+                    <input class="form-control" asp-for="BookDto.Inventory" />
+                    <span class="text-danger" asp-validation-for="BookDto.Inventory"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label" asp-for="BookDTO.Price">Giá tiền</label>
+                    <label class="form-label" asp-for="BookDto.Price">Giá tiền*</label>
                 </div>
                 <div class="col-md-9">
-                    <input class="form-control" asp-for="BookDTO.Price" />
-                    <span class="text-danger" asp-validation-for="BookDTO.Price"></span>
+                    <input class="form-control" asp-for="BookDto.Price" />
+                    <span class="text-danger" asp-validation-for="BookDto.Price"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label" asp-for="BookDTO.DiscountPercent">Giảm giá</label>
+                    <label class="form-label" asp-for="BookDto.DiscountPercent">Giảm giá*</label>
                 </div>
                 <div class="col-md-9">
-                    <input class="form-control" asp-for="BookDTO.DiscountPercent" />
-                    <span class="text-danger" asp-validation-for="BookDTO.DiscountPercent"></span>
+                    <input class="form-control" asp-for="BookDto.DiscountPercent" />
+                    <span class="text-danger" asp-validation-for="BookDto.DiscountPercent"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label" asp-for="BookDTO.NumberOfPages">Số trang</label>
+                    <label class="form-label" asp-for="BookDto.NumberOfPages">Số trang*</label>
                 </div>
                 <div class="col-md-9">
-                    <input class="form-control" asp-for="BookDTO.NumberOfPages" />
-                    <span class="text-danger" asp-validation-for="BookDTO.NumberOfPages"></span>
+                    <input class="form-control" asp-for="BookDto.NumberOfPages" />
+                    <span class="text-danger" asp-validation-for="BookDto.NumberOfPages"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label" asp-for="BookDTO.PublicationDate">Ngày sản xuất</label>
+                    <label class="form-label" asp-for="BookDto.PublicationDate">Ngày xuất bản*</label>
                 </div>
                 <div class="col-md-9">
-                    <input class="form-control" asp-for="BookDTO.PublicationDate" />
-                    <span class="text-danger" asp-validation-for="BookDTO.PublicationDate"></span>
+                    <input class="form-control" asp-for="BookDto.PublicationDate" />
+                    <span class="text-danger" asp-validation-for="BookDto.PublicationDate"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label">Tác giả</label>
+                    <label class="form-label">Tác giả*</label>
                 </div>
                 <div class="col-md-9">
-                    <input id="authorName" class="form-control" asp-for="BookDTO.AuthorName" />
-                    <input id="authorId" type="hidden" asp-for="BookDTO.AuthorId" />
-                    <span class="text-danger" asp-validation-for="BookDTO.AuthorName"></span>
+                    <input id="authorName" class="form-control" asp-for="BookDto.AuthorName" />
+                    <input id="authorId" type="hidden" asp-for="BookDto.AuthorId" />
+                    <span class="text-danger" asp-validation-for="BookDto.AuthorName"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label">Nhà xuất bản</label>
+                    <label class="form-label">Nhà xuất bản*</label>
                 </div>
                 <div class="col-md-9">
-                    <input id="publisherName" class="form-control" asp-for="BookDTO.PublisherName" />
-                    <input id="publisherId" type="hidden" asp-for="BookDTO.PublisherId" />
-                    <span class="text-danger" asp-validation-for="BookDTO.PublisherName"></span>
+                    <input id="publisherName" class="form-control" asp-for="BookDto.PublisherName" />
+                    <input id="publisherId" type="hidden" asp-for="BookDto.PublisherId" />
+                    <span class="text-danger" asp-validation-for="BookDto.PublisherName"></span>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col-md-3">
-                    <label class="form-label">Thể loại</label>
+                    <label class="form-label">Thể loại*</label>
                 </div>
-                <div class="col-md-9 checkbox-column">
-                    @foreach (Category category in Model.Categories)
-                    {
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" 
-                                id="category-@category.CategoryId"
-                                name="BookDTO.CategoryIds" value="@category.CategoryId"
-                                @if (Model.BookDTO.BookId != 0 &&
-                                    Model.BookDTO.CategoryIds.Contains(category.CategoryId))
-                                {
-                                    @Html.Raw("checked")
-                                } />
-                            <label class="form-check-label" for="category-@category.CategoryId">
-                                @category.Name
-                            </label>
-                        </div>
-                    }
+                <div class="col-md-9">
+                    <div class="checkbox-column">
+                        @foreach (Category category in Model.Categories)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" 
+                                    id="category-@category.CategoryId"
+                                    name="BookDto.CategoryIds" value="@category.CategoryId"
+                                    checked=@(CheckCategory.IsSelected(Model.BookDto, category)) />
+                                <label class="form-check-label" for="category-@category.CategoryId">
+                                    @category.Name
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <span class="text-danger" id="category-error"></span>
                 </div>
             </div>
 
@@ -142,14 +141,18 @@
 
         <div class="col-md-4 p-4">
             <div class="mb-3 row">
-                @if (Model.BookDTO.ImageUrl is not null)
-                {
-                    <img src="@Model.BookDTO.ImageUrl" width="330px" />
-                }
-                else
-                {
-                    <img class="image" src="~/imgs/books/default.jpg" width="330px" />
-                }
+                <div class="col-md-12 text-center">
+                    @if (Model.BookDto.ImageUrl is not null)
+                    {
+                        <img class="image-fluid image rounded" 
+                            src="@Model.BookDto.ImageUrl" id="previewImage" width="300px" />
+                    }
+                    else
+                    {
+                        <img class="image-fluid image rounded" 
+                            src="~/imgs/books/default.jpg" id="previewImage" width="300px" />
+                    }
+                </div>
             </div>
 
             <div class="mb-3 row">
@@ -158,7 +161,7 @@
                 </div>
                 <div class="col-md-9">
                     <input class="form-control" type="file" name="files" id="uploadBox" multiple />
-                    <input type="hidden" asp-for="BookDTO.ImageUrl">
+                    <input type="hidden" asp-for="BookDto.ImageUrl">
                 </div>
             </div>
 
@@ -167,7 +170,8 @@
                     <label class="form-label"></label>Xóa ảnh</label>
                 </div>
                 <div class="col-md-9">
-                    <a class="btn btn-danger" onclick=Delete("/admin/book/deleteImage/@Model.BookDTO.BookId")>
+                    <a class="btn btn-danger" 
+                        onclick=Delete("/admin/book/deleteImage/@Model.BookDto.BookId")>
                         Xóa
                     </a>
                 </div>
@@ -178,46 +182,9 @@
 
 @section scripts {
     <partial name="_ValidationScriptsPartial.cshtml"></partial>
-    <script src="~/js/search/searchAuthor.js"></script>
-    <script src="~/js/search/searchPublisher.js"></script>
-    <script>
-        function Delete(url) {
-            Swal.fire({
-                title: "Bạn có chắc muốn xóa?",
-                text: "Khi xóa sẽ xóa vĩnh viễn và sẽ không thể hồi phục.",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Xóa",
-                cancelButtonText: "Hủy"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        type: "DELETE",
-                        url: url,
-                        success: (data) => {
-                            if (data.success) { // if success is then then get the data
-                                Swal.fire({
-                                    title: "Đã xóa!",
-                                    text: data.message,
-                                    icon: "success"
-                                }).then(() => {
-                                    window.location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: "Ây da!!!",
-                                    text: data.message,
-                                    icon: "error"
-                                }).then(() => {
-                                    window.location.reload();
-                                });
-                            }
-                        }
-                    })
-                }
-            });
-        }
-    </script>
+    <script src="~/js/validation/validate-checkboxes.js"></script>
+    <script src="~/js/search/search-author.js"></script>
+    <script src="~/js/search/search-publisher.js"></script>
+    <script src="~/js/handle-image/check-image.js"></script>
+    <script src="~/js/handle-image/confirm-delete-image.js"></script>
 }

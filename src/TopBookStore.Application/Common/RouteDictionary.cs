@@ -7,32 +7,32 @@ public class RouteDictionary : Dictionary<string, string>
     // get, set these DTOs properties for filtering
     public string CategoryFilter
     {
-        get => Get(nameof(GridDTO.CategoryId)) ?? GridDTO.DefaultFilter;
-        set => this[nameof(GridDTO.CategoryId)] = value;
+        get => Get(nameof(GridDto.CategoryId)) ?? GridDto.DefaultFilter;
+        set => this[nameof(GridDto.CategoryId)] = value;
     }
 
     public string PriceFilter
     {
-        get => Get(nameof(GridDTO.Price)) ?? GridDTO.DefaultFilter;
-        set => this[nameof(GridDTO.Price)] = value;
+        get => Get(nameof(GridDto.Price)) ?? GridDto.DefaultFilter;
+        set => this[nameof(GridDto.Price)] = value;
     }
 
     public string NumberOfPagesFilter
     {
-        get => Get(nameof(GridDTO.NumberOfPages)) ?? GridDTO.DefaultFilter;
-        set => this[nameof(GridDTO.NumberOfPages)] = value;
+        get => Get(nameof(GridDto.NumberOfPages)) ?? GridDto.DefaultFilter;
+        set => this[nameof(GridDto.NumberOfPages)] = value;
     }
 
     public string AuthorFilter
     {
-        // get => GetIntValue(nameof(GridDTO.AuthorId));
-        get => Get(nameof(GridDTO.AuthorId)) ?? GridDTO.DefaultFilter;
-        set => this[nameof(GridDTO.AuthorId)] = value;
+        // get => GetIntValue(nameof(GridDto.AuthorId));
+        get => Get(nameof(GridDto.AuthorId)) ?? GridDto.DefaultFilter;
+        set => this[nameof(GridDto.AuthorId)] = value;
     }
 
     public RouteDictionary() { }
 
-    public RouteDictionary(GridDTO values)
+    public RouteDictionary(GridDto values)
     {
         // set filter segments
         CategoryFilter = values.CategoryId;
@@ -68,12 +68,12 @@ public class RouteDictionary : Dictionary<string, string>
     }
 
     public void ClearFilters() =>
-        CategoryFilter = PriceFilter = NumberOfPagesFilter = AuthorFilter = GridDTO.DefaultFilter;
+        CategoryFilter = PriceFilter = NumberOfPagesFilter = AuthorFilter = GridDto.DefaultFilter;
 
 
     // filter flags
-    public bool IsFilterByCategory => CategoryFilter != GridDTO.DefaultFilter;
-    public bool IsFilterByPrice => PriceFilter != GridDTO.DefaultFilter;
-    public bool IsFilterByNumberOfPages => NumberOfPagesFilter != GridDTO.DefaultFilter;
-    public bool IsFilterByAuthor => AuthorFilter != GridDTO.DefaultFilter;
+    public bool IsFilterByCategory => CategoryFilter != GridDto.DefaultFilter;
+    public bool IsFilterByPrice => PriceFilter != GridDto.DefaultFilter;
+    public bool IsFilterByNumberOfPages => NumberOfPagesFilter != GridDto.DefaultFilter;
+    public bool IsFilterByAuthor => AuthorFilter != GridDto.DefaultFilter;
 }

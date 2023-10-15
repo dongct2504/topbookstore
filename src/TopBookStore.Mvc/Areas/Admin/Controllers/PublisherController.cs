@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Services;
 using TopBookStore.Domain.Entities;
 
@@ -8,10 +10,12 @@ namespace TopBookStore.Mvc.Areas.Admin.Controllers;
 public class PublisherController : Controller
 {
     private readonly IPublisherService _service;
+    private readonly IMapper _mapper;
 
-    public PublisherController(IPublisherService service)
+    public PublisherController(IPublisherService service, IMapper mapper)
     {
         _service = service;
+        _mapper = mapper;
     }
 
     public IActionResult Index()
@@ -22,28 +26,31 @@ public class PublisherController : Controller
     [HttpGet]
     public async Task<IActionResult> Upsert(int? id)
     {
-        Publisher? publisher = new();
+        PublisherDto? publisherDto = new();
         if (id is null)
         {
             ViewBag.Action = "Add";
-            return View(publisher);
+            return View(publisherDto);
         }
 
         ViewBag.Action = "Update";
-        publisher = await _service.GetPublisherByIdAsync(id.GetValueOrDefault());
-        if (publisher is null)
+        publisherDto = _mapper.Map<PublisherDto>(
+            await _service.GetPublisherByIdAsync(id.GetValueOrDefault()));
+        if (publisherDto is null)
         {
             return NotFound();
         }
-        return View(publisher);
+        return View(publisherDto);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Upsert(Publisher publisher)
+    public async Task<IActionResult> Upsert(PublisherDto publisherDto)
     {
         if (ModelState.IsValid)
         {
-            if (publisher.PublisherId == 0)
+            Publisher publisher = _mapper.Map<Publisher>(publisherDto);
+
+            if (publisherDto.PublisherId == 0)
             {
                 await _service.AddPublisherAsync(publisher);
             }
@@ -54,8 +61,8 @@ public class PublisherController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        ViewBag.Action = publisher.PublisherId == 0 ? "Add" : "Update";
-        return View(publisher);
+        ViewBag.Action = publisherDto.PublisherId == 0 ? "Add" : "Update";
+        return View(publisherDto);
     }
 
     #region API CALLS

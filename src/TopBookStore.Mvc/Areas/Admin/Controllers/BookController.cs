@@ -1,7 +1,7 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Interfaces;
-using TopBookStore.Application.Mappers;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
@@ -14,13 +14,15 @@ public class BookController : Controller
 {
     private readonly IBookService _service;
     private readonly ITopBookStoreUnitOfWork _data;
+    private readonly IMapper _mapper;
     private readonly IWebHostEnvironment _hostEnvironment;
 
     public BookController(IBookService service, IWebHostEnvironment hostEnvironment,
-        ITopBookStoreUnitOfWork data)
+        IMapper mapper, ITopBookStoreUnitOfWork data)
     {
         _service = service;
         _data = data;
+        _mapper = mapper;
         _hostEnvironment = hostEnvironment;
     }
 
@@ -34,7 +36,7 @@ public class BookController : Controller
     {
         BookListViewModel vm = new()
         {
-            BookDTO = new BookDTO(),
+            BookDto = new BookDto(),
             Categories = await _data.Categories.ListAllAsync(new QueryOptions<Category>()),
         };
 
@@ -51,13 +53,13 @@ public class BookController : Controller
             return NotFound();
         }
 
-        vm.BookDTO = BookMapper.MapToDTO(book);
+        vm.BookDto = _mapper.Map<BookDto>(book);
         return View(vm);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Upsert(BookDTO bookDTO)
+    public async Task<IActionResult> Upsert(BookDto bookDto)
     {
         if (ModelState.IsValid)
         {
@@ -67,14 +69,14 @@ public class BookController : Controller
             IFormFileCollection files = HttpContext.Request.Form.Files;
             if (files.Count > 0) // has file
             {
-                string fileName = Guid.NewGuid().ToString(); // make it unique.
+                string fileName = Guid.NewGuid().ToString(); // make it unique
                 string pathUploads = Path.Combine(webRootPath, @"imgs\books");
                 string fileExtension = Path.GetExtension(files[0].FileName);
 
-                if (bookDTO.ImageUrl is not null)
+                if (bookDto.ImageUrl is not null)
                 {
-                    // this is an update.
-                    string imagePath = Path.Combine(webRootPath, bookDTO.ImageUrl.TrimStart('\\'));
+                    // this is an update
+                    string imagePath = Path.Combine(webRootPath, bookDto.ImageUrl.TrimStart('\\'));
                     if (System.IO.File.Exists(imagePath))
                     {
                         System.IO.File.Delete(imagePath);
@@ -87,21 +89,56 @@ public class BookController : Controller
                     await files[0].CopyToAsync(fs);
                 }
 
-                bookDTO.ImageUrl = @"\imgs\books\" + fileName + fileExtension;
+                bookDto.ImageUrl = @"\imgs\books\" + fileName + fileExtension;
             }
 
-            await _service.UpsertBookAsync(bookDTO);
+            if (bookDto.BookId == 0)
+            {
+                Book book = _mapper.Map<Book>(bookDto);
+
+                await _data.Books.AddNewCategoriesAsync(book, bookDto.CategoryIds, _data.Categories);
+
+                await _service.AddBookAsync(book);
+            }
+            else
+            {
+                QueryOptions<Book> options = new()
+                {
+                    Where = b => b.BookId == bookDto.BookId,
+                    Includes = "Categories"
+                };
+
+                Book bookFromDb = await _data.Books.GetAsync(options) ?? new Book();
+                bookFromDb.BookId = bookDto.BookId;
+                bookFromDb.Title = bookDto.Title;
+                bookFromDb.Description = bookDto.Description;
+                bookFromDb.Isbn13 = bookDto.Isbn13;
+                bookFromDb.Inventory = bookDto.Inventory;
+                bookFromDb.Price = bookDto.Price;
+                bookFromDb.DiscountPercent = bookDto.DiscountPercent;
+                bookFromDb.NumberOfPages = bookDto.NumberOfPages;
+                bookFromDb.PublicationDate = bookDto.PublicationDate;
+                bookFromDb.ImageUrl = bookDto.ImageUrl;
+                bookFromDb.AuthorId = bookDto.AuthorId;
+                bookFromDb.PublisherId = bookDto.PublisherId;
+
+                await _data.Books.AddNewCategoriesAsync(bookFromDb, bookDto.CategoryIds, _data.Categories);
+
+                // don't need to call UpdateBookAsync() - db context is tracking changes 
+                // because retrieved book with categories from db at the beginning
+                await _data.SaveAsync();
+            }
 
             return RedirectToAction(nameof(Index));
         }
 
         BookListViewModel vm = new()
         {
-            BookDTO = bookDTO,
+            BookDto = bookDto,
             Categories = await _data.Categories.ListAllAsync(new QueryOptions<Category>()),
         };
 
-        ViewBag.Action = bookDTO.BookId == 0 ? "Add" : "Update";
+        ViewBag.Action = bookDto.BookId == 0 ? "Add" : "Update";
         return View(vm);
     }
 
@@ -142,6 +179,7 @@ public class BookController : Controller
         return Json(new { success = true, message = "Xóa thành công!" });
     }
 
+    [HttpDelete]
     public async Task<IActionResult> DeleteImage(int id)
     {
         Book? book = await _service.GetBookByIdAsync(id);

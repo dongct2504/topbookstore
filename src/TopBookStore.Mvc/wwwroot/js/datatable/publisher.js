@@ -1,7 +1,7 @@
 let dataTable;
 
 $(document).ready(() => {
-    dataTable = $('#tblDataPublisher').DataTable({
+    dataTable = $('#datatable-publisher').DataTable({
         "ajax": {
             "type": "GET",
             "url": '/admin/publisher/getAllPublishers'

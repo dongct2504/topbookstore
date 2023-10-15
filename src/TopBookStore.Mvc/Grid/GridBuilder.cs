@@ -22,7 +22,7 @@ public class GridBuilder
     public RouteDictionary CurrentRoute => Routes;
 
     // use this constructor when you need to add new route
-    public GridBuilder(ISession session, GridDTO values)
+    public GridBuilder(ISession session, GridDto values)
     {
         _session = session;
 

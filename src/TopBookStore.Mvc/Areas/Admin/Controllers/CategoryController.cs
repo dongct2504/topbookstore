@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Entities;
 
@@ -8,10 +10,12 @@ namespace TopBookStore.Mvc.Areas.Admin.Controllers;
 public class CategoryController : Controller
 {
     private readonly ICategoryService _service;
+    private readonly IMapper _mapper;
 
-    public CategoryController(ICategoryService service)
+    public CategoryController(ICategoryService service, IMapper mapper)
     {
         _service = service;
+        _mapper = mapper;
     }
 
     public ViewResult Index()
@@ -22,32 +26,34 @@ public class CategoryController : Controller
     [HttpGet]
     public async Task<IActionResult> Upsert(int? id)
     {
-        Category? category = new();
+        CategoryDto? categoryDto = new();
 
         // for add
         if (id is null)
         {
             ViewBag.Action = "Add";
-            return View(category);
+            return View(categoryDto);
         }
 
         // for update
         ViewBag.Action = "Update";
-        category = await _service.GetCategoryByIdAsync(id.GetValueOrDefault());
-        if (category is null)
+        categoryDto = _mapper.Map<CategoryDto>(await _service.GetCategoryByIdAsync(id.GetValueOrDefault()));
+        if (categoryDto is null)
         {
             return NotFound();
         }
-        return View(category);
+        return View(categoryDto);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Upsert(Category category)
+    public async Task<IActionResult> Upsert(CategoryDto categoryDto)
     {
         if (ModelState.IsValid)
         {
-            if (category.CategoryId == 0)
+            Category category = _mapper.Map<Category>(categoryDto);
+
+            if (categoryDto.CategoryId == 0)
             {
                 await _service.AddCategoryAsync(category);
             }
@@ -58,8 +64,8 @@ public class CategoryController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        ViewBag.Action = category.CategoryId == 0 ? "Add" : "Update";
-        return View(category);
+        ViewBag.Action = categoryDto.CategoryId == 0 ? "Add" : "Update";
+        return View(categoryDto);
     }
 
     #region API CALLS

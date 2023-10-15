@@ -16,7 +16,7 @@
             <select name="filter" class="form-select m-2"
                 asp-items="@(new SelectList(
                     Model.Categories, "CategoryId", "Name", current.CategoryFilter))">
-                <option value="@GridDTO.DefaultFilter">Tất Cả</option>
+                <option value="@GridDto.DefaultFilter">Tất Cả</option>
             </select>
         </div>
 
@@ -27,7 +27,7 @@
             <select name="filter" class="form-select m-2"
                 asp-items="@(new SelectList(
                     Model.Prices, "Key", "Value", current.PriceFilter))">
-                <option value="@GridDTO.DefaultFilter">Tất Cả</option>
+                <option value="@GridDto.DefaultFilter">Tất Cả</option>
             </select>
         </div>
 
@@ -38,7 +38,7 @@
             <select name="filter" class="form-select m2"
                 asp-items="@(new SelectList(
                     Model.NumberOfPages, "Key", "Value", current.NumberOfPagesFilter))">
-                <option value="@GridDTO.DefaultFilter">Tất Cả</option>
+                <option value="@GridDto.DefaultFilter">Tất Cả</option>
             </select>
         </div>
 
@@ -49,7 +49,7 @@
             <select name="filter" class="form-select m-2"
                 asp-items="@(new SelectList(
                     Model.Authors, "AuthorId", "FullName", current.AuthorFilter))">
-                <option value="@GridDTO.DefaultFilter">Tất Cả</option>
+                <option value="@GridDto.DefaultFilter">Tất Cả</option>
             </select>
         </div>
     </div>
