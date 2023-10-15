@@ -8,12 +8,12 @@ $(document).ready(() => {
         const image = new Image();
         const reader = new FileReader();
 
-        // return error if the image is > 1M
-        if (file.size > 1024 * 1024) {
+        // return error if the image is > 500KB
+        if (file.size > 500 * 1024) {
             Swal.fire({
                 icon: "error",
                 title: "Lỗi!",
-                text: "Vui lòng nhập ảnh có kích thước nhỏ hơn 1M.",
+                text: "Vui lòng nhập ảnh có kích thước nhỏ hơn 500KB.",
             })
             imageInput.val(null);
             return;
