@@ -1,6 +1,6 @@
 using TopBookStore.Application.DTOs;
 
-namespace TopBookStore.Application.Commond;
+namespace TopBookStore.Application.Routing;
 
 public class RouteDictionary : Dictionary<string, string>
 {
