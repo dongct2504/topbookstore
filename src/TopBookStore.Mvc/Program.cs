@@ -8,6 +8,8 @@ using TopBookStore.Application.Services;
 using TopBookStore.Infrastructure.UnitOfWork;
 using System.Text.Json.Serialization;
 using AutoMapper;
+using TopBookStore.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,8 @@ builder.Services.AddDbContext<TopBookStoreContext>(options =>
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
         options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddTransient<ITopBookStoreUnitOfWork, TopBookStoreUnitOfWork>();
@@ -45,6 +49,7 @@ builder.Services.AddTransient<IBookService, BookService>();
 builder.Services.AddTransient<IAuthorService, AuthorService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IPublisherService, PublisherService>();
+builder.Services.AddTransient<ICustomerService, CustomerService>();
 
 var app = builder.Build();
 

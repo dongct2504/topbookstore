@@ -29,18 +29,26 @@ public class CustomerService : ICustomerService
         throw new NotImplementedException();
     }
 
-    public Task AddCustomerAsync(Customer customer)
+    public async Task AddCustomerAsync(Customer customer)
     {
-        throw new NotImplementedException();
+        _data.Customers.Add(customer);
+        await _data.SaveAsync();
     }
 
-    public Task UpdateCustomerAsync(Customer customer)
+    public async Task UpdateCustomerAsync(Customer customer)
     {
-        throw new NotImplementedException();
+        _data.Customers.Update(customer);
+        await _data.SaveAsync();
     }
 
-    public Task RemoveCustomerAsync(Customer customer)
+    public async Task RemoveCustomerAsync(Customer customer)
     {
-        throw new NotImplementedException();
+        _data.Customers.Remove(customer);
+        await _data.SaveAsync();
+    }
+
+    public async Task SaveAsync()
+    {
+        await _data.SaveAsync();
     }
 }

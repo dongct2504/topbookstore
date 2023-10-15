@@ -6,6 +6,10 @@ SELECT * FROM Books;
 SELECT * FROM BookCategory;
 SELECT * FROM Authors;
 
+SELECT * FROM AspNetUsers;
+SELECT * FROM AspNetRoles;
+SELECT * FROM AspNetUserRoles;
+
 DELETE FROM BookCategory;
 DELETE FROM Books;
 DELETE FROM Receipts;
@@ -17,6 +21,8 @@ DELETE FROM Carts;
 DELETE FROM Categories;
 DELETE FROM Publishers;
 DELETE FROM Authors
+
+DELETE FROM AspNetUsers;
 
 DBCC CHECKIDENT (Books, RESEED, 0)
 DBCC CHECKIDENT (Receipts, RESEED, 0)

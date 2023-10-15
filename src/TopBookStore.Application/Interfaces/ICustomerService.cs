@@ -11,4 +11,5 @@ public interface ICustomerService
     Task AddCustomerAsync(Customer customer);
     Task UpdateCustomerAsync(Customer customer);
     Task RemoveCustomerAsync(Customer customer);
+    Task SaveAsync();
 }

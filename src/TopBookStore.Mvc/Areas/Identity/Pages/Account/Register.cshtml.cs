@@ -18,8 +18,13 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
+using TopBookStore.Application.Interfaces;
+using TopBookStore.Domain.Constants;
+using TopBookStore.Domain.Entities;
 using TopBookStore.Infrastructure.Identity;
 using TopBookStore.Infrastructure.Persistence;
 
@@ -33,7 +38,9 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TopBookStoreContext _context;
+        private readonly ICustomerService _service;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -41,7 +48,9 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            TopBookStoreContext context)
+            RoleManager<IdentityRole> roleManager,
+            TopBookStoreContext context,
+            ICustomerService service)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -49,7 +58,9 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
             _context = context;
+            _service = service;
         }
 
         /// <summary>
@@ -105,29 +116,18 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [StringLength(80)]
+            [Required(ErrorMessage = "Vui lòng nhập Tên.")]
+            [StringLength(80, ErrorMessage = "Nhập Tên ngắn hơn 80 kí tự.")]
             public string FirstName { get; set; } = null!;
 
-            [StringLength(80)]
+            [Required(ErrorMessage = "Vui lòng nhập Tên.")]
+            [StringLength(80, ErrorMessage = "Nhập Họ ngắn hơn 80 kí tự.")]
             public string LastName { get; set; } = null!;
 
-            [StringLength(15)]
+            [Required(ErrorMessage = "Vui lòng Số điện thoại.")]
+            [StringLength(15, ErrorMessage = "Nhập Số điện thoại ngắn hơn 15 kí tự.")]
             [Unicode(false)]
             public string PhoneNumber { get; set; }
-
-            public decimal Debt { get; set; }
-
-            [StringLength(80)]
-            public string Street { get; set; }
-
-            [StringLength(50)]
-            public string District { get; set; }
-
-            [StringLength(30)]
-            public string City { get; set; }
-
-            [StringLength(30)]
-            public string Country { get; set; }
 
             public int CustomerId { get; set; }
 
@@ -147,7 +147,25 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                // Create the Customer entity
+                Customer customer = new()
+                {
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName,
+                    Email = Input.Email,
+                    PhoneNumber = Input.PhoneNumber
+                };
+
+                await _service.AddCustomerAsync(customer);
+
+                // var user = CreateUser();
+                ApplicationUser user = new()
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    CustomerId = customer.CustomerId,
+                    Role = Input.Role
+                };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -157,17 +175,33 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleAdmin))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleAdmin));
+                    }
+                    if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleLibrarian))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleLibrarian));
+                    }
+                    if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleCustomer))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleCustomer));
+                    }
+
+                    await _userManager.AddToRoleAsync(user, RolesConstants.RoleAdmin);
+
+                    // var userId = await _userManager.GetUserIdAsync(user);
+                    // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    // var callbackUrl = Url.Page(
+                    //     "/Account/ConfirmEmail",
+                    //     pageHandler: null,
+                    //     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    //     protocol: Request.Scheme);
+
+                    // await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -176,8 +210,13 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+
                         return LocalRedirect(returnUrl);
                     }
+                }
+                else
+                {
+                    await _service.RemoveCustomerAsync(customer);
                 }
                 foreach (var error in result.Errors)
                 {
