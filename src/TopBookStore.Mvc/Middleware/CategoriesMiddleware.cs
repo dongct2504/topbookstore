@@ -8,7 +8,7 @@ namespace TopBookStore.Mvc.Middleware;
 public class CategoriesMiddleware
 {
     private readonly RequestDelegate _next;
-    private bool categorySet = false;
+    private int categoryCount = 0;
 
     public CategoriesMiddleware(RequestDelegate request)
     {
@@ -17,7 +17,7 @@ public class CategoriesMiddleware
 
     public async Task InvokeAsync(HttpContext context, ITopBookStoreUnitOfWork data)
     {
-        if (!categorySet)
+        if (categoryCount < await data.Categories.CountAsync())
         {
             IEnumerable<Category> categories = await data.Categories.ListAllAsync(
                 new QueryOptions<Category>()
@@ -26,7 +26,7 @@ public class CategoriesMiddleware
                 });
             context.Session.SetObject("categories", categories);
 
-            categorySet = true;
+            categoryCount = await data.Categories.CountAsync();
         }
 
         await _next(context);
