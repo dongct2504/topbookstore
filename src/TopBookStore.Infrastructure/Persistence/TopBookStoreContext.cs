@@ -6,7 +6,7 @@ using TopBookStore.Infrastructure.Identity;
 
 namespace TopBookStore.Infrastructure.Persistence;
 
-public partial class TopBookStoreContext : ApplicationDbContext
+public partial class TopBookStoreContext : IdentityTopBookStoreDbContext
 {
     public TopBookStoreContext(DbContextOptions<TopBookStoreContext> options)
         : base(options)

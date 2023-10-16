@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -18,38 +17,32 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Constants;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Infrastructure.Identity;
-using TopBookStore.Infrastructure.Persistence;
 
 namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserStore<ApplicationUser> _userStore;
-        private readonly IUserEmailStore<ApplicationUser> _emailStore;
+        private readonly SignInManager<IdentityTopBookStoreUser> _signInManager;
+        private readonly UserManager<IdentityTopBookStoreUser> _userManager;
+        private readonly IUserStore<IdentityTopBookStoreUser> _userStore;
+        private readonly IUserEmailStore<IdentityTopBookStoreUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly TopBookStoreContext _context;
         private readonly ICustomerService _service;
 
         public RegisterModel(
-            UserManager<ApplicationUser> userManager,
-            IUserStore<ApplicationUser> userStore,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<IdentityTopBookStoreUser> userManager,
+            IUserStore<IdentityTopBookStoreUser> userStore,
+            SignInManager<IdentityTopBookStoreUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             RoleManager<IdentityRole> roleManager,
-            TopBookStoreContext context,
             ICustomerService service)
         {
             _userManager = userManager;
@@ -59,7 +52,6 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
-            _context = context;
             _service = service;
         }
 
@@ -92,7 +84,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Vui lòng nhập Email.")]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -101,10 +93,10 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Vui lòng nhập Mật khẩu")]
+            [StringLength(100, ErrorMessage = "{0} phải có ít nhất {2} ký tự và nhiều nhất {1} kí tự.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Mật khẩu")]
             public string Password { get; set; }
 
             /// <summary>
@@ -112,26 +104,23 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Xác nhận mật khẩu")]
+            [Compare("Password", ErrorMessage = "Mật khẩu không trùng khớp.")]
             public string ConfirmPassword { get; set; }
 
             [Required(ErrorMessage = "Vui lòng nhập Tên.")]
             [StringLength(80, ErrorMessage = "Nhập Tên ngắn hơn 80 kí tự.")]
             public string FirstName { get; set; } = null!;
 
-            [Required(ErrorMessage = "Vui lòng nhập Tên.")]
-            [StringLength(80, ErrorMessage = "Nhập Họ ngắn hơn 80 kí tự.")]
+            [Required(ErrorMessage = "Vui lòng nhập Họ.")]
+            [StringLength(80, ErrorMessage = "Nhập Tên ngắn hơn 80 kí tự.")]
             public string LastName { get; set; } = null!;
 
-            [Required(ErrorMessage = "Vui lòng Số điện thoại.")]
-            [StringLength(15, ErrorMessage = "Nhập Số điện thoại ngắn hơn 15 kí tự.")]
-            [Unicode(false)]
-            public string PhoneNumber { get; set; }
+            [Required(ErrorMessage = "Vui lòng nhập Số điện thoại.")]
+            [StringLength(15, ErrorMessage = "Vui lòng nhập số điện thoại hợp lệ.")]
+            public string PhoneNumber { get; set; } = null!;
 
-            public int CustomerId { get; set; }
-
-            public string Role { get; set; }
+            public string Role { get; set; } = string.Empty;
         }
 
 
@@ -147,24 +136,25 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                // Create the Customer entity
+                // var user = CreateUser();
+
                 Customer customer = new()
                 {
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
                     Email = Input.Email,
-                    PhoneNumber = Input.PhoneNumber
+                    PhoneNumber = Input.PhoneNumber,
+                    Role = Input.Role
                 };
 
                 await _service.AddCustomerAsync(customer);
 
-                // var user = CreateUser();
-                ApplicationUser user = new()
+                IdentityTopBookStoreUser user = new()
                 {
-                    UserName = Input.Email,
                     Email = Input.Email,
-                    CustomerId = customer.CustomerId,
-                    Role = Input.Role
+                    UserName = Input.Email,
+                    PhoneNumber = Input.PhoneNumber,
+                    CustomerId = customer.CustomerId
                 };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -175,18 +165,17 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-
-                    if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleAdmin))
+                    if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleCustomer))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleAdmin));
+                        await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleCustomer));
                     }
                     if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleLibrarian))
                     {
                         await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleLibrarian));
                     }
-                    if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleCustomer))
+                    if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleAdmin))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleCustomer));
+                        await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleAdmin));
                     }
 
                     await _userManager.AddToRoleAsync(user, RolesConstants.RoleAdmin);
@@ -197,7 +186,13 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                     // var callbackUrl = Url.Page(
                     //     "/Account/ConfirmEmail",
                     //     pageHandler: null,
-                    //     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    //     values: new
+                    //     {
+                    //         area = "Identity",
+                    //         userId = userId,
+                    //         code = code,
+                    //         returnUrl = returnUrl
+                    //     },
                     //     protocol: Request.Scheme);
 
                     // await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -210,7 +205,6 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-
                         return LocalRedirect(returnUrl);
                     }
                 }
@@ -228,27 +222,27 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private ApplicationUser CreateUser()
+        private IdentityTopBookStoreUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<ApplicationUser>();
+                return Activator.CreateInstance<IdentityTopBookStoreUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityTopBookStoreUser)}'. " +
+                    $"Ensure that '{nameof(IdentityTopBookStoreUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<ApplicationUser> GetEmailStore()
+        private IUserEmailStore<IdentityTopBookStoreUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<ApplicationUser>)_userStore;
+            return (IUserEmailStore<IdentityTopBookStoreUser>)_userStore;
         }
     }
 }

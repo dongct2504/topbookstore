@@ -11,8 +11,8 @@ using TopBookStore.Infrastructure.Identity;
 
 namespace TopBookStore.Infrastructure.Identity.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231015050120_InitialIdentityMigration")]
+    [DbContext(typeof(IdentityTopBookStoreDbContext))]
+    [Migration("20231016132610_InitialIdentityMigration")]
     partial class InitialIdentityMigration
     {
         /// <inheritdoc />
@@ -473,7 +473,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.ToTable("Receipts");
                 });
 
-            modelBuilder.Entity("TopBookStore.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("TopBookStore.Infrastructure.Identity.IdentityTopBookStoreUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -569,7 +569,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("TopBookStore.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("TopBookStore.Infrastructure.Identity.IdentityTopBookStoreUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -578,7 +578,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("TopBookStore.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("TopBookStore.Infrastructure.Identity.IdentityTopBookStoreUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -593,7 +593,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TopBookStore.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("TopBookStore.Infrastructure.Identity.IdentityTopBookStoreUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -602,7 +602,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("TopBookStore.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("TopBookStore.Infrastructure.Identity.IdentityTopBookStoreUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -699,7 +699,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("TopBookStore.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("TopBookStore.Infrastructure.Identity.IdentityTopBookStoreUser", b =>
                 {
                     b.HasOne("TopBookStore.Domain.Entities.Customer", "Customer")
                         .WithMany()

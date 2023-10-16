@@ -1,18 +1,18 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using TopBookStore.Domain.Entities;
 using TopBookStore.Infrastructure.Identity;
 
 namespace TopBookStore.Infrastructure.Identity;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class IdentityTopBookStoreDbContext : IdentityDbContext<IdentityTopBookStoreUser>
 {
-    protected ApplicationDbContext(DbContextOptions options) : base(options)
+    protected IdentityTopBookStoreDbContext(DbContextOptions options)
+        : base(options)
     {
     }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public IdentityTopBookStoreDbContext(DbContextOptions<IdentityTopBookStoreDbContext> options)
         : base(options)
     {
     }
