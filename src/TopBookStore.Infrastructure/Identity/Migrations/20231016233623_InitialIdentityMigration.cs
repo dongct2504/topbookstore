@@ -61,13 +61,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false),
-                    Debt = table.Column<decimal>(type: "money", nullable: false),
-                    Street = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: true),
-                    District = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true)
+                    Debt = table.Column<decimal>(type: "money", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,6 +103,29 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    AddressId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Street = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: true),
+                    District = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    CustomerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
+                    table.ForeignKey(
+                        name: "FK_Addresses_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -146,8 +163,8 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                 {
                     CartId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "money", nullable: false)
+                    Amount = table.Column<decimal>(type: "money", nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -401,6 +418,11 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Addresses_CustomerId",
+                table: "Addresses",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -498,6 +520,9 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Addresses");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 

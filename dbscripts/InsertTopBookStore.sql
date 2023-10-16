@@ -14,6 +14,7 @@ DELETE FROM BookCategory;
 DELETE FROM Books;
 DELETE FROM Receipts;
 DELETE FROM OrderDetails;
+DELETE FROM Addresses;
 DELETE FROM CartItems;
 DELETE FROM Orders;
 DELETE FROM Customers;
@@ -27,6 +28,7 @@ DELETE FROM AspNetUsers;
 DBCC CHECKIDENT (Books, RESEED, 0)
 DBCC CHECKIDENT (Receipts, RESEED, 0)
 DBCC CHECKIDENT (OrderDetails, RESEED, 0)
+DBCC CHECKIDENT (Addresses, RESEED, 0)
 DBCC CHECKIDENT (CartItems, RESEED, 0)
 DBCC CHECKIDENT (Orders, RESEED, 0)
 DBCC CHECKIDENT (Customers, RESEED, 0)
@@ -35,97 +37,98 @@ DBCC CHECKIDENT (Categories, RESEED, 0)
 DBCC CHECKIDENT (Publishers, RESEED, 0)
 DBCC CHECKIDENT (Authors, RESEED, 0)
 
--- Insert sample Authors
+-- Insert sample authors
 INSERT INTO Authors
     (LastName, FirstName, PhoneNumber)
 VALUES
-    (N'Nguyễn', N'Văn A', '0901234567'),
-    (N'Trần', N'Thị B', '0912345678'),
-    (N'Lê', N'Đức C', '0923456789');
+    (N'Nguyễn', N'Văn A', '0123456789'),
+    (N'Trần', N'Thị B', '0987654321'),
+    (N'Lê', N'Quang C', '0912345678');
 
--- Insert sample Publishers
+-- Insert sample publishers
 INSERT INTO Publishers
     (Name)
 VALUES
-    (N'Nhà Xuất Bản A'),
-    (N'Nhà Xuất Bản B'),
-    (N'Nhà Xuất Bản C');
+    (N'Nhà Xuất Bản Kim Đồng'),
+    (N'Nhà Xuất Bản Trẻ'),
+    (N'Nhà Xuất Bản Văn Học');
 
--- Insert sample Categories
+-- Insert sample categories
 INSERT INTO Categories
     (Name)
 VALUES
     (N'Tiểu Thuyết'),
-    (N'Truyện Ngắn'),
-    (N'Sách Kỹ Năng');
+    (N'Kinh Tế'),
+    (N'Khoa Học');
 
--- Insert sample Customers
+-- Insert sample customers
 INSERT INTO Customers
-    (LastName, FirstName, Email, PhoneNumber, Debt, Street, District, City, Country)
+    (LastName, FirstName, Debt)
 VALUES
-    (N'Trần', N'Thị D', 'trand@gmail.com', '0987654321', 0, N'123 Đường A', N'Quận 1', N'TPHCM', N'Việt Nam'),
-    (N'Nguyễn', N'Huỳnh E', 'nguyenhe@gmail.com', '0976543210', 0, N'456 Đường B', N'Quận 2', N'TPHCM', N'Việt Nam'),
-    (N'Lê', N'Trúc F', 'letruc@gmail.com', '0965432109', 0, N'789 Đường C', N'Quận 3', N'TPHCM', N'Việt Nam');
+    (N'Nguyễn', N'Thị D', 0),
+    (N'Trần', N'Văn E', 1000000),
+    (N'Lê', N'Thị F', 500000);
 
--- Insert sample Carts
+-- Insert sample carts
 INSERT INTO Carts
     (Amount, CustomerId)
 VALUES
-    (100000, 1),
-    (200000, 2),
-    (300000, 3);
+    (250000, 1),
+    (100000, 2),
+    (500000, 3);
 
--- Insert sample Orders
+-- Insert sample orders
 INSERT INTO Orders
     (OrderDate, Amount, State, CustomerId)
 VALUES
-    ('2023-10-01', 150000, 'paid', 1),
-    ('2023-10-02', 250000, 'sent', 2),
-    ('2023-10-03', 350000, 'awaiting', 3);
+    (GETDATE(), 200000, N'awaiting', 1),
+    (GETDATE(), 150000, N'paid', 2),
+    (GETDATE(), 300000, N'sent', 3);
 
--- Insert sample Receipts
+-- Insert sample receipts
 INSERT INTO Receipts
     (Amount, CustomerId)
 VALUES
-    (50000, 1),
-    (70000, 2),
-    (90000, 3);
+    (500000, 1),
+    (200000, 2),
+    (100000, 3);
 
--- Insert sample Books
-INSERT INTO Books
-    (Title, Description, Isbn13, Inventory, Price, DiscountPercent,
-    NumberOfPages, PublicationDate, AuthorId, PublisherId)
+-- Insert sample addresses
+INSERT INTO Addresses
+    (Street, District, City, Country, CustomerId)
 VALUES
-    (N'Sách Tiểu Thuyết 1', N'Mô tả sách tiểu thuyết 1', '9781234567890', 10, 150000, 0.1,
-        200, '2022-01-01', 1, 1),
-    (N'Sách Tiểu Thuyết 2', N'Mô tả sách tiểu thuyết 2', '9780987654321', 5, 200000, 0.2,
-        250, '2022-05-01', 2, 2),
-    (N'Sách Kỹ Năng 1', N'Mô tả sách kỹ năng 1', '9789876543210', 8, 180000, 0.15,
-        180, '2022-01-04', 3, 3);
+    (N'123 Đường Nguyễn Văn A', N'Quận 1', N'Thành phố Hồ Chí Minh', N'Việt Nam', 1),
+    (N'456 Đường Trần Thị B', N'Quận 2', N'Thành phố Hồ Chí Minh', N'Việt Nam', 2),
+    (N'789 Đường Lê Quang C', N'Quận 3', N'Thành phố Hồ Chí Minh', N'Việt Nam', 3);
 
--- Insert sample OrderDetails
+-- Insert sample books
+INSERT INTO Books
+    (Title, Description, Isbn13, Inventory, Price, DiscountPercent, NumberOfPages, PublicationDate, ImageUrl, AuthorId, PublisherId)
+VALUES
+    (N'Tiếng Gọi Công Việc', N'Một cuốn sách về sự nghiệp và thành công', '9781234567890', 100, 50000, 0.1, 200, GETDATE(), 'book1.jpg', 1, 1),
+    (N'Kinh Tế Học Đại Cương', N'Giới thiệu về kinh tế học', '9780987654321', 50, 75000, 0.05, 300, GETDATE(), 'book2.jpg', 2, 2),
+    (N'Cuốn Sách Khoa Học', N'Một cuốn sách về khoa học', '9789876543210', 80, 60000, 0.2, 150, GETDATE(), 'book3.jpg', 3, 3);
+
+-- Insert sample order details
 INSERT INTO OrderDetails
     (Quantity, BookId, OrderId)
 VALUES
     (2, 1, 1),
-    (1, 2, 1),
-    (3, 3, 2),
-    (2, 1, 3);
+    (1, 2, 2),
+    (3, 3, 3);
 
--- Insert sample CartItems
+-- Insert sample cart items
 INSERT INTO CartItems
     (Quantity, CartId, BookId)
 VALUES
     (1, 1, 1),
-    (2, 1, 2),
-    (3, 2, 3),
-    (1, 3, 1);
+    (2, 2, 2),
+    (3, 3, 3);
 
--- Insert sample BookCategory
+-- Insert sample book categories
 INSERT INTO BookCategory
     (BookId, CategoryId)
 VALUES
     (1, 1),
-    (2, 1),
     (2, 2),
     (3, 3);

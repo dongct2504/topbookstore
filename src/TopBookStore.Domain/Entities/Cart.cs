@@ -11,10 +11,10 @@ public partial class Cart
     [Key]
     public int CartId { get; set; }
 
-    public int CustomerId { get; set; }
-
     [Column(TypeName = "money")]
     public decimal Amount { get; set; }
+
+    public int CustomerId { get; set; }
 
     [InverseProperty("Cart")]
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();

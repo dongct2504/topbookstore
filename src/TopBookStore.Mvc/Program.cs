@@ -9,6 +9,8 @@ using TopBookStore.Infrastructure.UnitOfWork;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using TopBookStore.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +44,8 @@ builder.Services.AddDefaultIdentity<IdentityTopBookStoreUser>(options =>
     .AddRoles<IdentityRole>()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<IdentityTopBookStoreDbContext>();
+
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.AddTransient<ITopBookStoreUnitOfWork, TopBookStoreUnitOfWork>();
 builder.Services.AddTransient<IBookService, BookService>();

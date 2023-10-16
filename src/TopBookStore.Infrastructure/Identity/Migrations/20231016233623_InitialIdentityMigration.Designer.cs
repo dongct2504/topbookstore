@@ -12,7 +12,7 @@ using TopBookStore.Infrastructure.Identity;
 namespace TopBookStore.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(IdentityTopBookStoreDbContext))]
-    [Migration("20231016132610_InitialIdentityMigration")]
+    [Migration("20231016233623_InitialIdentityMigration")]
     partial class InitialIdentityMigration
     {
         /// <inheritdoc />
@@ -177,6 +177,40 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("TopBookStore.Domain.Entities.Address", b =>
+                {
+                    b.Property<int>("AddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
+
+                    b.Property<string>("City")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Country")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("District")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Street")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.HasKey("AddressId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("TopBookStore.Domain.Entities.Author", b =>
                 {
                     b.Property<int>("AuthorId")
@@ -334,25 +368,8 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
 
-                    b.Property<string>("City")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Country")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
                     b.Property<decimal>("Debt")
                         .HasColumnType("money");
-
-                    b.Property<string>("District")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -361,16 +378,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<string>("Street")
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
@@ -609,6 +616,17 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TopBookStore.Domain.Entities.Address", b =>
+                {
+                    b.HasOne("TopBookStore.Domain.Entities.Customer", "Customer")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("TopBookStore.Domain.Entities.Book", b =>
                 {
                     b.HasOne("TopBookStore.Domain.Entities.Author", "Author")
@@ -729,6 +747,8 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Customer", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("Carts");
 
                     b.Navigation("Orders");

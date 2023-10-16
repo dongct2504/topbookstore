@@ -35,13 +35,7 @@ CREATE TABLE Customers
     CustomerId INT NOT NULL IDENTITY PRIMARY KEY,
     FirstName NVARCHAR(80) NOT NULL,
     LastName NVARCHAR(80) NOT NULL,
-    Email NVARCHAR(70) NOT NULL,
-    PhoneNumber VARCHAR(15) NOT NULL,
-    Debt MONEY NOT NULL DEFAULT 0,
-    Street NVARCHAR(80),
-    District NVARCHAR(50),
-    City NVARCHAR(30),
-    Country NVARCHAR(30)
+    Debt MONEY NOT NULL DEFAULT 0
 );
 
 CREATE TABLE Carts
@@ -65,7 +59,7 @@ CREATE TABLE Orders
     CustomerId INT NOT NULL,
 
     CONSTRAINT FK_Orders_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
-    ON DELETE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE Receipts
@@ -75,7 +69,20 @@ CREATE TABLE Receipts
     CustomerId INT NOT NULL,
 
     CONSTRAINT FK_Receipts_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
-    ON DELETE CASCADE
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Addresses
+(
+    AddressId INT NOT NULL IDENTITY PRIMARY KEY,
+    Street NVARCHAR(80),
+    District NVARCHAR(50),
+    City NVARCHAR(30),
+    Country NVARCHAR(30),
+    CustomerId INT NOT NULL,
+
+    CONSTRAINT FK_Addresses_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE Books
@@ -96,9 +103,9 @@ CREATE TABLE Books
     -- A Author or Publisher can be deleted only if all books related to those tables
     -- are deleted
     CONSTRAINT FK_Books_Authors FOREIGN KEY (AuthorId) REFERENCES Authors(AuthorId)
-    ON DELETE NO ACTION,
+        ON DELETE NO ACTION,
     CONSTRAINT FK_Books_Publishers FOREIGN KEY (PublisherId) REFERENCES Publishers(PublisherId)
-    ON DELETE NO ACTION
+        ON DELETE NO ACTION
 );
 
 CREATE TABLE OrderDetails
@@ -109,9 +116,9 @@ CREATE TABLE OrderDetails
     OrderId INT NOT NULL,
 
     CONSTRAINT FK_OrderDetails_Books FOREIGN KEY (BookId) REFERENCES Books(BookId)
-    ON DELETE CASCADE,
+        ON DELETE CASCADE,
     CONSTRAINT FK_OrderDetails_Orders FOREIGN KEY (OrderId) REFERENCES Orders(OrderId)
-    ON DELETE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE CartItems
@@ -122,9 +129,9 @@ CREATE TABLE CartItems
     BookId INT NOT NULL,
 
     CONSTRAINT FK_CartItems_Carts FOREIGN KEY (CartId) REFERENCES Carts(CartId)
-    ON DELETE CASCADE,
+        ON DELETE CASCADE,
     CONSTRAINT FK_CartItems_Books FOREIGN KEY (BookId) REFERENCES Books(BookId)
-    ON DELETE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE BookCategory
@@ -134,7 +141,7 @@ CREATE TABLE BookCategory
     PRIMARY KEY (BookId, CategoryId),
 
     CONSTRAINT FK_BookCategory_Books FOREIGN KEY (BookId) REFERENCES Books(BookId)
-    ON DELETE CASCADE,
+        ON DELETE CASCADE,
     CONSTRAINT FK_BookCategory_Categories FOREIGN KEY (CategoryId) REFERENCES Categories(CategoryId)
-    ON DELETE CASCADE
+        ON DELETE CASCADE
 );
