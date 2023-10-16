@@ -56,9 +56,4 @@ public class CustomerService : ICustomerService
         _data.Customers.Remove(customer);
         await _data.SaveAsync();
     }
-
-    public async Task SaveAsync()
-    {
-        await _data.SaveAsync();
-    }
 }

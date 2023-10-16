@@ -5,16 +5,19 @@ using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
 using TopBookStore.Domain.Extensions;
 using TopBookStore.Application.Routing;
+using AutoMapper;
 
 namespace TopBookStore.Application.Services;
 
 public class BookService : IBookService
 {
     private readonly ITopBookStoreUnitOfWork _data;
+    private readonly IMapper _mapper;
 
-    public BookService(ITopBookStoreUnitOfWork data)
+    public BookService(ITopBookStoreUnitOfWork data, IMapper mapper)
     {
         _data = data;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<Book>> GetAllBooksAsync()
@@ -36,6 +39,23 @@ public class BookService : IBookService
         };
 
         return await _data.Books.GetAsync(options);
+    }
+
+    public async Task<BookDto?> GetBookDtoByIdAsync(int id)
+    {
+        QueryOptions<Book> options = new()
+        {
+            Where = b => b.BookId == id,
+            Includes = "Author, Publisher, Categories"
+        };
+
+        Book? book = await _data.Books.GetAsync(options);
+        if (book is null)
+        {
+            return null;
+        }
+
+        return _mapper.Map<BookDto>(book);
     }
 
     public async Task<IEnumerable<Book>> GetBooksByCategoryAsync(int id)
@@ -121,20 +141,54 @@ public class BookService : IBookService
         await _data.SaveAsync();
     }
 
+    public async Task AddBookAsync(BookDto bookDto)
+    {
+        Book book = _mapper.Map<Book>(bookDto);
+
+        await _data.Books.AddNewCategoriesAsync(book, bookDto.CategoryIds, _data.Categories);
+
+        _data.Books.Add(book);
+        await _data.SaveAsync();
+    }
+
     public async Task UpdateBookAsync(Book book)
     {
         _data.Books.Update(book);
         await _data.SaveAsync();
     }
 
-    public async Task RemoveBookAsync(Book book)
+    public async Task UpdateBookAsync(BookDto bookDto)
     {
-        _data.Books.Remove(book);
+        QueryOptions<Book> options = new()
+        {
+            Where = b => b.BookId == bookDto.BookId,
+            Includes = "Categories"
+        };
+
+        Book bookFromDb = await _data.Books.GetAsync(options) ?? new Book();
+        bookFromDb.BookId = bookDto.BookId;
+        bookFromDb.Title = bookDto.Title;
+        bookFromDb.Description = bookDto.Description;
+        bookFromDb.Isbn13 = bookDto.Isbn13;
+        bookFromDb.Inventory = bookDto.Inventory;
+        bookFromDb.Price = bookDto.Price;
+        bookFromDb.DiscountPercent = bookDto.DiscountPercent;
+        bookFromDb.NumberOfPages = bookDto.NumberOfPages;
+        bookFromDb.PublicationDate = bookDto.PublicationDate;
+        bookFromDb.ImageUrl = bookDto.ImageUrl;
+        bookFromDb.AuthorId = bookDto.AuthorId;
+        bookFromDb.PublisherId = bookDto.PublisherId;
+
+        await _data.Books.AddNewCategoriesAsync(bookFromDb, bookDto.CategoryIds, _data.Categories);
+
+        // don't need to call _data.Books.Update(bookDto) - db context is tracking changes 
+        // because retrieved bookDto with categories from db at the beginning
         await _data.SaveAsync();
     }
 
-    public async Task SaveAsync()
+    public async Task RemoveBookAsync(Book bookDto)
     {
+        _data.Books.Remove(bookDto);
         await _data.SaveAsync();
     }
 }

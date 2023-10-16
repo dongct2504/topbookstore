@@ -52,9 +52,4 @@ public class CategoryService : ICategoryService
         _data.Categories.Remove(category);
         await _data.SaveAsync();
     }
-
-    public async Task SaveAsync()
-    {
-        await _data.SaveAsync();
-    }
 }

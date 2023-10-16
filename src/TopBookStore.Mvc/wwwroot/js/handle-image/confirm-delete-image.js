@@ -24,7 +24,7 @@ function Delete(url) {
                         });
                     } else {
                         Swal.fire({
-                            title: "Ây da!!!",
+                            title: "Lỗi!!!",
                             text: data.message,
                             icon: "error"
                         }).then(() => {

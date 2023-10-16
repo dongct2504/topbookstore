@@ -14,15 +14,13 @@ public class BookController : Controller
 {
     private readonly IBookService _service;
     private readonly ITopBookStoreUnitOfWork _data;
-    private readonly IMapper _mapper;
     private readonly IWebHostEnvironment _hostEnvironment;
 
     public BookController(IBookService service, IWebHostEnvironment hostEnvironment,
-        IMapper mapper, ITopBookStoreUnitOfWork data)
+        ITopBookStoreUnitOfWork data)
     {
         _service = service;
         _data = data;
-        _mapper = mapper;
         _hostEnvironment = hostEnvironment;
     }
 
@@ -47,13 +45,13 @@ public class BookController : Controller
         }
 
         ViewBag.Action = "Update";
-        Book? book = await _service.GetBookByIdAsync(id.GetValueOrDefault());
-        if (book is null)
+        BookDto? bookDto = await _service.GetBookDtoByIdAsync(id.GetValueOrDefault());
+        if (bookDto is null)
         {
             return NotFound();
         }
 
-        vm.BookDto = _mapper.Map<BookDto>(book);
+        vm.BookDto = bookDto;
         return View(vm);
     }
 
@@ -94,41 +92,12 @@ public class BookController : Controller
 
             if (bookDto.BookId == 0)
             {
-                Book book = _mapper.Map<Book>(bookDto);
-
-                await _data.Books.AddNewCategoriesAsync(book, bookDto.CategoryIds, _data.Categories);
-
-                await _service.AddBookAsync(book);
+                await _service.AddBookAsync(bookDto);
             }
             else
             {
-                QueryOptions<Book> options = new()
-                {
-                    Where = b => b.BookId == bookDto.BookId,
-                    Includes = "Categories"
-                };
-
-                Book bookFromDb = await _data.Books.GetAsync(options) ?? new Book();
-                bookFromDb.BookId = bookDto.BookId;
-                bookFromDb.Title = bookDto.Title;
-                bookFromDb.Description = bookDto.Description;
-                bookFromDb.Isbn13 = bookDto.Isbn13;
-                bookFromDb.Inventory = bookDto.Inventory;
-                bookFromDb.Price = bookDto.Price;
-                bookFromDb.DiscountPercent = bookDto.DiscountPercent;
-                bookFromDb.NumberOfPages = bookDto.NumberOfPages;
-                bookFromDb.PublicationDate = bookDto.PublicationDate;
-                bookFromDb.ImageUrl = bookDto.ImageUrl;
-                bookFromDb.AuthorId = bookDto.AuthorId;
-                bookFromDb.PublisherId = bookDto.PublisherId;
-
-                await _data.Books.AddNewCategoriesAsync(bookFromDb, bookDto.CategoryIds, _data.Categories);
-
-                // don't need to call UpdateBookAsync() - db context is tracking changes 
-                // because retrieved book with categories from db at the beginning
-                await _data.SaveAsync();
+                await _service.UpdateBookAsync(bookDto);
             }
-
             return RedirectToAction(nameof(Index));
         }
 
@@ -202,7 +171,8 @@ public class BookController : Controller
 
         System.IO.File.Delete(imagePath);
         book.ImageUrl = null;
-        await _service.SaveAsync();
+
+        await _service.UpdateBookAsync(book);
 
         return Json(new { success = true, message = "Xóa thành công!" });
     }
