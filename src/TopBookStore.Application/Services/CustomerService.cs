@@ -19,16 +19,6 @@ public class CustomerService : ICustomerService
         return await _data.Customers.ListAllAsync(new QueryOptions<Customer>());
     }
 
-    public async Task<IEnumerable<Customer>> GetCustomersWithRole(string role)
-    {
-        QueryOptions<Customer> options = new()
-        {
-            Where = c => c.Role == role
-        };
-
-        return await _data.Customers.ListAllAsync(options);
-    }
-
     public Task<Customer?> GetCustomerById(int id)
     {
         throw new NotImplementedException();
