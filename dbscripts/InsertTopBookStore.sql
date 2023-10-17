@@ -5,6 +5,7 @@ SELECT * FROM Categories;
 SELECT * FROM Books;
 SELECT * FROM BookCategory;
 SELECT * FROM Authors;
+SELECT * FROM Addresses;
 
 SELECT * FROM AspNetUsers;
 SELECT * FROM AspNetRoles;
@@ -105,9 +106,9 @@ VALUES
 INSERT INTO Books
     (Title, Description, Isbn13, Inventory, Price, DiscountPercent, NumberOfPages, PublicationDate, ImageUrl, AuthorId, PublisherId)
 VALUES
-    (N'Tiếng Gọi Công Việc', N'Một cuốn sách về sự nghiệp và thành công', '9781234567890', 100, 50000, 0.1, 200, GETDATE(), 'book1.jpg', 1, 1),
-    (N'Kinh Tế Học Đại Cương', N'Giới thiệu về kinh tế học', '9780987654321', 50, 75000, 0.05, 300, GETDATE(), 'book2.jpg', 2, 2),
-    (N'Cuốn Sách Khoa Học', N'Một cuốn sách về khoa học', '9789876543210', 80, 60000, 0.2, 150, GETDATE(), 'book3.jpg', 3, 3);
+    (N'Tiếng Gọi Công Việc', N'Một cuốn sách về sự nghiệp và thành công', '9781234567890', 100, 50000, 0.1, 200, GETDATE(), NULL, 1, 1),
+    (N'Kinh Tế Học Đại Cương', N'Giới thiệu về kinh tế học', '9780987654321', 50, 75000, 0.05, 300, GETDATE(), NULL, 2, 2),
+    (N'Cuốn Sách Khoa Học', N'Một cuốn sách về khoa học', '9789876543210', 80, 60000, 0.2, 150, GETDATE(), NULL, 3, 3);
 
 -- Insert sample order details
 INSERT INTO OrderDetails
