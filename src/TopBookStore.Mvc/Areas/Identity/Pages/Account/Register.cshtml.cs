@@ -16,7 +16,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Constants;
@@ -121,12 +123,27 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             public string PhoneNumber { get; set; } = null!;
 
             public string Role { get; set; } = string.Empty;
+
+            public List<SelectListItem> RoleList { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
+
+            Input = new InputModel
+            {
+                RoleList = await _roleManager.Roles
+                    .Where(r => r.Name != RolesConstants.RoleCustomer)
+                    .Select(i => new SelectListItem
+                    {
+                        Text = i.Name,
+                        Value = i.Name
+                    })
+                    .ToListAsync()
+            };
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
@@ -141,10 +158,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                 Customer customer = new()
                 {
                     FirstName = Input.FirstName,
-                    LastName = Input.LastName,
-                    Email = Input.Email,
-                    PhoneNumber = Input.PhoneNumber,
-                    Role = Input.Role
+                    LastName = Input.LastName
                 };
 
                 await _service.AddCustomerAsync(customer);
@@ -154,7 +168,8 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     UserName = Input.Email,
                     PhoneNumber = Input.PhoneNumber,
-                    CustomerId = customer.CustomerId
+                    Role = Input.Role,
+                    CustomerId = customer.CustomerId,
                 };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -178,7 +193,16 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleAdmin));
                     }
 
-                    await _userManager.AddToRoleAsync(user, RolesConstants.RoleAdmin);
+                    // await _userManager.AddToRoleAsync(user, RolesConstants.RoleAdmin);
+
+                    if (string.IsNullOrEmpty(user.Role))
+                    {
+                        await _userManager.AddToRoleAsync(user, RolesConstants.RoleCustomer);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, user.Role);
+                    }
 
                     // var userId = await _userManager.GetUserIdAsync(user);
                     // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -200,12 +224,20 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        return RedirectToPage("RegisterConfirmation",
+                            new { email = Input.Email, returnUrl = returnUrl });
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        if (string.IsNullOrEmpty(user.Role)) // for customer
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
+                        else // for admin register a new user
+                        {
+                            return RedirectToAction("Index", "User", new { Area = "Admin" });
+                        }
                     }
                 }
                 else
@@ -217,6 +249,18 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
+            Input = new InputModel
+            {
+                RoleList = await _roleManager.Roles
+                    .Where(r => r.Name != RolesConstants.RoleCustomer)
+                    .Select(i => new SelectListItem
+                    {
+                        Text = i.Name,
+                        Value = i.Name
+                    })
+                    .ToListAsync()
+            };
 
             // If we got this far, something failed, redisplay form
             return Page();
