@@ -86,7 +86,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Vui lòng nhập Email.")]
+            [Required(ErrorMessage = "Vui lòng nhập email.")]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -95,8 +95,9 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Vui lòng nhập Mật khẩu")]
-            [StringLength(100, ErrorMessage = "{0} phải có ít nhất {2} ký tự và nhiều nhất {1} kí tự.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Vui lòng nhập mật khẩu.")]
+            [StringLength(100, ErrorMessage = 
+                "{0} phải có ít nhất {2} ký tự và nhiều nhất {1} kí tự.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Mật khẩu")]
             public string Password { get; set; }
@@ -110,15 +111,15 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "Mật khẩu không trùng khớp.")]
             public string ConfirmPassword { get; set; }
 
-            [Required(ErrorMessage = "Vui lòng nhập Tên.")]
+            [Required(ErrorMessage = "Vui lòng nhập tên.")]
             [StringLength(80, ErrorMessage = "Nhập Tên ngắn hơn 80 kí tự.")]
             public string FirstName { get; set; } = null!;
 
-            [Required(ErrorMessage = "Vui lòng nhập Họ.")]
+            [Required(ErrorMessage = "Vui lòng nhập họ.")]
             [StringLength(80, ErrorMessage = "Nhập Tên ngắn hơn 80 kí tự.")]
             public string LastName { get; set; } = null!;
 
-            [Required(ErrorMessage = "Vui lòng nhập Số điện thoại.")]
+            [Required(ErrorMessage = "Vui lòng nhập số điện thoại.")]
             [StringLength(15, ErrorMessage = "Vui lòng nhập số điện thoại hợp lệ.")]
             public string PhoneNumber { get; set; } = null!;
 
@@ -192,15 +193,23 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleAdmin));
                     }
 
-                    // await _userManager.AddToRoleAsync(user, RolesConstants.RoleAdmin);
-
-                    if (string.IsNullOrEmpty(user.Role))
+                    // only for testing
+                    if (customer.FirstName == "Dong" || customer.FirstName == "Duc" ||
+                        customer.FirstName == "Duy" || customer.FirstName == "Giap" ||
+                        customer.FirstName == "Diep")
                     {
-                        await _userManager.AddToRoleAsync(user, RolesConstants.RoleCustomer);
+                        await _userManager.AddToRoleAsync(user, RolesConstants.RoleAdmin);
                     }
                     else
                     {
-                        await _userManager.AddToRoleAsync(user, user.Role);
+                        if (string.IsNullOrEmpty(user.Role))
+                        {
+                            await _userManager.AddToRoleAsync(user, RolesConstants.RoleCustomer);
+                        }
+                        else
+                        {
+                            await _userManager.AddToRoleAsync(user, user.Role);
+                        }
                     }
 
                     // var userId = await _userManager.GetUserIdAsync(user);
