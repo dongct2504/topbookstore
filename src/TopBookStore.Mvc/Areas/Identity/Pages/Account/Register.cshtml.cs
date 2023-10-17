@@ -135,7 +135,6 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             Input = new InputModel
             {
                 RoleList = await _roleManager.Roles
-                    .Where(r => r.Name != RolesConstants.RoleCustomer)
                     .Select(i => new SelectListItem
                     {
                         Text = i.Name,
@@ -253,7 +252,6 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             Input = new InputModel
             {
                 RoleList = await _roleManager.Roles
-                    .Where(r => r.Name != RolesConstants.RoleCustomer)
                     .Select(i => new SelectListItem
                     {
                         Text = i.Name,
