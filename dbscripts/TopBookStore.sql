@@ -2,7 +2,7 @@ USE master;
 
 IF DB_ID('TopBookStore') IS NOT NULL
     ALTER DATABASE TopBookStore SET SINGLE_USER WITH ROLLBACK IMMEDIATE
-DROP DATABASE TopBookStore;
+    DROP DATABASE TopBookStore;
 GO
 
 CREATE DATABASE TopBookStore;
@@ -41,7 +41,7 @@ CREATE TABLE Customers
 CREATE TABLE Carts
 (
     CartId INT NOT NULL IDENTITY PRIMARY KEY,
-    Amount MONEY NOT NULL DEFAULT 0,
+    TotalAmount MONEY NOT NULL,
     CustomerId INT NOT NULL,
 
     -- When a customer is deleted, all associated cart records should be deleted as well.
@@ -53,22 +53,12 @@ CREATE TABLE Orders
 (
     OrderId INT NOT NULL IDENTITY PRIMARY KEY,
     OrderDate DATETIME NOT NULL,
-    Amount MONEY NOT NULL,
+    TotalAmount MONEY NOT NULL,
     State VARCHAR(30) DEFAULT 'awaiting'
         CHECK (state = 'awaiting' OR state = 'paid' OR state = 'sent'),
     CustomerId INT NOT NULL,
 
     CONSTRAINT FK_Orders_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
-        ON DELETE CASCADE
-);
-
-CREATE TABLE Receipts
-(
-    ReceiptId INT NOT NULL IDENTITY PRIMARY KEY,
-    Amount MONEY NOT NULL DEFAULT 0,
-    CustomerId INT NOT NULL,
-
-    CONSTRAINT FK_Receipts_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
         ON DELETE CASCADE
 );
 
@@ -111,6 +101,7 @@ CREATE TABLE Books
 CREATE TABLE OrderDetails
 (
     OrderDetailId INT NOT NULL IDENTITY PRIMARY KEY,
+    Price MONEY NOT NULL,
     Quantity INT NOT NULL DEFAULT 0,
     BookId INT NOT NULL,
     OrderId INT NOT NULL,
@@ -124,6 +115,7 @@ CREATE TABLE OrderDetails
 CREATE TABLE CartItems
 (
     CartItemId INT NOT NULL IDENTITY PRIMARY KEY,
+    Price MONEY NOT NULL,
     Quantity INT NOT NULL,
     CartId INT NOT NULL,
     BookId INT NOT NULL,

@@ -11,6 +11,9 @@ public partial class CartItem
     [Key]
     public int CartItemId { get; set; }
 
+    [Column(TypeName = "money")]
+    public decimal Price { get; set; }
+
     public int Quantity { get; set; }
 
     public int CartId { get; set; }

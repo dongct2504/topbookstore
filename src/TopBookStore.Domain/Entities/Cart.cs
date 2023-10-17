@@ -12,7 +12,7 @@ public partial class Cart
     public int CartId { get; set; }
 
     [Column(TypeName = "money")]
-    public decimal Amount { get; set; }
+    public decimal TotalAmount { get; set; }
 
     public int CustomerId { get; set; }
 

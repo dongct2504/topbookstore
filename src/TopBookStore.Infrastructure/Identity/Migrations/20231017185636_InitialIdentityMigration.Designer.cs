@@ -12,7 +12,7 @@ using TopBookStore.Infrastructure.Identity;
 namespace TopBookStore.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(IdentityTopBookStoreDbContext))]
-    [Migration("20231016233623_InitialIdentityMigration")]
+    [Migration("20231017185636_InitialIdentityMigration")]
     partial class InitialIdentityMigration
     {
         /// <inheritdoc />
@@ -303,11 +303,11 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("money");
-
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("money");
 
                     b.HasKey("CartId");
 
@@ -329,6 +329,9 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.Property<int>("CartId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("money");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -394,9 +397,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("money");
-
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
@@ -407,6 +407,9 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasMaxLength(30)
                         .IsUnicode(false)
                         .HasColumnType("varchar(30)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("money");
 
                     b.HasKey("OrderId");
 
@@ -428,6 +431,9 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("money");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -457,27 +463,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.HasKey("PublisherId");
 
                     b.ToTable("Publishers");
-                });
-
-            modelBuilder.Entity("TopBookStore.Domain.Entities.Receipt", b =>
-                {
-                    b.Property<int>("ReceiptId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReceiptId"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("money");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReceiptId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Receipts");
                 });
 
             modelBuilder.Entity("TopBookStore.Infrastructure.Identity.IdentityTopBookStoreUser", b =>
@@ -706,17 +691,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("TopBookStore.Domain.Entities.Receipt", b =>
-                {
-                    b.HasOne("TopBookStore.Domain.Entities.Customer", "Customer")
-                        .WithMany("Receipts")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("TopBookStore.Infrastructure.Identity.IdentityTopBookStoreUser", b =>
                 {
                     b.HasOne("TopBookStore.Domain.Entities.Customer", "Customer")
@@ -752,8 +726,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.Navigation("Carts");
 
                     b.Navigation("Orders");
-
-                    b.Navigation("Receipts");
                 });
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Order", b =>
