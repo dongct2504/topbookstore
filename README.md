@@ -60,9 +60,11 @@ The TopBookStore project utilizes the following technologies:
 
 - **Programming Language**: C# 11 (.NET 7)
 - **Web Framework**: ASP.NET Core MVC
-- **Database**: Entity Framework Core (ORM)
-- **Dependency Injection**: Microsoft.Extensions.DependencyInjection
-- **Serialization**: JSON for data exchange
+- **Database**: Entity Framework Core SQL Server 7.0.8 (ORM)
+- **Front-End Libraries**: Bootstrap, jQuery, DataTables
+- **Data Loading**: Ajax
+- **Icon Library**: Font Awesome
+- **Identity Provider**: Microsoft AspNetCore Identity 7.0.8
 
 ## License
 
