@@ -1,6 +1,6 @@
 namespace TopBookStore.Domain.Constants;
 
-public static class RolesConstants
+public static class RoleConstants
 {
     public const string RoleCustomer = "Customer";
     public const string RoleLibrarian = "Librarian";

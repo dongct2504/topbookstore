@@ -1,7 +1,9 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Interfaces;
+using TopBookStore.Domain.Constants;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
@@ -10,6 +12,7 @@ using TopBookStore.Mvc.Models;
 namespace TopBookStore.Mvc.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = RoleConstants.RoleAdmin + "," + RoleConstants.RoleLibrarian)]
 public class BookController : Controller
 {
     private readonly IBookService _service;

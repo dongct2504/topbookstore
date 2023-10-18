@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TopBookStore.Application.DTOs;
+using TopBookStore.Domain.Constants;
 using TopBookStore.Infrastructure.Identity;
 using TopBookStore.Infrastructure.Persistence;
 
 namespace TopBookStore.Mvc.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = RoleConstants.RoleAdmin)]
 public class UserController : Controller
 {
     private readonly TopBookStoreContext _context;

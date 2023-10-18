@@ -1,12 +1,15 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Services;
+using TopBookStore.Domain.Constants;
 using TopBookStore.Domain.Entities;
 
 namespace TopBookStore.Mvc.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = RoleConstants.RoleAdmin + "," + RoleConstants.RoleLibrarian)]
 public class PublisherController : Controller
 {
     private readonly IPublisherService _service;

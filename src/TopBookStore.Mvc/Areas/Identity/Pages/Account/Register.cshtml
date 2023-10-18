@@ -55,7 +55,7 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
 
-            @if (User.IsInRole(RolesConstants.RoleAdmin))
+            @if (User.IsInRole(RoleConstants.RoleAdmin))
             {
                 <div class="form-floating mb-3">
                     <select asp-for="Input.Role" asp-items="Model.Input.RoleList"

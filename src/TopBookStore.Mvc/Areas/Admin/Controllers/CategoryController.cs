@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Interfaces;
+using TopBookStore.Domain.Constants;
 using TopBookStore.Domain.Entities;
 
 namespace TopBookStore.Mvc.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = RoleConstants.RoleAdmin + "," + RoleConstants.RoleLibrarian)]
 public class CategoryController : Controller
 {
     private readonly ICategoryService _service;

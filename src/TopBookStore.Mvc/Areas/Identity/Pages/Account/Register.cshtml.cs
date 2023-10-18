@@ -180,17 +180,17 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleCustomer))
+                    if (!await _roleManager.RoleExistsAsync(RoleConstants.RoleCustomer))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleCustomer));
+                        await _roleManager.CreateAsync(new IdentityRole(RoleConstants.RoleCustomer));
                     }
-                    if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleLibrarian))
+                    if (!await _roleManager.RoleExistsAsync(RoleConstants.RoleLibrarian))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleLibrarian));
+                        await _roleManager.CreateAsync(new IdentityRole(RoleConstants.RoleLibrarian));
                     }
-                    if (!await _roleManager.RoleExistsAsync(RolesConstants.RoleAdmin))
+                    if (!await _roleManager.RoleExistsAsync(RoleConstants.RoleAdmin))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(RolesConstants.RoleAdmin));
+                        await _roleManager.CreateAsync(new IdentityRole(RoleConstants.RoleAdmin));
                     }
 
                     // only for testing
@@ -198,13 +198,13 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                         customer.FirstName == "Duy" || customer.FirstName == "Giap" ||
                         customer.FirstName == "Diep")
                     {
-                        await _userManager.AddToRoleAsync(user, RolesConstants.RoleAdmin);
+                        await _userManager.AddToRoleAsync(user, RoleConstants.RoleAdmin);
                     }
                     else
                     {
                         if (string.IsNullOrEmpty(user.Role))
                         {
-                            await _userManager.AddToRoleAsync(user, RolesConstants.RoleCustomer);
+                            await _userManager.AddToRoleAsync(user, RoleConstants.RoleCustomer);
                         }
                         else
                         {
