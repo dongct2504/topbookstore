@@ -8,7 +8,7 @@ The clean architecture promotes separation of concerns and maintainability by or
 
 The TopBookStore homepage should look like this:
 
-![Home page](TopBookStore.Mvc/wwwroot/imgs/homepage.png)
+![Home page](src/TopBookStore.Mvc/wwwroot/imgs/homepage.png)
 
 ## Getting Started
 
