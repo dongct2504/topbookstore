@@ -28,13 +28,13 @@ Server=.\\sqlexpress;Database=TopBookStore;MultipleActiveResultSets=true;Trusted
 
 3. Set up the database, to set up the database you need to follow either one of these steps:
 
-- If you use Visual Studio, open the Package Manager Console in **Infrastructure** layer  and run the following command.
+- If you use Visual Studio, open the Package Manager Console in **TopBookStore.Infrastructure** layer  and run the following command.
 
 ```powershell
 Update-Database -Context IdentityTopBookStoreDbContext
 ```
 
-- If you use Visual Studio Code, open your terminal in **Infrastructure** layer and run the command.
+- If you use Visual Studio Code, open your terminal in **TopBookStore.Infrastructure** layer and run the command.
 
 ```powershell
 dotnet ef database update --context IdentityTopBookStoreDbContext --startup-project ..\TopBookStore.Mvc\TopBookStore.Mvc.csproj
