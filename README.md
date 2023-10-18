@@ -17,7 +17,7 @@ To run the TopBookStore project locally, you need to follow these steps:
 1. Clone the repository.
 
 ```powershell
-https://github.com/keilar000/TopBookStore.git
+git clone https://github.com/keilar000/TopBookStore.git
 ```
 
 2. Configure the database connection string, in **TopBookStore.Mvc** find the file called **appsetting.json** and check the connection string, you may need to change the connection string. For example, if you are using SQL Express, the connection string would be: 
