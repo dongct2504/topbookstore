@@ -359,9 +359,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime?>("LockoutEnd")
-                        .HasColumnType("datetime");
-
                     b.Property<string>("Street")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");

@@ -62,7 +62,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Debt = table.Column<decimal>(type: "money", nullable: false),
-                    LockoutEnd = table.Column<DateTime>(type: "datetime", nullable: true),
                     Street = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     District = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),

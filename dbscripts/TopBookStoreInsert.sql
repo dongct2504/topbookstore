@@ -90,10 +90,10 @@ values
 
 -- Inserting data into Customers table
 insert into Customers
-    (FirstName, LastName, Debt, LockoutEnd, Street, District, City, Country)
+    (FirstName, LastName, Debt, Street, District, City, Country)
 values
-    (N'Trần', N'Hoàng', 0, null, '123 Đường A', 'Quận B', 'Thành phố C', 'Việt Nam'),
-    (N'Lê', N'Thịnh', 50000, null, '456 Đường X', 'Quận Y', 'Thành phố Z', 'Việt Nam');
+    (N'Trần', N'Hoàng', 0, '123 Đường A', 'Quận B', 'Thành phố C', 'Việt Nam'),
+    (N'Lê', N'Thịnh', 50000, '456 Đường X', 'Quận Y', 'Thành phố Z', 'Việt Nam');
 
 -- Inserting data into Carts table
 insert into Carts

@@ -369,7 +369,6 @@ create table Customers
    FirstName nvarchar(50) not null,
    LastName nvarchar(50) not null,
    Debt money not null,
-   LockoutEnd datetime null,
    Street nvarchar(50) null,
    District nvarchar(30) null,
    City nvarchar(30) null,

@@ -12,7 +12,7 @@ using TopBookStore.Infrastructure.Identity;
 namespace TopBookStore.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(IdentityTopBookStoreDbContext))]
-    [Migration("20231018124531_InitialIdentityMigration")]
+    [Migration("20231018172956_InitialIdentityMigration")]
     partial class InitialIdentityMigration
     {
         /// <inheritdoc />
@@ -361,9 +361,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("LockoutEnd")
-                        .HasColumnType("datetime");
 
                     b.Property<string>("Street")
                         .HasMaxLength(50)

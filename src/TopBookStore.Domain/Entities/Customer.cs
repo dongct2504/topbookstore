@@ -20,9 +20,6 @@ public partial class Customer
     [Column(TypeName = "money")]
     public decimal Debt { get; set; }
 
-    [Column(TypeName = "datetime")]
-    public DateTime? LockoutEnd { get; set; }
-
     [StringLength(50)]
     public string? Street { get; set; }
 
