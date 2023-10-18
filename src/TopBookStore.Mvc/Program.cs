@@ -30,10 +30,6 @@ builder.Services.AddControllersWithViews().AddJsonOptions(x =>
 builder.Services.AddRazorPages();
 
 var TopBookStoreCS = builder.Configuration.GetConnectionString("TopBookStoreCS");
-// builder.Services.AddDbContext<TopBookStoreContext>(options =>
-//     options.UseSqlServer(TopBookStoreCS));
-
-// var ApplicationDbContextCS = builder.Configuration.GetConnectionString("ApplicationDbContextConnection");
 builder.Services.AddDbContext<IdentityTopBookStoreDbContext>(options =>
     options.UseSqlServer(TopBookStoreCS));
 builder.Services.AddDbContext<TopBookStoreContext>(options =>
