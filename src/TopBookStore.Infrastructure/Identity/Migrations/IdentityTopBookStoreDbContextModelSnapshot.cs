@@ -174,40 +174,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TopBookStore.Domain.Entities.Address", b =>
-                {
-                    b.Property<int>("AddressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
-
-                    b.Property<string>("City")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Country")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("District")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Street")
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
-
-                    b.HasKey("AddressId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Addresses");
-                });
-
             modelBuilder.Entity("TopBookStore.Domain.Entities.Author", b =>
                 {
                     b.Property<int>("AuthorId")
@@ -218,13 +184,13 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(15)
@@ -285,9 +251,9 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasKey("BookId");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex(new[] { "AuthorId" }, "BOOKAUTHORS_FK");
 
-                    b.HasIndex("PublisherId");
+                    b.HasIndex(new[] { "PublisherId" }, "BOOKPUBLISHERS_FK");
 
                     b.ToTable("Books");
                 });
@@ -308,7 +274,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasKey("CartId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex(new[] { "CustomerId" }, "CARTCUSTOMERS_FK");
 
                     b.ToTable("Carts");
                 });
@@ -335,9 +301,9 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasKey("CartItemId");
 
-                    b.HasIndex("BookId");
+                    b.HasIndex(new[] { "BookId" }, "CARTITEMBOOK_FK");
 
-                    b.HasIndex("CartId");
+                    b.HasIndex(new[] { "CartId" }, "CARTITEMCARTS_FK");
 
                     b.ToTable("CartItems");
                 });
@@ -352,8 +318,8 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("CategoryId");
 
@@ -368,18 +334,37 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
 
+                    b.Property<string>("City")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Country")
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
                     b.Property<decimal>("Debt")
                         .HasColumnType("money");
 
+                    b.Property<string>("District")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("LockoutEnd")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Street")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("CustomerId");
 
@@ -394,23 +379,73 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
+                    b.Property<string>("Carrier")
+                        .HasMaxLength(128)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Country")
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("District")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("State")
-                        .HasMaxLength(30)
+                    b.Property<string>("OrderStatus")
+                        .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(30)");
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("PaymentStatus")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<DateTime>("ShippingDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Street")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("money");
 
+                    b.Property<string>("TrackingNumber")
+                        .HasMaxLength(128)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(256)");
+
                     b.HasKey("OrderId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex(new[] { "CustomerId" }, "ORDERCUSTOMERS_FK");
 
                     b.ToTable("Orders");
                 });
@@ -437,9 +472,9 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.HasKey("OrderDetailId");
 
-                    b.HasIndex("BookId");
+                    b.HasIndex(new[] { "BookId" }, "ORDERDETAILBOOK_FK");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex(new[] { "OrderId" }, "ORDERDETAILORDERS_FK");
 
                     b.ToTable("OrderDetails");
                 });
@@ -454,8 +489,8 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("PublisherId");
 
@@ -598,17 +633,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TopBookStore.Domain.Entities.Address", b =>
-                {
-                    b.HasOne("TopBookStore.Domain.Entities.Customer", "Customer")
-                        .WithMany("Addresses")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("TopBookStore.Domain.Entities.Book", b =>
                 {
                     b.HasOne("TopBookStore.Domain.Entities.Author", "Author")
@@ -718,8 +742,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("TopBookStore.Domain.Entities.Customer", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("Carts");
 
                     b.Navigation("Orders");

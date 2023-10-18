@@ -6,10 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TopBookStore.Domain.Entities;
 
+[Index("AuthorId", Name = "BOOKAUTHORS_FK")]
+[Index("PublisherId", Name = "BOOKPUBLISHERS_FK")]
 public partial class Book
 {
     [Key]
     public int BookId { get; set; }
+
+    public int AuthorId { get; set; }
+
+    public int PublisherId { get; set; }
 
     [StringLength(80)]
     public string Title { get; set; } = null!;
@@ -34,10 +40,6 @@ public partial class Book
     public DateTime PublicationDate { get; set; }
 
     public string? ImageUrl { get; set; }
-
-    public int AuthorId { get; set; }
-
-    public int PublisherId { get; set; }
 
     [ForeignKey("AuthorId")]
     [InverseProperty("Books")]

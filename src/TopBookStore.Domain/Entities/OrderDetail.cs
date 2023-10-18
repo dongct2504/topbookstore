@@ -6,19 +6,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TopBookStore.Domain.Entities;
 
+[Index("BookId", Name = "ORDERDETAILBOOK_FK")]
+[Index("OrderId", Name = "ORDERDETAILORDERS_FK")]
 public partial class OrderDetail
 {
     [Key]
     public int OrderDetailId { get; set; }
 
+    public int BookId { get; set; }
+
+    public int OrderId { get; set; }
+
     [Column(TypeName = "money")]
     public decimal Price { get; set; }
 
     public int Quantity { get; set; }
-
-    public int BookId { get; set; }
-
-    public int OrderId { get; set; }
 
     [ForeignKey("BookId")]
     [InverseProperty("OrderDetails")]

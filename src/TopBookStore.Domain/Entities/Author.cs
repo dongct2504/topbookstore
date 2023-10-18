@@ -11,10 +11,10 @@ public partial class Author
     [Key]
     public int AuthorId { get; set; }
 
-    [StringLength(60)]
+    [StringLength(50)]
     public string FirstName { get; set; } = null!;
 
-    [StringLength(60)]
+    [StringLength(50)]
     public string LastName { get; set; } = null!;
 
     [StringLength(15)]

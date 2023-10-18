@@ -11,7 +11,7 @@ public partial class Category
     [Key]
     public int CategoryId { get; set; }
 
-    [StringLength(80)]
+    [StringLength(128)]
     public string Name { get; set; } = null!;
 
     [ForeignKey("CategoryId")]

@@ -11,7 +11,7 @@ public partial class Publisher
     [Key]
     public int PublisherId { get; set; }
 
-    [StringLength(80)]
+    [StringLength(128)]
     public string Name { get; set; } = null!;
 
     [InverseProperty("Publisher")]

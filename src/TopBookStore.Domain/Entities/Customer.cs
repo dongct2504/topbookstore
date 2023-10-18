@@ -11,17 +11,29 @@ public partial class Customer
     [Key]
     public int CustomerId { get; set; }
 
-    [StringLength(80)]
+    [StringLength(50)]
     public string FirstName { get; set; } = null!;
 
-    [StringLength(80)]
+    [StringLength(50)]
     public string LastName { get; set; } = null!;
 
     [Column(TypeName = "money")]
     public decimal Debt { get; set; }
 
-    [InverseProperty("Customer")]
-    public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
+    [Column(TypeName = "datetime")]
+    public DateTime? LockoutEnd { get; set; }
+
+    [StringLength(50)]
+    public string? Street { get; set; }
+
+    [StringLength(30)]
+    public string? District { get; set; }
+
+    [StringLength(30)]
+    public string? City { get; set; }
+
+    [StringLength(60)]
+    public string? Country { get; set; }
 
     [InverseProperty("Customer")]
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
