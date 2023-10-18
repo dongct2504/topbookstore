@@ -8,27 +8,28 @@ The clean architecture promotes separation of concerns and maintainability by or
 
 The TopBookStore homepage should look like this:
 
-![Home page](TopBookStore/wwwroot/imgs/homepage.png)
+![Home page](TopBookStore.Mvc/wwwroot/imgs/homepage.png)
 
 ## Getting Started
 
-To run the TopBookStore project locally, you need to follow either one of these steps:
+To run the TopBookStore project locally, you need to follow these steps:
 
-If you are using vscode, follow these steps:
+1. Clone the repository.
+```powershell
+git clone https://github.com/keilar000/ToDoListApp.git
+```
 
-1. Clone the repository from [GitHub](https://github.com/keilar000/TopBookStore.git).
-
-2. Configure the database connection string. For example, if you are using SQL Express, the connection string would be: 
+2. Configure the database connection string, in **TopBookStore.Mvc** find the file called **appsetting.json** and check the connection string, you may need to change the connection string. For example, if you are using SQL Express, the connection string would be: 
 ```powershell
 Server=.\\sqlexpress;Database=TopBookStore;MultipleActiveResultSets=true;Trusted_Connection=True;
 ```
 
-3. Set up the database
-- In Visual Studio, open the Package Manager Console in **Infrastructure** layer  and run the following command.
+3. Set up the database, to set up the database you need to follow either one of these steps:
+- If you use Visual Studio, open the Package Manager Console in **Infrastructure** layer  and run the following command.
 ```powershell
 Update-Database -Context IdentityTopBookStoreDbContext
 ```
-- In Visual Studio Code, open your terminal in **Infrastructure** layer and run the command.
+- If you use Visual Studio Code, open your terminal in **Infrastructure** layer and run the command.
 ```powershell
 dotnet ef database update --context IdentityTopBookStoreDbContext --startup-project ..\TopBookStore.Mvc\TopBookStore.Mvc.csproj
 ```
