@@ -29,13 +29,22 @@ delete from Books;
 delete from OrderDetails;
 delete from CartItems;
 delete from Orders;
+
 delete from Customers;
+
+delete from Customers
+where FirstName != 'Dong';
+dbcc CHECKIDENT (Customers, RESEED, 1)
+
 delete from Carts;
 delete from Categories;
 delete from Publishers;
 delete from Authors
 
 delete from AspNetUsers;
+
+delete from AspNetUsers
+where UserName != 'admin@gmail.com';
 
 dbcc CHECKIDENT (Books, RESEED, 0)
 dbcc CHECKIDENT (OrderDetails, RESEED, 0)
