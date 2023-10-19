@@ -96,7 +96,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required(ErrorMessage = "Vui lòng nhập mật khẩu.")]
-            [StringLength(100, ErrorMessage = 
+            [StringLength(100, ErrorMessage =
                 "{0} phải có ít nhất {2} ký tự và nhiều nhất {1} kí tự.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Mật khẩu")]
@@ -193,7 +193,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(RoleConstants.RoleAdmin));
                     }
 
-                    // only for testing
+                    // Assign role for user, only for testing
                     if (customer.FirstName == "Dong" || customer.FirstName == "Duc" ||
                         customer.FirstName == "Duy" || customer.FirstName == "Giap" ||
                         customer.FirstName == "Diep")
@@ -212,23 +212,31 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                         }
                     }
 
-                    // var userId = await _userManager.GetUserIdAsync(user);
-                    // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    // var callbackUrl = Url.Page(
-                    //     "/Account/ConfirmEmail",
-                    //     pageHandler: null,
-                    //     values: new
-                    //     {
-                    //         area = "Identity",
-                    //         userId = userId,
-                    //         code = code,
-                    //         returnUrl = returnUrl
-                    //     },
-                    //     protocol: Request.Scheme);
+                    // Generate email confirmation, again only for testing
+                    if (customer.FirstName != "Dong" || customer.FirstName != "Duc" ||
+                        customer.FirstName != "Duy" || customer.FirstName != "Giap" ||
+                        customer.FirstName != "Diep")
+                    {
+                        var userId = await _userManager.GetUserIdAsync(user);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new
+                            {
+                                area = "Identity",
+                                // these are use member name
+                                userId,
+                                code,
+                                returnUrl
+                            },
+                            protocol: Request.Scheme);
 
-                    // await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    //     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    }
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
