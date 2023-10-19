@@ -10,12 +10,8 @@ public class EmailSender : IEmailSender
     public async System.Threading.Tasks.Task SendEmailAsync(
         string email, string subject, string htmlMessage)
     {
-        // this is only for testing
-        string? apiKey = "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";
-
-        // // you should use this instead
-        // string? apiKey = Environment.GetEnvironmentVariable("TOPBOOKSTORE_API_KEY",
-        //    EnvironmentVariableTarget.Machine);
+        string? apiKey = Environment.GetEnvironmentVariable("TOPBOOKSTORE_API_KEY",
+           EnvironmentVariableTarget.User);
 
         if (string.IsNullOrEmpty(apiKey))
         {
