@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.Interfaces;
+using TopBookStore.Domain.Entities;
 using TopBookStore.Mvc.Models;
 
 namespace TopBookStore.Mvc.Controllers;

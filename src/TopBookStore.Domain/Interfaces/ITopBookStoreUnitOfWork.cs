@@ -7,6 +7,10 @@ public interface ITopBookStoreUnitOfWork : IDisposable
     IAuthorRepository Authors { get; }
     IPublisherRepository Publishers { get; }
     ICustomerRepository Customers { get; }
+    ICartItemRepository CartItems { get; }
+    ICartRepository Carts { get; }
+    IOrderDetailRepository OrderDetails { get; }
+    IOrderRepository Orders { get; }
 
     Task SaveAsync();
 }

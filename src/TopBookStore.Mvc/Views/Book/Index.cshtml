@@ -1,0 +1,98 @@
+@model BookListViewModel
+@{
+    ViewData["Title"] = "Lọc Sách";
+
+    RouteDictionary current = Model.CurrentRoute;
+}
+
+<h1>Lọc Sách</h1>
+
+<form class="m-3" asp-action="FilterBooks" method="get">
+    <div class="row g-1 align-items-center">
+        <div class="col-md-auto">
+            <label class="form-label">Thể loại:</label>
+        </div>
+        <div class="col-md-auto me-3">
+            <select name="filter" class="form-select m-2"
+                asp-items="@(new SelectList(
+                    Model.Categories, "CategoryId", "Name", current.CategoryFilter))">
+                <option value="@GridDto.DefaultFilter">Tất Cả</option>
+            </select>
+        </div>
+
+        <div class="col-md-auto">
+            <label class="form-label">Giá:</label>
+        </div>
+        <div class="col-md-auto me-3">
+            <select name="filter" class="form-select m-2"
+                asp-items="@(new SelectList(
+                    Model.Prices, "Key", "Value", current.PriceFilter))">
+                <option value="@GridDto.DefaultFilter">Tất Cả</option>
+            </select>
+        </div>
+
+        <div class="col-md-auto">
+            <label class="form-label">Số trang:</label>
+        </div>
+        <div class="col-md-auto me-3">
+            <select name="filter" class="form-select m-2"
+                asp-items="@(new SelectList(
+                    Model.NumberOfPages, "Key", "Value", current.NumberOfPagesFilter))">
+                <option value="@GridDto.DefaultFilter">Tất Cả</option>
+            </select>
+        </div>
+
+        <div class="col-md-auto">
+            <label class="form-label">Tác giả:</label>
+        </div>
+        <div class="col-md-auto me-3">
+            <select name="filter" class="form-select m-2"
+                asp-items="@(new SelectList(
+                    Model.Authors, "AuthorId", "FullName", current.AuthorFilter))">
+                <option value="@GridDto.DefaultFilter">Tất Cả</option>
+            </select>
+        </div>
+
+        <div class="col-md-auto text-center">
+            <button type="submit" class="btn btn-primary">Gửi</button>
+            <button type="submit" class="btn btn-secondary"
+                name="clear" value="true">Xóa</button>
+        </div>
+    </div>
+</form>
+
+<div class="row pb-3">
+    @foreach (Book book in Model.Books)
+    {
+        <div class="col-md-2 col-4">
+            <div class="row p-2">
+                <div class="col-12 p-1 card">
+                    <a asp-controller="Book" asp-action="Details" asp-route-id="@book.BookId">
+                        @if (book.ImageUrl is not null)
+                        {
+                            <img src="@book.ImageUrl" class="card-img-top image
+                                image-fluid rounded" />
+                        }
+                        else
+                        {
+                            <img src="~/imgs/books/default.jpg" class="card-img-top image
+                                image-fluid rounded" />
+                        }
+                    </a>
+                    <div class="card-body">
+                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.BookId">
+                            <h6 class="card-title">@book.Title</h6>
+                        </a>
+                        <p class="card-price">
+                            Giá: <b>@book.DiscountPrice.ToString("#,## đ")</b><br />
+                            @if (book.DiscountPercent != 0)
+                            {
+                                <strike>@book.Price.ToString("#,## đ")</strike>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

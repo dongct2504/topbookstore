@@ -19,6 +19,14 @@ public class TopBookStoreUnitOfWork : ITopBookStoreUnitOfWork
 
     public ICustomerRepository Customers { get; private set; }
 
+    public ICartItemRepository CartItems { get; private set; }
+
+    public ICartRepository Carts { get; private set; }
+
+    public IOrderDetailRepository OrderDetails { get; private set; }
+
+    public IOrderRepository Orders { get; private set; }
+
     public TopBookStoreUnitOfWork(TopBookStoreContext context)
     {
         _context = context;
@@ -27,6 +35,10 @@ public class TopBookStoreUnitOfWork : ITopBookStoreUnitOfWork
         Authors = new AuthorRepository(_context);
         Publishers = new PublisherRepository(_context);
         Customers = new CustomerRepository(_context);
+        CartItems = new CartItemRepository(_context);
+        Carts = new CartRepository(_context);
+        OrderDetails = new OrderDetailRepository(_context);
+        Orders = new OrderRepository(_context);
     }
 
     public async Task SaveAsync()

@@ -20,11 +20,11 @@ public class BookListViewModel
     public Dictionary<string, string> Prices =>
         new()
         {
-            { "under50", "Dưới 50,000 VND" },
-            { "50to150", "50,000 tới 150,000 VND" },
-            { "150to500", "Từ 150,000 tới 500,000 VND" },
-            { "500to1000", "Từ 500,000 tới 1,000,000 VND" },
-            { "over1000", "1,000,000 VND trở lên" }
+            { "under50", "Dưới 50,000 đ" },
+            { "50to150", "50,000 tới 150,000 đ" },
+            { "150to500", "Từ 150,000 tới 500,000 đ" },
+            { "500to1000", "Từ 500,000 tới 1,000,000 đ" },
+            { "over1000", "1,000,000 đ trở lên" }
         };
     public Dictionary<string, string> NumberOfPages =>
         new()

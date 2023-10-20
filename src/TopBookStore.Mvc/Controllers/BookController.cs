@@ -20,12 +20,7 @@ public class BookController : Controller
         _data = data;
     }
 
-    public async Task<IActionResult> Index()
-    {
-        return View(await _service.GetAllBooksAsync());
-    }
-
-    public async Task<ViewResult> List(GridDto values)
+    public async Task<IActionResult> Index(GridDto values)
     {
         GridBuilder builder = new(HttpContext.Session, values);
 
@@ -44,6 +39,17 @@ public class BookController : Controller
         };
 
         return View(vm);
+    }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        Book? book = await _service.GetBookByIdAsync(id);
+        if (book is null)
+        {
+            return NotFound();
+        }
+
+        return View(book);
     }
 
     public RedirectToActionResult FilterBooks(string[] filter, bool clear = false)
@@ -66,17 +72,6 @@ public class BookController : Controller
         // passing dictionary of route segment values to build URL
         builder.SaveRouteSegments();
 
-        return RedirectToAction(nameof(List), builder.CurrentRoute);
-    }
-
-    public async Task<IActionResult> Details(int id)
-    {
-        Book? book = await _service.GetBookByIdAsync(id);
-        if (book is null)
-        {
-            return NotFound();
-        }
-
-        return View(book);
+        return RedirectToAction(nameof(Index), builder.CurrentRoute);
     }
 }

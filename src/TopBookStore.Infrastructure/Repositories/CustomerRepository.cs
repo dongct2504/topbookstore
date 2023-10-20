@@ -1,8 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
-using TopBookStore.Domain.Queries;
-using TopBookStore.Infrastructure.Identity;
 using TopBookStore.Infrastructure.Persistence;
 
 namespace TopBookStore.Infrastructure.Repositories;

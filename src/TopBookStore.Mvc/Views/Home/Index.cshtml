@@ -11,7 +11,7 @@
         <div class="col-md-2 col-4">
             <div class="row p-2">
                 <div class="col-12 p-1 card">
-                    <a asp-action="Details" asp-route-id="@book.BookId">
+                    <a asp-controller="Book" asp-action="Details" asp-route-id="@book.BookId">
                         @if (book.ImageUrl is not null)
                         {
                             <img src="@book.ImageUrl" class="card-img-top image
@@ -24,7 +24,7 @@
                         }
                     </a>
                     <div class="card-body">
-                        <a asp-action="Details" asp-route-id="@book.BookId">
+                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.BookId">
                             <h6 class="card-title">@book.Title</h6>
                         </a>
                         <p class="card-price">
