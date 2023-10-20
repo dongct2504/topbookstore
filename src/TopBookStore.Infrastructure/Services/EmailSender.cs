@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Options;
 using sib_api_v3_sdk.Api;
 using sib_api_v3_sdk.Client;
 using sib_api_v3_sdk.Model;
@@ -7,11 +8,17 @@ namespace TopBookStore.Infrastructure.Services;
 
 public class EmailSender : IEmailSender
 {
+    private readonly EmailOptions _emailOptions;
+
+    public EmailSender(IOptions<EmailOptions> options)
+    {
+        _emailOptions = options.Value;
+    }
+
     public async System.Threading.Tasks.Task SendEmailAsync(
         string email, string subject, string htmlMessage)
     {
-        string? apiKey = Environment.GetEnvironmentVariable("TOPBOOKSTORE_API_KEY",
-           EnvironmentVariableTarget.User);
+        string? apiKey = _emailOptions.BrevoApiKey;
 
         if (string.IsNullOrEmpty(apiKey))
         {

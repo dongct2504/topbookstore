@@ -49,6 +49,7 @@ builder.Services.AddTransient<IPublisherService, PublisherService>();
 builder.Services.AddTransient<ICustomerService, CustomerService>();
 
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
+builder.Services.Configure<EmailOptions>(builder.Configuration);
 
 // string fbAppId = Environment.
 //     GetEnvironmentVariable("FACEBOOK_APP_ID", EnvironmentVariableTarget.User) ?? string.Empty;
@@ -66,10 +67,14 @@ builder.Services.AddSingleton<IEmailSender, EmailSender>();
 //     options.AppSecret = fbAppSecret;
 // });
 
-string ggClientId = Environment.
-    GetEnvironmentVariable("GOOGLE_CLIENT_ID", EnvironmentVariableTarget.User) ?? string.Empty;
-string ggClientSecret = Environment.
-    GetEnvironmentVariable("GOOGLE_CLIENT_SECRET", EnvironmentVariableTarget.User) ?? string.Empty;
+// string ggClientId = Environment.
+//     GetEnvironmentVariable("GOOGLE_CLIENT_ID", EnvironmentVariableTarget.User) ?? string.Empty;
+// string ggClientSecret = Environment.
+//     GetEnvironmentVariable("GOOGLE_CLIENT_SECRET", EnvironmentVariableTarget.User) ?? string.Empty;
+
+string ggClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
+
+string ggClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
 
 builder.Services.AddAuthentication().AddGoogle(options =>
 {

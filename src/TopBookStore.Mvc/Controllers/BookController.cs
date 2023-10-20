@@ -49,7 +49,13 @@ public class BookController : Controller
             return NotFound();
         }
 
-        return View(book);
+        CartItem cartItem = new()
+        {
+            BookId = book.BookId,
+            Book = book
+        };
+
+        return View(cartItem);
     }
 
     public RedirectToActionResult FilterBooks(string[] filter, bool clear = false)
