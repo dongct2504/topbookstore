@@ -259,6 +259,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                 {
                     await _service.RemoveCustomerAsync(customer);
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);

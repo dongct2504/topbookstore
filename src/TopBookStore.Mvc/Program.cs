@@ -35,13 +35,11 @@ builder.Services.AddDbContext<IdentityTopBookStoreDbContext>(options =>
 builder.Services.AddDbContext<TopBookStoreContext>(options =>
     options.UseSqlServer(TopBookStoreCS));
 
-builder.Services.AddDefaultIdentity<IdentityTopBookStoreUser>(options => 
+builder.Services.AddDefaultIdentity<IdentityTopBookStoreUser>(options =>
         options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<IdentityTopBookStoreDbContext>();
-
-builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.AddTransient<ITopBookStoreUnitOfWork, TopBookStoreUnitOfWork>();
 builder.Services.AddTransient<IBookService, BookService>();
@@ -49,6 +47,36 @@ builder.Services.AddTransient<IAuthorService, AuthorService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IPublisherService, PublisherService>();
 builder.Services.AddTransient<ICustomerService, CustomerService>();
+
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+// string fbAppId = Environment.
+//     GetEnvironmentVariable("FACEBOOK_APP_ID", EnvironmentVariableTarget.User) ?? string.Empty;
+// string fbAppSecret = Environment.
+//     GetEnvironmentVariable("FACEBOOK_APP_SECRET", EnvironmentVariableTarget.User) ?? string.Empty;
+
+// if (string.IsNullOrEmpty(fbAppId) || string.IsNullOrEmpty(fbAppSecret))
+// {
+//     Console.WriteLine("Not found fbAppId or fbAppSecret");
+// }
+
+// builder.Services.AddAuthentication().AddFacebook(options =>
+// {
+//     options.AppId = fbAppId;
+//     options.AppSecret = fbAppSecret;
+// });
+
+string ggClientId = Environment.
+    GetEnvironmentVariable("GOOGLE_CLIENT_ID", EnvironmentVariableTarget.User) ?? string.Empty;
+string ggClientSecret = Environment.
+    GetEnvironmentVariable("GOOGLE_CLIENT_SECRET", EnvironmentVariableTarget.User) ?? string.Empty;
+
+builder.Services.AddAuthentication().AddGoogle(options =>
+{
+    options.ClientId = ggClientId;
+    options.ClientSecret = ggClientSecret;
+});
+
 
 var app = builder.Build();
 
@@ -66,6 +94,7 @@ app.UseRouting();
 
 app.UseSession();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<CategoriesMiddleware>();

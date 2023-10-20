@@ -18,6 +18,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using TopBookStore.Infrastructure.Identity;
+using TopBookStore.Domain.Entities;
+using TopBookStore.Application.Interfaces;
+using TopBookStore.Domain.Constants;
 
 namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
 {
@@ -30,13 +33,15 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityTopBookStoreUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly ICustomerService _service;
 
         public ExternalLoginModel(
             SignInManager<IdentityTopBookStoreUser> signInManager,
             UserManager<IdentityTopBookStoreUser> userManager,
             IUserStore<IdentityTopBookStoreUser> userStore,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ICustomerService service)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -44,6 +49,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _logger = logger;
             _emailSender = emailSender;
+            _service = service;
         }
 
         /// <summary>
@@ -82,11 +88,24 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Vui lòng nhập email.")]
             [EmailAddress]
+            [Display(Name = "Email")]
             public string Email { get; set; }
+
+            [Required(ErrorMessage = "Vui lòng nhập tên.")]
+            [StringLength(80, ErrorMessage = "Nhập Tên ngắn hơn 80 kí tự.")]
+            public string FirstName { get; set; } = null!;
+
+            [Required(ErrorMessage = "Vui lòng nhập họ.")]
+            [StringLength(80, ErrorMessage = "Nhập Tên ngắn hơn 80 kí tự.")]
+            public string LastName { get; set; } = null!;
+
+            [Required(ErrorMessage = "Vui lòng nhập số điện thoại.")]
+            [StringLength(15, ErrorMessage = "Vui lòng nhập số điện thoại hợp lệ.")]
+            public string PhoneNumber { get; set; } = null!;
         }
-        
+
         public IActionResult OnGet() => RedirectToPage("./Login");
 
         public IActionResult OnPost(string provider, string returnUrl = null)
@@ -97,7 +116,8 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             return new ChallengeResult(provider, properties);
         }
 
-        public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null,
+            string remoteError = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)
@@ -132,7 +152,9 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        FirstName = info.Principal.FindFirstValue(ClaimTypes.GivenName),
+                        PhoneNumber = info.Principal.FindFirstValue(ClaimTypes.MobilePhone),
                     };
                 }
                 return Page();
@@ -141,7 +163,9 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            // returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
+
             // Get the information about the user from the external login provider
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
@@ -152,7 +176,21 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                Customer customer = new()
+                {
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName
+                };
+
+                await _service.AddCustomerAsync(customer);
+
+                IdentityTopBookStoreUser user = new()
+                {
+                    Email = Input.Email,
+                    UserName = Input.Email,
+                    PhoneNumber = Input.PhoneNumber,
+                    CustomerId = customer.CustomerId,
+                };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -160,6 +198,8 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, RoleConstants.RoleCustomer);
+
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
@@ -187,6 +227,11 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+                else
+                {
+                    await _service.RemoveCustomerAsync(customer);
+                }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
