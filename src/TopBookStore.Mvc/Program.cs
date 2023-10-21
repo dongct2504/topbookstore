@@ -56,16 +56,14 @@ builder.Services.Configure<EmailOptions>(builder.Configuration);
 // string fbAppSecret = Environment.
 //     GetEnvironmentVariable("FACEBOOK_APP_SECRET", EnvironmentVariableTarget.User) ?? string.Empty;
 
-// if (string.IsNullOrEmpty(fbAppId) || string.IsNullOrEmpty(fbAppSecret))
-// {
-//     Console.WriteLine("Not found fbAppId or fbAppSecret");
-// }
+string fbAppId = builder.Configuration["Authentication:Facebook:AppId"] ?? string.Empty;
+string fbAppSecret = builder.Configuration["Authentication:Facebook:AppSecret"] ?? string.Empty;
 
-// builder.Services.AddAuthentication().AddFacebook(options =>
-// {
-//     options.AppId = fbAppId;
-//     options.AppSecret = fbAppSecret;
-// });
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    options.AppId = fbAppId;
+    options.AppSecret = fbAppSecret;
+});
 
 // string ggClientId = Environment.
 //     GetEnvironmentVariable("GOOGLE_CLIENT_ID", EnvironmentVariableTarget.User) ?? string.Empty;
