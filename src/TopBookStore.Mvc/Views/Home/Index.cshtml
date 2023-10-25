@@ -1,12 +1,15 @@
-﻿@model IEnumerable<Book>
+﻿@model HomeIndexViewModel
 @{
     ViewData["Title"] = "Trang Chủ";
+
+    RouteDictionary currentRoute = Model.CurrentRoute;
+    RouteDictionary routes = Model.CurrentRoute.Clone();
 }
 
 <h1>Tất cả sách</h1>
 
 <div class="row pb-3">
-    @foreach (Book book in Model)
+    @foreach (Book book in Model.Books)
     {
         <div class="col-md-2 col-4">
             <div class="row p-2">
@@ -40,3 +43,18 @@
         </div>
     }
 </div>
+
+@{
+    @* int startPage = Math.Max(1, currentRoute.PageNumber); *@
+
+    routes = Model.CurrentRoute.Clone();
+
+    for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        routes.PageNumber = i;
+        <a class="btn btn-outline-primary @Nav.Active(i, currentRoute.PageNumber)"
+            asp-action="Index" asp-all-route-data="@routes">
+            @i
+        </a>
+    }
+}

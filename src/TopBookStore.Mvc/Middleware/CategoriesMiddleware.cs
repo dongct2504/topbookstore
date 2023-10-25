@@ -1,3 +1,4 @@
+using TopBookStore.Domain.Constants;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
@@ -24,7 +25,7 @@ public class CategoriesMiddleware
                 {
                     OrderBy = c => c.Name
                 });
-            context.Session.SetObject("categories", categories);
+            context.Session.SetObject(SessionCookieConstants.CategoriesKey, categories);
 
             categoryCount = await data.Categories.CountAsync();
         }

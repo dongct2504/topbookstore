@@ -11,31 +11,51 @@ public class GridBuilder
 
     private readonly ISession _session;
 
+    protected RouteDictionary Routes { get; set; }
+
+    public RouteDictionary CurrentRoute => Routes;
+
     public GridBuilder(ISession session)
     {
         _session = session;
         Routes = _session.GetObject<RouteDictionary>(RouteKey) ?? new RouteDictionary();
     }
 
-    protected RouteDictionary Routes { get; set; }
-
-    public RouteDictionary CurrentRoute => Routes;
-
     // use this constructor when you need to add new route
     public GridBuilder(ISession session, GridDto values)
     {
         _session = session;
 
-        Routes = new RouteDictionary
+        if (values is BookGridDto bookGridDto)
         {
-            // set filter segments
-            CategoryFilter = values.CategoryId,
-            PriceFilter = values.Price,
-            NumberOfPagesFilter = values.NumberOfPages,
-            AuthorFilter = values.AuthorId
-        };
+            Routes = new RouteDictionary
+            {
+                PageNumber = bookGridDto.PageNumber,
+                PageSize = bookGridDto.PageSize,
+
+                // set filter segments
+                CategoryFilter = bookGridDto.CategoryId,
+                PriceFilter = bookGridDto.Price,
+                NumberOfPagesFilter = bookGridDto.NumberOfPages,
+                AuthorFilter = bookGridDto.AuthorId
+            };
+        }
+        else
+        {
+            Routes = new RouteDictionary
+            {
+                PageNumber = values.PageNumber,
+                PageSize = values.PageSize
+            };
+
+        }
 
         SaveRouteSegments();
+    }
+
+    public int GetTotalPages(int count)
+    {
+        return (Routes.PageSize + count - 1) / Routes.PageSize;
     }
 
     public void SaveRouteSegments() => _session.SetObject(RouteKey, Routes);

@@ -2,7 +2,8 @@
 @{
     ViewData["Title"] = "Lọc Sách";
 
-    RouteDictionary current = Model.CurrentRoute;
+    RouteDictionary currentRoute = Model.CurrentRoute;
+    RouteDictionary routes = Model.CurrentRoute.Clone();
 }
 
 <h1>Lọc Sách</h1>
@@ -15,8 +16,8 @@
         <div class="col-md-auto me-3">
             <select name="filter" class="form-select m-2"
                 asp-items="@(new SelectList(
-                    Model.Categories, "CategoryId", "Name", current.CategoryFilter))">
-                <option value="@GridDto.DefaultFilter">Tất Cả</option>
+                    Model.Categories, "CategoryId", "Name", currentRoute.CategoryFilter))">
+                <option value="@BookGridDto.DefaultFilter">Tất Cả</option>
             </select>
         </div>
 
@@ -26,8 +27,8 @@
         <div class="col-md-auto me-3">
             <select name="filter" class="form-select m-2"
                 asp-items="@(new SelectList(
-                    Model.Prices, "Key", "Value", current.PriceFilter))">
-                <option value="@GridDto.DefaultFilter">Tất Cả</option>
+                    Model.Prices, "Key", "Value", currentRoute.PriceFilter))">
+                <option value="@BookGridDto.DefaultFilter">Tất Cả</option>
             </select>
         </div>
 
@@ -37,8 +38,8 @@
         <div class="col-md-auto me-3">
             <select name="filter" class="form-select m-2"
                 asp-items="@(new SelectList(
-                    Model.NumberOfPages, "Key", "Value", current.NumberOfPagesFilter))">
-                <option value="@GridDto.DefaultFilter">Tất Cả</option>
+                    Model.NumberOfPages, "Key", "Value", currentRoute.NumberOfPagesFilter))">
+                <option value="@BookGridDto.DefaultFilter">Tất Cả</option>
             </select>
         </div>
 
@@ -48,8 +49,8 @@
         <div class="col-md-auto me-3">
             <select name="filter" class="form-select m-2"
                 asp-items="@(new SelectList(
-                    Model.Authors, "AuthorId", "FullName", current.AuthorFilter))">
-                <option value="@GridDto.DefaultFilter">Tất Cả</option>
+                    Model.Authors, "AuthorId", "FullName", currentRoute.AuthorFilter))">
+                <option value="@BookGridDto.DefaultFilter">Tất Cả</option>
             </select>
         </div>
 
@@ -96,3 +97,18 @@
         </div>
     }
 </div>
+
+@{
+    @* int startPage = Math.Max(1, currentRoute.PageNumber); *@
+
+    routes = Model.CurrentRoute.Clone();
+
+    for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        routes.PageNumber = i;
+        <a class="btn btn-outline-primary @Nav.Active(i, currentRoute.PageNumber)"
+            asp-action="Index" asp-all-route-data="@routes">
+            @i
+        </a>
+    }
+}

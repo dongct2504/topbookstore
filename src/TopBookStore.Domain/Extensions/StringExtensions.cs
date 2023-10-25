@@ -21,16 +21,9 @@ public static class StringExtensions
     public static bool EqualsNoCase(this string str, string strToCompare) =>
         str.ToLower() == strToCompare.ToLower();
 
-    public static int ToInt(this string str)
+    public static int SafeToInt(this string str)
     {
-        if (int.TryParse(str, out int id))
-        {
-            return id;
-        }
-        else
-        {
-            return 0;
-        }
+        return int.TryParse(str, out int value) ? value : 0;
     }
 
     public static string Capitalize(this string str) =>

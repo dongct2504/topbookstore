@@ -1,39 +1,63 @@
 using TopBookStore.Application.DTOs;
+using TopBookStore.Domain.Extensions;
 
 namespace TopBookStore.Application.Routing;
 
 public class RouteDictionary : Dictionary<string, string>
 {
+    public int PageNumber
+    {
+        get => Get(nameof(GridDto.PageNumber))?.SafeToInt() ?? 0;
+        set => this[nameof(GridDto.PageNumber)] = value.ToString();
+    }
+
+    public int PageSize
+    {
+        get => Get(nameof(GridDto.PageSize))?.SafeToInt() ?? 0;
+        set => this[nameof(GridDto.PageSize)] = value.ToString();
+    }
+
     // get, set these DTOs properties for filtering
     public string CategoryFilter
     {
-        get => Get(nameof(GridDto.CategoryId)) ?? GridDto.DefaultFilter;
-        set => this[nameof(GridDto.CategoryId)] = value;
+        get => Get(nameof(BookGridDto.CategoryId)) ?? BookGridDto.DefaultFilter;
+        set => this[nameof(BookGridDto.CategoryId)] = value;
     }
 
     public string PriceFilter
     {
-        get => Get(nameof(GridDto.Price)) ?? GridDto.DefaultFilter;
-        set => this[nameof(GridDto.Price)] = value;
+        get => Get(nameof(BookGridDto.Price)) ?? BookGridDto.DefaultFilter;
+        set => this[nameof(BookGridDto.Price)] = value;
     }
 
     public string NumberOfPagesFilter
     {
-        get => Get(nameof(GridDto.NumberOfPages)) ?? GridDto.DefaultFilter;
-        set => this[nameof(GridDto.NumberOfPages)] = value;
+        get => Get(nameof(BookGridDto.NumberOfPages)) ?? BookGridDto.DefaultFilter;
+        set => this[nameof(BookGridDto.NumberOfPages)] = value;
     }
 
     public string AuthorFilter
     {
-        // get => GetIntValue(nameof(GridDto.AuthorId));
-        get => Get(nameof(GridDto.AuthorId)) ?? GridDto.DefaultFilter;
-        set => this[nameof(GridDto.AuthorId)] = value;
+        // get => GetIntValue(nameof(BookGridDto.AuthorId));
+        get => Get(nameof(BookGridDto.AuthorId)) ?? BookGridDto.DefaultFilter;
+        set => this[nameof(BookGridDto.AuthorId)] = value;
     }
 
-    public RouteDictionary() { }
+    public RouteDictionary()
+    {
+    }
 
     public RouteDictionary(GridDto values)
     {
+        PageNumber = values.PageNumber;
+        PageSize = values.PageSize;
+    }
+
+    public RouteDictionary(BookGridDto values)
+    {
+        PageNumber = values.PageNumber;
+        PageSize = values.PageSize;
+
         // set filter segments
         CategoryFilter = values.CategoryId;
         PriceFilter = values.Price;
@@ -68,12 +92,12 @@ public class RouteDictionary : Dictionary<string, string>
     }
 
     public void ClearFilters() =>
-        CategoryFilter = PriceFilter = NumberOfPagesFilter = AuthorFilter = GridDto.DefaultFilter;
+        CategoryFilter = PriceFilter = NumberOfPagesFilter = AuthorFilter = BookGridDto.DefaultFilter;
 
 
     // filter flags
-    public bool IsFilterByCategory => CategoryFilter != GridDto.DefaultFilter;
-    public bool IsFilterByPrice => PriceFilter != GridDto.DefaultFilter;
-    public bool IsFilterByNumberOfPages => NumberOfPagesFilter != GridDto.DefaultFilter;
-    public bool IsFilterByAuthor => AuthorFilter != GridDto.DefaultFilter;
+    public bool IsFilterByCategory => CategoryFilter != BookGridDto.DefaultFilter;
+    public bool IsFilterByPrice => PriceFilter != BookGridDto.DefaultFilter;
+    public bool IsFilterByNumberOfPages => NumberOfPagesFilter != BookGridDto.DefaultFilter;
+    public bool IsFilterByAuthor => AuthorFilter != BookGridDto.DefaultFilter;
 }

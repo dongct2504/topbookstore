@@ -66,25 +66,29 @@
             </tr>
         </table>
         
-        <div class="row align-items-center mb-3">
-            <div class="col-md-auto">
-                <label class="control-label" asp-for="Quantity">Số lượng</label>
-            </div>
-            <div class="col-md-4">
-                <input class="form-control" asp-for="Quantity" />
-            </div>
-        </div>
+        <form method="get">
+            <input type="hidden" asp-for="BookId" />
 
-        <div class="mb-3">
-            <a class="btn btn-success" asp-controller="Order" asp-action="BuyItem"
-                asp-route-id="@Model.Book.BookId">
-                Mua Ngay
-            </a>
-            <a class="btn btn-primary" asp-controller="Cart" asp-action="Add"
-                asp-route-id="@Model.Book.BookId">
-                Thêm Vào Giỏ
-            </a>
-        </div>
+            <div class="row align-items-center mb-3">
+                <div class="col-md-auto">
+                    <label class="control-label" asp-for="Quantity">Số lượng</label>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" asp-for="Quantity" value="1" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-success" type="submit" asp-controller="Order" 
+                    asp-action="BuyItem" asp-route-id="@Model.CartItemId">
+                    Mua Ngay
+                </button>
+                <button class="btn btn-primary" type="submit" asp-controller="Cart" 
+                    asp-action="AddCartItem" asp-route-id="@Model.CartItemId">
+                    Thêm Vào Giỏ
+                </button>
+            </div>
+        </form>
     </div>
 
     <h3>Mô Tả</h3>

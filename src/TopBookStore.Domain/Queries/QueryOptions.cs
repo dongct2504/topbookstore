@@ -4,6 +4,9 @@ namespace TopBookStore.Domain.Queries;
 
 public class QueryOptions<T>
 {
+    public int PageNumber { get; set; }
+    public int PageSize { get; set; }
+
     // private field, public properties for Include strings.
     private string[] includes = Array.Empty<string>();
 
@@ -33,6 +36,7 @@ public class QueryOptions<T>
     public string OrderByDirection { get; set; } = "asc"; // only if have orderby to invoke this.
 
     // flags.
+    public bool HasPaging => PageNumber > 0 && PageSize > 0;
     public bool HasInclude => includes != Array.Empty<string>();
     public bool HasWhere => WhereClauses is not null;
     public bool HasOrderBy => OrderBy is not null;

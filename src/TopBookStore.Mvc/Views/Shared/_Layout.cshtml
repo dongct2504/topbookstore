@@ -1,5 +1,7 @@
 ﻿@{
-    List<Category> categories = Context.Session.GetObject<List<Category>>("categories") ?? new();
+    List<Category> categories = Context.Session
+        .GetObject<List<Category>>(SessionCookieConstants.CategoriesKey) ?? new();
+    int quantity = Context.Session.GetInt32(SessionCookieConstants.CartItemQuantityKey) ?? 0;
 }
 
 <!DOCTYPE html>
@@ -43,7 +45,8 @@
                             <ul class="dropdown-menu" aria-labelledby="dropdownCategory">
                                 @foreach (Category c in categories)
                                 {
-                                    <a class="dropdown-item" asp-route-id="@c.CategoryId" asp-area="" asp-controller="Home"
+                                    <a class="dropdown-item" asp-route-id="@c.CategoryId"
+                                        asp-area="" asp-controller="Home"
                                         asp-action="Index">
                                         @c.Name
                                     </a>
@@ -51,7 +54,8 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Book" asp-action="Index">
+                            <a class="nav-link text-white" asp-area="" 
+                                asp-controller="Book" asp-action="Index">
                                 <span class="fas fa-filter"></span>&nbsp;Lọc Sách
                             </a>
                         </li>
@@ -62,7 +66,10 @@
                             <a class="nav-link text-white" asp-area="" 
                                 asp-controller="Cart" asp-action="Index">
                                 <span class="fas fa-shopping-cart"></span>&nbsp;Giỏ Hàng
-                                <span class="badge badge-light"></span>
+                                @if (quantity != 0)
+                                {
+                                    <span class="badge bg-light text-dark">@quantity</span>
+                                }
                             </a>
                         </li>
                         <partial name="_LoginPartial" />

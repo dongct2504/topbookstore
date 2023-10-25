@@ -1,5 +1,6 @@
 use TopBookStore;
 
+-- select statement for TopBookStore tables
 select *
 from Customers;
 
@@ -16,6 +17,13 @@ select *
 from Authors;
 
 select *
+from Carts;
+
+select *
+from CartItems;
+
+-- select statement for TopBookStore Identity tables
+select *
 from AspNetUsers;
 
 select *
@@ -25,36 +33,42 @@ select *
 from AspNetUserRoles;
 
 delete from BookCategory;
+
 delete from Books;
+dbcc CHECKIDENT (Books, RESEED, 0)
+
 delete from OrderDetails;
+dbcc CHECKIDENT (OrderDetails, RESEED, 0)
+
 delete from CartItems;
+dbcc CHECKIDENT (CartItems, RESEED, 0)
+
 delete from Orders;
+dbcc CHECKIDENT (Orders, RESEED, 0)
 
 delete from Customers;
+dbcc CHECKIDENT (Customers, RESEED, 0)
 
 delete from Customers
 where FirstName != 'Dong';
 dbcc CHECKIDENT (Customers, RESEED, 1)
 
 delete from Carts;
+dbcc CHECKIDENT (Carts, RESEED, 0)
+
 delete from Categories;
+dbcc CHECKIDENT (Categories, RESEED, 0)
+
 delete from Publishers;
+dbcc CHECKIDENT (Publishers, RESEED, 0)
+
 delete from Authors
+dbcc CHECKIDENT (Authors, RESEED, 0)
 
 delete from AspNetUsers;
 
 delete from AspNetUsers
 where UserName != 'admin@gmail.com';
-
-dbcc CHECKIDENT (Books, RESEED, 0)
-dbcc CHECKIDENT (OrderDetails, RESEED, 0)
-dbcc CHECKIDENT (CartItems, RESEED, 0)
-dbcc CHECKIDENT (Orders, RESEED, 0)
-dbcc CHECKIDENT (Customers, RESEED, 0)
-dbcc CHECKIDENT (Carts, RESEED, 0)
-dbcc CHECKIDENT (Categories, RESEED, 0)
-dbcc CHECKIDENT (Publishers, RESEED, 0)
-dbcc CHECKIDENT (Authors, RESEED, 0)
 
 -- Inserting data into Authors table
 insert into Authors

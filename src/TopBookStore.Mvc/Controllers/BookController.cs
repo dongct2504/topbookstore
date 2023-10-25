@@ -20,9 +20,9 @@ public class BookController : Controller
         _data = data;
     }
 
-    public async Task<IActionResult> Index(GridDto values)
+    public async Task<IActionResult> Index(BookGridDto values)
     {
-        GridBuilder builder = new(HttpContext.Session, values);
+        GridBuilder gridBuilder = new(HttpContext.Session, values);
 
         BookListViewModel vm = new()
         {
@@ -35,7 +35,10 @@ public class BookController : Controller
             {
                 OrderBy = a => a.FirstName
             }),
-            CurrentRoute = builder.CurrentRoute
+            PageNumber = values.PageNumber,
+            PageSize = values.PageSize,
+            CurrentRoute = gridBuilder.CurrentRoute,
+            TotalPages = gridBuilder.GetTotalPages(await _service.GetBookCountAsync())
         };
 
         return View(vm);
@@ -61,23 +64,24 @@ public class BookController : Controller
     public RedirectToActionResult FilterBooks(string[] filter, bool clear = false)
     {
         // get current route segments from session
-        GridBuilder builder = new(HttpContext.Session);
+        GridBuilder gridBuilder = new(HttpContext.Session);
 
         // clear or update filter route segment values. If update, get author data
         // from database so can add author name slug to author filter value.
         if (clear)
         {
-            builder.ClearFilterSegments();
+            gridBuilder.ClearFilterSegments();
         }
         else
         {
-            builder.LoadFilterSegments(filter);
+            gridBuilder.CurrentRoute.PageNumber = 1;
+            gridBuilder.LoadFilterSegments(filter);
         }
 
         // save route data back to session and redirect to Book/List action method,
         // passing dictionary of route segment values to build URL
-        builder.SaveRouteSegments();
+        gridBuilder.SaveRouteSegments();
 
-        return RedirectToAction(nameof(Index), builder.CurrentRoute);
+        return RedirectToAction(nameof(Index), gridBuilder.CurrentRoute);
     }
 }

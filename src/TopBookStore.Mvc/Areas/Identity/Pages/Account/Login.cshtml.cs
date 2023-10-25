@@ -15,6 +15,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using TopBookStore.Infrastructure.Identity;
+using TopBookStore.Infrastructure.Persistence;
+using TopBookStore.Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using TopBookStore.Domain.Constants;
 
 namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
 {
@@ -22,11 +26,18 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityTopBookStoreUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly TopBookStoreContext _context;
+        private readonly ICartService _cartService;
 
-        public LoginModel(SignInManager<IdentityTopBookStoreUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityTopBookStoreUser> signInManager,
+            ILogger<LoginModel> logger,
+            TopBookStoreContext context,
+            ICartService cartService)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
+            _cartService = cartService;
         }
 
         /// <summary>
@@ -115,6 +126,12 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    IdentityTopBookStoreUser user = await _context.Users.FirstOrDefaultAsync(u =>
+                        u.Email == Input.Email);
+
+                    HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey,
+                        await _cartService.GetQuantityAsync(user.CustomerId) ?? 0);
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

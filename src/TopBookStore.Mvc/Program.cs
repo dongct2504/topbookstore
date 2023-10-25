@@ -22,7 +22,12 @@ builder.Services.AddRouting(options =>
 });
 
 builder.Services.AddMemoryCache();
-builder.Services.AddSession();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllersWithViews().AddJsonOptions(x =>
@@ -47,8 +52,10 @@ builder.Services.AddTransient<IAuthorService, AuthorService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IPublisherService, PublisherService>();
 builder.Services.AddTransient<ICustomerService, CustomerService>();
+builder.Services.AddTransient<ICartService, CartService>();
 
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
 builder.Services.Configure<EmailOptions>(builder.Configuration);
 
 // string fbAppId = Environment.
@@ -59,27 +66,25 @@ builder.Services.Configure<EmailOptions>(builder.Configuration);
 string fbAppId = builder.Configuration["Authentication:Facebook:AppId"] ?? string.Empty;
 string fbAppSecret = builder.Configuration["Authentication:Facebook:AppSecret"] ?? string.Empty;
 
-builder.Services.AddAuthentication().AddFacebook(options =>
-{
-    options.AppId = fbAppId;
-    options.AppSecret = fbAppSecret;
-});
-
 // string ggClientId = Environment.
 //     GetEnvironmentVariable("GOOGLE_CLIENT_ID", EnvironmentVariableTarget.User) ?? string.Empty;
 // string ggClientSecret = Environment.
 //     GetEnvironmentVariable("GOOGLE_CLIENT_SECRET", EnvironmentVariableTarget.User) ?? string.Empty;
 
 string ggClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
-
 string ggClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
 
-builder.Services.AddAuthentication().AddGoogle(options =>
-{
-    options.ClientId = ggClientId;
-    options.ClientSecret = ggClientSecret;
-});
-
+builder.Services.AddAuthentication()
+    .AddFacebook(fbOptions =>
+    {
+        fbOptions.AppId = fbAppId;
+        fbOptions.AppSecret = fbAppSecret;
+    })
+    .AddGoogle(ggOptions =>
+    {
+        ggOptions.ClientId = ggClientId;
+        ggOptions.ClientSecret = ggClientSecret;
+    });
 
 var app = builder.Build();
 
@@ -105,13 +110,16 @@ app.UseMiddleware<CategoriesMiddleware>();
 app.MapAreaControllerRoute(
     name: "admin",
     areaName: "Admin",
-    pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
+    pattern: "Admin/{controller=Home}/{action=Index}/{id?}"
+);
 app.MapControllerRoute(
     name: "filter",
-    pattern: "{controller=Home}/{action=Index}/filter/{categoryId}/{price}/{numberOfPages}/{authorId}");
+    pattern: "{controller=Home}/{action=Index}/filter/{categoryId}/{price}/{numberOfPages}/{authorId}"
+);
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
 app.MapRazorPages();
 
 app.Run();

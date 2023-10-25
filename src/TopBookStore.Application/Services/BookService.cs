@@ -30,6 +30,18 @@ public class BookService : IBookService
         return await _data.Books.ListAllAsync(options);
     }
 
+    public async Task<IEnumerable<Book>> GetAllBooksAsync(GridDto values)
+    {
+        QueryOptions<Book> options = new()
+        {
+            Includes = "Author, Categories, Publisher",
+            PageNumber = values.PageNumber,
+            PageSize = values.PageSize
+        };
+
+        return await _data.Books.ListAllAsync(options);
+    }
+
     public async Task<Book?> GetBookByIdAsync(int id)
     {
         QueryOptions<Book> options = new()
@@ -58,22 +70,26 @@ public class BookService : IBookService
         return _mapper.Map<BookDto>(book);
     }
 
-    public async Task<IEnumerable<Book>> GetBooksByCategoryAsync(int id)
+    public async Task<IEnumerable<Book>> GetBooksByCategoryAsync(GridDto values)
     {
         QueryOptions<Book> options = new()
         {
-            Where = b => b.Categories.Any(c => c.CategoryId == id),
-            Includes = "Author, Categories"
+            Where = b => b.Categories.Any(c => c.CategoryId == values.Id),
+            Includes = "Author, Categories",
+            PageNumber = values.PageNumber,
+            PageSize = values.PageSize
         };
 
         return await _data.Books.ListAllAsync(options);
     }
 
-    public async Task<IEnumerable<Book>> FilterBooksAsync(GridDto values)
+    public async Task<IEnumerable<Book>> FilterBooksAsync(BookGridDto values)
     {
         QueryOptions<Book> options = new()
         {
             Includes = "Author, Categories",
+            PageNumber = values.PageNumber,
+            PageSize = values.PageSize
         };
 
         RouteDictionary route = new(values);
@@ -81,7 +97,7 @@ public class BookService : IBookService
         // filter
         if (route.IsFilterByCategory)
         {
-            _ = int.TryParse(route.CategoryFilter, out int categoryId) ? categoryId : 0;
+            int categoryId = route.CategoryFilter.SafeToInt();
             options.Where = b => b.Categories.Any(c => c.CategoryId == categoryId);
         }
         if (route.IsFilterByPrice)
@@ -133,6 +149,11 @@ public class BookService : IBookService
         }
 
         return await _data.Books.ListAllAsync(options);
+    }
+
+    public async Task<int> GetBookCountAsync()
+    {
+        return await _data.Books.CountAsync();
     }
 
     public async Task AddBookAsync(Book book)

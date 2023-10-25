@@ -1,15 +1,10 @@
-using System.Text.Json.Serialization;
-
 namespace TopBookStore.Application.DTOs;
 
 public class GridDto
 {
-    // only for filter
-    [JsonIgnore]
-    public const string DefaultFilter = "all";
+    public int PageNumber { get; set; } = 1;
+    public int PageSize { get; set; } = 2;
 
-    public string CategoryId { get; set; } = DefaultFilter;
-    public string Price { get; set; } = DefaultFilter;
-    public string NumberOfPages { get; set; } = DefaultFilter;
-    public string AuthorId { get; set; } = DefaultFilter;
+    // For filtering category in home index
+    public int? Id { get; set; }
 }

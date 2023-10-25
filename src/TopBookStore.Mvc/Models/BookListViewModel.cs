@@ -9,9 +9,11 @@ public class BookListViewModel
     public BookDto BookDto { get; set; } = new();
     public IEnumerable<Book> Books { get; set; } = new List<Book>();
 
-    public RouteDictionary CurrentRoute { get; set; } = new();
+    public int PageNumber { get; set; }
+    public int PageSize { get; set; }
     public int TotalPages { get; set; }
-    public int Id { get; set; }
+
+    public RouteDictionary CurrentRoute { get; set; } = new();
 
     // data for dropdowns both for filter and display
     public IEnumerable<Author> Authors { get; set; } = new List<Author>();
