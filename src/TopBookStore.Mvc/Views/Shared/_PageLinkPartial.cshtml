@@ -10,7 +10,7 @@
     {
         routes.PageNumber = Model.PageNumber - 1;
         <a asp-action="Index" asp-all-route-data="@routes"
-           class="btn btn-primary">Previous</a>
+           class="btn btn-outline-primary">Trang trước</a>
     }
 
     // Middle link
@@ -29,6 +29,6 @@
     {
         routes.PageNumber = Model.PageNumber + 1;
         <a asp-action="Index" asp-all-route-data="@routes"
-           class="btn btn-primary">Next</a>
+           class="btn btn-outline-primary">Trang sau</a>
     }
 }
