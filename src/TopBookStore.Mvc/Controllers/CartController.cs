@@ -21,9 +21,20 @@ public class CartController : Controller
         _context = context;
     }
 
-    public ViewResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        ClaimsIdentity? claimsIdentity = User.Identity as ClaimsIdentity;
+        Claim? claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+        IdentityTopBookStoreUser user = await _context.Users.FindAsync(claim?.Value)
+            ?? throw new Exception("User not found.");
+        
+        Cart? cart = await _service.GetCartByCustomerAsync(user.CustomerId);
+        if (cart is null)
+        {
+            return NotFound();
+        }
+
+        return View(cart);
     }
 
     public async Task<IActionResult> AddCartItem(CartItem cartItem)

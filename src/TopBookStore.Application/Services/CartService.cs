@@ -19,11 +19,18 @@ public class CartService : ICartService
         return _data.Carts.ListAllAsync(new QueryOptions<Cart>());
     }
 
+    public async Task<Cart?> GetCartByCustomerAsync(int customerId)
+    {
+        Cart? cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
+        {
+            Where = c => c.CustomerId == customerId
+        });
+
+        return cart;
+    }
+
     public async Task AddCartItemAsync(int customerId, CartItem cartItem)
     {
-        Customer? customer = await _data.Customers.GetAsync(customerId) ??
-            throw new Exception("Customer not found.");
-
         // Get customer's cart
         // Cart? cart = customer.Carts.FirstOrDefault(c => c.CustomerId == customerId);
         Cart? cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
@@ -53,12 +60,26 @@ public class CartService : ICartService
         if (cartItemFromDb is null)
         {
             cartItem.CartId = cart.CartId;
+
+            Book? book = await _data.Books.GetAsync(cartItem.BookId);
+            if (book is not null)
+            {
+                cartItem.Book = book;
+                cartItem.Price = cartItem.Book.DiscountPrice * cartItem.Quantity;
+            }
+
+            cart.TotalAmount += cartItem.Price;
+
             _data.CartItems.Add(cartItem);
             // cart.CartItems.Add(cartItem); // also no need
         }
         else
         {
             cartItemFromDb.Quantity += cartItem.Quantity;
+
+            cart.TotalAmount += cartItemFromDb.Price;
+
+            cartItemFromDb.Price = cartItemFromDb.Book.DiscountPrice * cartItemFromDb.Quantity;
         }
 
         await _data.SaveAsync();
@@ -66,33 +87,42 @@ public class CartService : ICartService
 
     public async Task<int?> GetQuantityAsync(int customerId)
     {
-        Cart cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
+        Cart? cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
         {
+            Includes = "CartItems",
             Where = c => c.CustomerId == customerId
-        }) ?? new Cart();
-
-        IEnumerable<CartItem> cartItems =  await _data.CartItems.ListAllAsync(new QueryOptions<CartItem>
-        {
-            Where = ci => ci.CartId == cart.CartId
         });
 
-        return cartItems.Count();
+        return cart?.CartItems.Count;
     }
 
     public async Task<int?> GetTotalCartItemsCountAsync(int customerId)
     {
-        IEnumerable<Cart> carts = await _data.Carts.ListAllAsync(new QueryOptions<Cart>
+        Cart? cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
         {
             Where = c => c.CustomerId == customerId
-        });
+        }) ?? throw new Exception("Cart not found");
 
         int count = 0;
-        foreach (Cart cart in carts)
+        foreach (CartItem cartItem in cart.CartItems)
         {
-            count += cart.CartItems.Count;
+            count += cartItem.Quantity;
         }
 
         return count;
+    }
+
+    public async Task<decimal> GetTotalAmount(int customerId)
+    {
+        Cart cart = await GetCartByCustomerAsync(customerId) ?? new Cart();
+
+        decimal totalAmount = 0;
+        foreach (CartItem cartItem in cart.CartItems)
+        {
+            totalAmount += cartItem.Price;
+        }
+
+        return totalAmount;
     }
 
     public async Task AddCartAsync(Cart cart)
