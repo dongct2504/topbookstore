@@ -98,17 +98,4 @@
     }
 </div>
 
-@{
-    @* int startPage = Math.Max(1, currentRoute.PageNumber); *@
-
-    routes = Model.CurrentRoute.Clone();
-
-    for (int i = 1; i <= Model.TotalPages; i++)
-    {
-        routes.PageNumber = i;
-        <a class="btn btn-outline-primary @Nav.Active(i, currentRoute.PageNumber)"
-            asp-action="Index" asp-all-route-data="@routes">
-            @i
-        </a>
-    }
-}
+<partial name="_PageLinkPartial.cshtml"></partial>
