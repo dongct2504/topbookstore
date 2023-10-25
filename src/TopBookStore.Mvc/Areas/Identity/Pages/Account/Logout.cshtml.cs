@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using TopBookStore.Domain.Constants;
 using TopBookStore.Infrastructure.Identity;
 
 namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
@@ -26,6 +27,8 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
+            HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey, 0);
+
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
