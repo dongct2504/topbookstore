@@ -46,12 +46,13 @@ dbcc CHECKIDENT (CartItems, RESEED, 0)
 delete from Orders;
 dbcc CHECKIDENT (Orders, RESEED, 0)
 
-delete from Customers;
-dbcc CHECKIDENT (Customers, RESEED, 0)
-
+-- delete Customers
 delete from Customers
 where FirstName != 'Dong';
 dbcc CHECKIDENT (Customers, RESEED, 1)
+
+delete from Customers;
+dbcc CHECKIDENT (Customers, RESEED, 0)
 
 delete from Carts;
 dbcc CHECKIDENT (Carts, RESEED, 0)
@@ -65,10 +66,11 @@ dbcc CHECKIDENT (Publishers, RESEED, 0)
 delete from Authors
 dbcc CHECKIDENT (Authors, RESEED, 0)
 
-delete from AspNetUsers;
-
+-- delete AspNetUsers
 delete from AspNetUsers
 where UserName != 'admin@gmail.com';
+
+delete from AspNetUsers;
 
 -- Inserting data into Authors table
 insert into Authors
