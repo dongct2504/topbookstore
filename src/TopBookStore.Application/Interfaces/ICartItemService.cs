@@ -5,6 +5,7 @@ namespace TopBookStore.Application.Interfaces;
 public interface ICartItemService
 {
     Task<CartItem?> GetCartItemByIdAsync(int id);
+    Task<IEnumerable<CartItem>> GetAllCartItemsByCartIdAsync(int cartId);
     Task<CartItem?> GetCartItemByCartIdAsync(int cartId);
 
     Task<int?> GetQuantityAsync(int cartId);

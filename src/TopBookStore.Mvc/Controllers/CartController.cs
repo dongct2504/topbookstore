@@ -12,12 +12,15 @@ namespace TopBookStore.Mvc.Controllers;
 [Authorize(Roles = RoleConstants.RoleCustomer)]
 public class CartController : Controller
 {
-    private readonly ICartService _service;
+    private readonly ICartService _cartService;
+    private readonly ICartItemService _cartItemService;
     private readonly TopBookStoreContext _context;
 
-    public CartController(ICartService service, TopBookStoreContext context)
+    public CartController(ICartService service, ICartItemService cartItemService,
+        TopBookStoreContext context)
     {
-        _service = service;
+        _cartService = service;
+        _cartItemService = cartItemService;
         _context = context;
     }
 
@@ -27,16 +30,18 @@ public class CartController : Controller
         Claim? claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
         IdentityTopBookStoreUser user = await _context.Users.FindAsync(claim?.Value)
             ?? throw new Exception("User not found.");
+
+        HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey,
+            await _cartService.GetQuantityAsync(user.CustomerId) ?? 0);
         
-        Cart? cart = await _service.GetCartByCustomerAsync(user.CustomerId);
-        if (cart is null)
-        {
-            return NotFound();
-        }
+        Cart cart = await _cartService.GetCartByCustomerAsync(user.CustomerId) ?? new Cart();
+        
+        cart.CartItems = (await _cartItemService.GetAllCartItemsByCartIdAsync(cart.CartId)).ToList();
 
         return View(cart);
     }
 
+    [HttpGet]
     public async Task<IActionResult> AddCartItem(CartItem cartItem)
     {
         ClaimsIdentity? claimsIdentity = User.Identity as ClaimsIdentity;
@@ -44,11 +49,30 @@ public class CartController : Controller
         IdentityTopBookStoreUser user = await _context.Users.FindAsync(claim?.Value) ??
             throw new Exception("User not found.");
 
-        await _service.AddCartItemAsync(user.CustomerId, cartItem);
+        await _cartService.AddCartItemAsync(user.CustomerId, cartItem);
 
         HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey,
-            await _service.GetQuantityAsync(user.CustomerId) ?? 0);
+            await _cartService.GetQuantityAsync(user.CustomerId) ?? 0);
 
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> RemoveCartItem(int id)
+    {
+        ClaimsIdentity? claimsIdentity = User.Identity as ClaimsIdentity;
+        Claim? claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+        IdentityTopBookStoreUser user = await _context.Users.FindAsync(claim?.Value) ??
+            throw new Exception("User not found.");
+
+        CartItem? cartItem = await _cartItemService.GetCartItemByIdAsync(id);
+        if (cartItem is null)
+        {
+            return NotFound();
+        }
+
+        await _cartService.RemoveCartItemAsync(user.CustomerId, cartItem);
+
+        return RedirectToAction(nameof(Index));
     }
 }

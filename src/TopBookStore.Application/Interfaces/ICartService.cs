@@ -9,6 +9,7 @@ public interface ICartService
     Task<Cart?> GetCartByCustomerAsync(int customerId);
 
     Task AddCartItemAsync(int customerId, CartItem cartItem);
+    Task RemoveCartItemAsync(int customerId, CartItem cartItem);
 
     Task<int?> GetQuantityAsync(int customerId);
     Task<int?> GetTotalCartItemsCountAsync(int customerId);

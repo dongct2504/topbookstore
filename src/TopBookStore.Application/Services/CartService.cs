@@ -50,14 +50,15 @@ public class CartService : ICartService
             await AddCartAsync(cart); // need to add and save to update CartId
         }
 
-        // Check if the book is already in the cart
+        // Check if there are already have a cartItem or that cartItem have book
+        // then update it's quantity
         CartItem? cartItemFromDb = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
         {
             Includes = "Book",
-            Where = ci => ci.BookId == cartItem.BookId
+            Where = ci => ci.CartItemId == cartItem.CartItemId || ci.BookId == cartItem.BookId
         });
 
-        if (cartItemFromDb is null)
+        if (cartItemFromDb is null) // add
         {
             cartItem.CartId = cart.CartId;
 
@@ -73,15 +74,37 @@ public class CartService : ICartService
             _data.CartItems.Add(cartItem);
             // cart.CartItems.Add(cartItem); // also no need
         }
-        else
+        else // update or delete
         {
-            cartItemFromDb.Quantity += cartItem.Quantity;
+            if (cartItem.Quantity > 0)
+            {
+                cart.TotalAmount -= cartItemFromDb.Price;
 
-            cart.TotalAmount += cartItemFromDb.Price;
+                cartItemFromDb.Quantity = cartItem.Quantity;
 
-            cartItemFromDb.Price = cartItemFromDb.Book.DiscountPrice * cartItemFromDb.Quantity;
+                cartItemFromDb.Price = cartItemFromDb.Book.DiscountPrice * cartItemFromDb.Quantity;
+
+                cart.TotalAmount += cartItemFromDb.Price;
+            }
+            else
+            {
+                cart.TotalAmount -= cartItemFromDb.Price;
+                _data.CartItems.Remove(cartItemFromDb);
+            }
         }
 
+        await _data.SaveAsync();
+    }
+
+    public async Task RemoveCartItemAsync(int customerId, CartItem cartItem)
+    {
+        Cart cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
+        {
+            Where = c => c.CustomerId == customerId
+        }) ?? throw new Exception("Cart not found.");
+
+        cart.TotalAmount -= cartItem.Price;
+        _data.CartItems.Remove(cartItem);
         await _data.SaveAsync();
     }
 
@@ -110,19 +133,6 @@ public class CartService : ICartService
         }
 
         return count;
-    }
-
-    public async Task<decimal> GetTotalAmount(int customerId)
-    {
-        Cart cart = await GetCartByCustomerAsync(customerId) ?? new Cart();
-
-        decimal totalAmount = 0;
-        foreach (CartItem cartItem in cart.CartItems)
-        {
-            totalAmount += cartItem.Price;
-        }
-
-        return totalAmount;
     }
 
     public async Task AddCartAsync(Cart cart)

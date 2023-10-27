@@ -55,7 +55,8 @@ public class BookController : Controller
         CartItem cartItem = new()
         {
             BookId = book.BookId,
-            Book = book
+            Book = book,
+            Quantity = 1
         };
 
         return View(cartItem);

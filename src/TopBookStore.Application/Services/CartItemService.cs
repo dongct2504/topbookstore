@@ -18,6 +18,7 @@ public class CartItemService : ICartItemService
     {
         QueryOptions<CartItem> options = new()
         {
+            Includes = "Book",
             Where = ci => ci.CartItemId == id
         };
 
@@ -28,10 +29,22 @@ public class CartItemService : ICartItemService
     {
         QueryOptions<CartItem> options = new()
         {
+            Includes = "Book",
             Where = ci => ci.CartId == cartId
         };
 
         return await _data.CartItems.GetAsync(options);
+    }
+
+    public async Task<IEnumerable<CartItem>> GetAllCartItemsByCartIdAsync(int cartId)
+    {
+        QueryOptions<CartItem> options = new()
+        {
+            Includes = "Book",
+            Where = ci => ci.CartId == cartId
+        };
+
+        return await _data.CartItems.ListAllAsync(options);
     }
 
     public async Task<int?> GetQuantityAsync(int cartId)
