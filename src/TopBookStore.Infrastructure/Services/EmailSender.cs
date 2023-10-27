@@ -25,7 +25,10 @@ public class EmailSender : IEmailSender
             Console.WriteLine("Not found API Key.");
         }
 
-        Configuration.Default.ApiKey.Add("api-key", apiKey);
+        if (!Configuration.Default.ApiKey.ContainsKey("api-key"))
+        {
+            Configuration.Default.ApiKey.Add("api-key", apiKey);
+        }
 
         TransactionalEmailsApi apiInstance = new();
 
