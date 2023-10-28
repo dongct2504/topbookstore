@@ -120,20 +120,20 @@ values
     (N'Trần', N'Hoàng', 0, '123 Đường A', 'Quận B', 'Thành phố C', 'Việt Nam'),
     (N'Lê', N'Thịnh', 50000, '456 Đường X', 'Quận Y', 'Thành phố Z', 'Việt Nam');
 
--- Inserting data into Carts table
-insert into Carts
-    (CustomerId, TotalAmount)
-values
-    (1, 200000),
-    (2, 150000);
+-- -- Inserting data into Carts table
+-- insert into Carts
+--     (CustomerId, TotalAmount)
+-- values
+--     (1, 200000),
+--     (2, 150000);
 
--- Inserting data into CartItems table
-insert into CartItems
-    (CartId, BookId, Price, Quantity)
-values
-    (1, 1, 100000, 2),
-    (1, 2, 80000, 1),
-    (2, 3, 120000, 1);
+-- -- Inserting data into CartItems table
+-- insert into CartItems
+--     (CartId, BookId, Price, Quantity)
+-- values
+--     (1, 1, 100000, 2),
+--     (1, 2, 80000, 1),
+--     (2, 3, 120000, 1);
 
 -- Inserting data into Orders table
 insert into Orders
