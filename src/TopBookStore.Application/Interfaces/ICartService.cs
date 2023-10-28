@@ -12,7 +12,7 @@ public interface ICartService
     Task RemoveCartItemAsync(int customerId, CartItem cartItem);
 
     Task<int?> GetQuantityAsync(int customerId);
-    Task<int?> GetTotalCartItemsCountAsync(int customerId);
+    Task<int> GetTotalCartItemsCountAsync(int customerId);
 
     Task AddCartAsync(Cart cart);
     Task UpdateCartAsync(Cart cart);

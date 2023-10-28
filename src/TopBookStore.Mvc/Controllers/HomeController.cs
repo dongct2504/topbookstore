@@ -35,7 +35,7 @@ public class HomeController : Controller
                 throw new Exception("User not found.");
 
             HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey,
-                await _cartService.GetQuantityAsync(user.CustomerId) ?? 0);
+                await _cartService.GetTotalCartItemsCountAsync(user.CustomerId));
         }
 
         GridBuilder gridBuilder = new(HttpContext.Session, values);

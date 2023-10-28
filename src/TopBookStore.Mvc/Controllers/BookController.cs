@@ -6,6 +6,7 @@ using TopBookStore.Mvc.Grid;
 using TopBookStore.Mvc.Models;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Interfaces;
+using System.Security.Claims;
 
 namespace TopBookStore.Mvc.Controllers;
 
@@ -52,14 +53,29 @@ public class BookController : Controller
             return NotFound();
         }
 
-        CartItem cartItem = new()
+        CartItemDto cartItemDto = new()
         {
             BookId = book.BookId,
             Book = book,
             Quantity = 1
         };
 
-        return View(cartItem);
+        if (User.Identity?.IsAuthenticated ?? false) // user have login, retrieve the cart item quantity
+        {
+            CartItem? cartItemFromDb = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
+            {
+                Where = ci => ci.BookId == cartItemDto.BookId
+            });
+
+            // Already have one in db
+            if (cartItemFromDb is not null)
+            {
+                cartItemDto.CartItemId = cartItemFromDb.CartItemId;
+                cartItemDto.Quantity = cartItemFromDb.Quantity;
+            }
+        }
+
+        return View(cartItemDto);
     }
 
     public RedirectToActionResult FilterBooks(string[] filter, bool clear = false)

@@ -3,104 +3,102 @@
     ViewData["Title"] = "Giỏ Hàng";
 }
 
-<form asp-action="">
-    <div class="card">
-        <div class="card-header">
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-6 d-flex align-items-center">
+                <span class="fas fa-shopping-cart"></span>&nbsp;Giỏ hàng của bạn
+            </div>
+            <div class="col-6 text-end">
+                <a class="btn btn-info"
+                   asp-controller="Home" asp-action="Index">
+                    Tiếp tục mua sắm
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @if (Model?.CartItems.Count > 0)
+    {
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <th></th>
+                        <th>Tiêu đề</th>
+                        <th>Số lượng</th>
+                        <th>Tổng cộng</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (CartItem cartItem in Model.CartItems)
+                    {
+                        <tr>
+                            <td class="col-1">
+                                <a asp-controller="Book" asp-action="Details"
+                                   asp-route-id="@cartItem.BookId">
+                                    @if (cartItem.Book.ImageUrl is null)
+                                    {
+                                        <img class="image rounded" src="~/imgs/books/default.jpg"
+                                             width="120" />
+                                    }
+                                    else
+                                    {
+                                        <img class="image rounded" src="@cartItem.Book.ImageUrl"
+                                             width="120" />
+                                    }
+                                </a>
+                            </td>
+                            <td class="col-4">
+                                <a asp-controller="Book" asp-action="Details"
+                                   asp-route-id="@cartItem.BookId">
+                                    <h5>@cartItem.Book.Title</h5>
+                                </a>
+                            </td>
+                            <td class="col-1">@cartItem.Quantity</td>
+                            <td>@cartItem.Price.ToString("#,## đ")</td>
+                            <td class="col-lg-3 col-md-4 col-6 text-center">
+                                <a type="submit" class="btn btn-outline-primary"
+                                   asp-controller="Book" asp-action="Details"
+                                   asp-route-id="@cartItem.BookId">
+                                    <span class="fas fa-info-circle"></span>&nbsp;Chi tiết
+                                </a>
+                                <a type="submit" class="btn btn-outline-danger"
+                                   asp-action="RemoveCartItem"
+                                   asp-route-id="@cartItem.CartItemId">
+                                    <span class="fas fa-trash"></span>&nbsp;Xóa
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
             <div class="row">
-                <div class="col-6 d-flex align-items-center">
-                    <span class="fas fa-shopping-cart"></span>&nbsp;Giỏ hàng của bạn
-                </div>
-                <div class="col-6 text-end">
-                    <a class="btn btn-info"
-                        asp-controller="Home" asp-action="Index">
-                        Tiếp tục mua sắm
-                    </a>
+                <div class="col-lg-4 col-md-6 col-12 offset-lg-8 offset-md-6 pe-4">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <span class="text-info">Tổng (VND)</span>
+                            <strong>@Model.TotalAmount.ToString("#,## đ")</strong>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        @if (Model?.CartItems.Count > 0)
-        {
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <thead class="bg-dark text-white">
-                        <tr>
-                            <th></th>
-                            <th>Tiêu đề</th>
-                            <th>Số lượng</th>
-                            <th>Tổng cộng</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (CartItem cartItem in Model.CartItems)
-                        {
-                            <tr>
-                                <td class="col-1">
-                                    <a asp-controller="Book" asp-action="Details"
-                                        asp-route-id="@cartItem.BookId">
-                                        @if (cartItem.Book.ImageUrl is null)
-                                        {
-                                            <img class="image rounded" src="~/imgs/books/default.jpg"
-                                                width="120" />
-                                        }
-                                        else
-                                        {
-                                            <img class="image rounded" src="@cartItem.Book.ImageUrl"
-                                                width="120" />
-                                        }
-                                    </a>
-                                </td>
-                                <td class="col-4">
-                                    <a asp-controller="Book" asp-action="Details"
-                                        asp-route-id="@cartItem.BookId">
-                                        <h5>@cartItem.Book.Title</h5>
-                                    </a>
-                                </td>
-                                <td class="col-1">@cartItem.Quantity</td>
-                                <td>@cartItem.Price.ToString("#,## đ")</td>
-                                <td class="col-lg-2 col-md-3 col-4 text-center">
-                                    <a type="submit" class="btn btn-outline-primary"
-                                        asp-controller="Book" asp-action="Details"
-                                        asp-route-id="@cartItem.BookId">
-                                        <span class="fas fa-info-circle"></span>&nbsp;Chi tiết
-                                    </a>
-                                    <a type="submit" class="btn btn-outline-danger"
-                                        asp-action="RemoveCartItem"
-                                        asp-route-id="@cartItem.CartItemId">
-                                        <span class="fas fa-trash"></span>&nbsp;Xóa
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-12 offset-lg-8 offset-md-6 pe-4">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between bg-light">
-                                <span class="text-info">Tổng (VND)</span>
-                                <strong>@Model.TotalAmount.ToString("#,## đ")</strong>
-                            </li>
-                        </ul>
-                    </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-md-5 col-12 offset-md-7">
+                    <a asp-controller="Order" asp-action="Index" asp-route-id="@Model.CartId"
+                       class="btn btn-primary form-control">
+                        Tổng kết
+                    </a>
                 </div>
             </div>
-
-            <div class="card-footer">
-                <div class="row">
-                    <div class="col-md-5 col-12 offset-md-7">
-                        <a asp-controller="Order" asp-action="BuyAllItems"
-                            class="btn btn-primary form-control">
-                            Thanh toán
-                        </a>
-                    </div>
-                </div>
-            </div>
-        }
-        else
-        {
-            <p class="text-center">Hiện không có sách nào trong giỏ của bạn.</p>
-        }
-    </div>
-</form>
+        </div>
+    }
+    else
+    {
+        <p class="text-center">Hiện không có sách nào trong giỏ của bạn.</p>
+    }
+</div>

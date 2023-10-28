@@ -130,7 +130,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                         u.Email == Input.Email);
 
                     HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey,
-                        await _cartService.GetQuantityAsync(user.CustomerId) ?? 0);
+                        await _cartService.GetTotalCartItemsCountAsync(user.CustomerId));
 
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);

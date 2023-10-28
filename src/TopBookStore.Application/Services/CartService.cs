@@ -55,7 +55,7 @@ public class CartService : ICartService
         CartItem? cartItemFromDb = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
         {
             Includes = "Book",
-            Where = ci => ci.CartItemId == cartItem.CartItemId || ci.BookId == cartItem.BookId
+            Where = ci => ci.CartItemId == cartItem.CartItemId
         });
 
         if (cartItemFromDb is null) // add
@@ -119,10 +119,11 @@ public class CartService : ICartService
         return cart?.CartItems.Count;
     }
 
-    public async Task<int?> GetTotalCartItemsCountAsync(int customerId)
+    public async Task<int> GetTotalCartItemsCountAsync(int customerId)
     {
         Cart? cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
         {
+            Includes = "CartItems",
             Where = c => c.CustomerId == customerId
         }) ?? throw new Exception("Cart not found");
 

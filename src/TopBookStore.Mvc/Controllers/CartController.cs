@@ -9,7 +9,7 @@ using TopBookStore.Infrastructure.Persistence;
 
 namespace TopBookStore.Mvc.Controllers;
 
-[Authorize(Roles = RoleConstants.RoleCustomer)]
+[Authorize]
 public class CartController : Controller
 {
     private readonly ICartService _cartService;
@@ -32,7 +32,7 @@ public class CartController : Controller
             ?? throw new Exception("User not found.");
 
         HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey,
-            await _cartService.GetQuantityAsync(user.CustomerId) ?? 0);
+            await _cartService.GetTotalCartItemsCountAsync(user.CustomerId));
         
         Cart cart = await _cartService.GetCartByCustomerAsync(user.CustomerId) ?? new Cart();
         
@@ -50,9 +50,6 @@ public class CartController : Controller
             throw new Exception("User not found.");
 
         await _cartService.AddCartItemAsync(user.CustomerId, cartItem);
-
-        HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey,
-            await _cartService.GetQuantityAsync(user.CustomerId) ?? 0);
 
         return RedirectToAction(nameof(Index));
     }

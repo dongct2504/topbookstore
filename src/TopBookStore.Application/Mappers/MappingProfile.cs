@@ -23,5 +23,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CategoryIds, opt => opt.MapFrom(
                 src => src.Categories.Select(c => c.CategoryId).ToArray()));
         CreateMap<BookDto, Book>();
+
+        CreateMap<CartItem, CartItemDto>();
+        CreateMap<CartItemDto, CartItem>();
     }
 }

@@ -1,4 +1,4 @@
-@model CartItem
+@model CartItemDto
 @{
     ViewData["Title"] = "Chi Tiết Sách";
 }
@@ -6,20 +6,20 @@
 <h1>Chi Tiết Sách</h1>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-lg-3 col-md-5">
         @if (Model.Book.ImageUrl is not null)
         {
-            <img class="image-fluid image rounded" 
-                src="@Model.Book.ImageUrl" id="previewImage" width="280px" />
+            <img class="image image-fluid rounded" 
+                src="@Model.Book.ImageUrl" id="previewImage" width="230" />
         }
         else
         {
-            <img class="image-fluid image rounded" 
-                src="~/imgs/books/default.jpg" id="previewImage" width="280px" />
+            <img class="image image-fluid rounded" 
+                src="~/imgs/books/default.jpg" id="previewImage" width="230" />
         }
     </div>
 
-    <div class="col-md-9 mb-3">
+    <div class="col-lg-9 col-md-7 mb-3">
         <h2>@Model.Book.Title</h2>
         <table class="table table-striped table-bordered table-md">
             <tr>
@@ -69,23 +69,25 @@
         <form method="get">
             @* This is important, remember to add a book to a cartItem *@
             <input type="hidden" asp-for="BookId" />
+            <input type="hidden" asp-for="CartItemId" />
 
             <div class="row align-items-center mb-3">
-                <div class="col-md-auto">
+                <div class="col-auto">
                     <label class="control-label" asp-for="Quantity">Số lượng</label>
                 </div>
-                <div class="col-md-4">
+                <div class="col-6">
                     <input class="form-control" asp-for="Quantity" />
+                    <span class="text-danger" asp-validation-for="Quantity"></span>
                 </div>
             </div>
 
             <div class="mb-3">
                 <button class="btn btn-success" type="submit" asp-controller="Order" 
-                    asp-action="BuyItem" asp-route-cartItemId="@Model.CartItemId">
+                    asp-action="BuyItem">
                     Mua Ngay
                 </button>
                 <button class="btn btn-primary" type="submit" asp-controller="Cart" 
-                    asp-action="AddCartItem" asp-route-cartItemId="@Model.CartItemId">
+                    asp-action="AddCartItem">
                     Thêm Vào Giỏ
                 </button>
             </div>
@@ -95,3 +97,7 @@
     <h3>Mô Tả</h3>
     <p>@Model.Book.Description</p>
 </div>
+
+@section Scripts {
+   <partial name="_ValidationScriptsPartial" />
+}
