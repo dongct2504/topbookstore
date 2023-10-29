@@ -48,7 +48,7 @@ public partial class Order
 
     [StringLength(256)]
     [Unicode(false)]
-    public string TransactionId { get; set; } = null!;
+    public string? TransactionId { get; set; }
 
     [StringLength(128)]
     public string? Address { get; set; }

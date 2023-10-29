@@ -21,7 +21,7 @@ public class AuthorService : IAuthorService
 
     public async Task<Author?> GetAuthorByIdAsync(int id)
     {
-        QueryOptions<Author> options = new QueryOptions<Author>
+        QueryOptions<Author> options = new()
         {
             Where = a => a.AuthorId == id,
             Includes = "Books"

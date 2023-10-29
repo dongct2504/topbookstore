@@ -13,6 +13,9 @@ public interface IRepository<T> where T : class
     Task<T?> GetAsync(QueryOptions<T> options);
 
     void Add(T entity);
+    void AddRange(List<T> values);
+
     void Remove(T entity);
     void RemoveRange(T entity);
+    void RemoveRange(List<T> entities);
 }

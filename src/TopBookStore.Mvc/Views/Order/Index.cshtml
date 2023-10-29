@@ -1,4 +1,4 @@
-@model OrderIndexViewModel
+@model OrderDto
 @{
     ViewData["Title"] = "Đặt hàng";
 }
@@ -32,8 +32,8 @@
                                 <label class="form-label">Tên</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="OrderDto.Name" />
-                                <span class="text-danger" asp-validation-for="OrderDto.Name"></span>
+                                <input class="form-control" asp-for="Name" />
+                                <span class="text-danger" asp-validation-for="Name"></span>
                             </div>
                         </div>
 
@@ -42,8 +42,8 @@
                                 <label class="form-label">Số điện thoại</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="OrderDto.PhoneNumber" />
-                                <span class="text-danger" asp-validation-for="OrderDto.PhoneNumber"></span>
+                                <input class="form-control" asp-for="PhoneNumber" />
+                                <span class="text-danger" asp-validation-for="PhoneNumber"></span>
                             </div>
                         </div>
 
@@ -52,9 +52,9 @@
                                 <label class="form-label">Địa chỉ</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="OrderDto.Address"
+                                <input class="form-control" asp-for="Address"
                                        placeholder="108/2 Đường Hoàng Hoa Thám" />
-                                <span class="text-danger" asp-validation-for="OrderDto.Address"></span>
+                                <span class="text-danger" asp-validation-for="Address"></span>
                             </div>
                         </div>
 
@@ -63,9 +63,9 @@
                                 <label class="form-label">Phường</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="OrderDto.Ward"
+                                <input class="form-control" asp-for="Ward"
                                        placeholder="Phường Tân Thới Hiệp" />
-                                <span class="text-danger" asp-validation-for="OrderDto.Ward"></span>
+                                <span class="text-danger" asp-validation-for="Ward"></span>
                             </div>
                         </div>
 
@@ -74,9 +74,9 @@
                                 <label class="form-label">Quận</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="OrderDto.District"
+                                <input class="form-control" asp-for="District"
                                        placeholder="Quận Tân Bình" />
-                                <span class="text-danger" asp-validation-for="OrderDto.District"></span>
+                                <span class="text-danger" asp-validation-for="District"></span>
                             </div>
                         </div>
 
@@ -85,9 +85,9 @@
                                 <label class="form-label">Thành phố</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="OrderDto.City"
+                                <input class="form-control" asp-for="City"
                                        placeholder="Hồ Chí Minh" />
-                                <span class="text-danger" asp-validation-for="OrderDto.City"></span>
+                                <span class="text-danger" asp-validation-for="City"></span>
                             </div>
                         </div>
                     </div>
@@ -96,6 +96,26 @@
                         <h4 class="mb-4">
                             <span class="text-info">Đơn đặt hàng của bạn</span>
                         </h4>
+
+                        <ul class="list-group mb-3">
+                            @foreach (OrderDetail orderDetail in Model.OrderDetails)
+                            {
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <div>
+                                        <h6>@orderDetail.Book.Title</h6>
+                                        <small class="text-muted">Giá: @orderDetail.Book.Price.ToString("#,## đ")</small>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-muted">Tổng: @orderDetail.Price.ToString("#,## đ")</h6>
+                                        <small class="text-muted">Số lượng: @orderDetail.Quantity</small>
+                                    </div>
+                                </li>
+                            }
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <h6 class="text-info">Tổng (VND)</h6>
+                                <h5 class="text-info">@Model.TotalAmount.ToString("#,## đ")</h5>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -103,7 +123,7 @@
 
         <div class="card-footer">
             <div class="row">
-                <div class="col-md-5 col-12 offset-md-7">
+                <div class="col-lg-5 col-12 offset-lg-7">
                     <button class="btn btn-primary form-control">
                         Thanh toán
                     </button>

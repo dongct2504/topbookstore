@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using TopBookStore.Domain.Entities;
 
 namespace TopBookStore.Application.DTOs;
 
@@ -42,7 +43,7 @@ public class OrderDto
 
     [StringLength(256)]
     [Unicode(false)]
-    public string TransactionId { get; set; } = null!;
+    public string? TransactionId { get; set; }
 
     [Required(ErrorMessage = "Vui lòng nhập địa chỉ.")]
     [StringLength(50)]
@@ -59,4 +60,6 @@ public class OrderDto
     [Required(ErrorMessage = "Vui lòng nhập tên thành phố.")]
     [StringLength(30)]
     public string? City { get; set; }
+
+    public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

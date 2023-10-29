@@ -26,6 +26,7 @@
                     <tr>
                         <th></th>
                         <th>Tiêu đề</th>
+                        <th>Giá</th>
                         <th>Số lượng</th>
                         <th>Tổng cộng</th>
                         <th></th>
@@ -56,7 +57,8 @@
                                     <h5>@cartItem.Book.Title</h5>
                                 </a>
                             </td>
-                            <td class="col-1">@cartItem.Quantity</td>
+                            <td>@cartItem.Book.Price.ToString("#,## đ")</td>
+                            <td>@cartItem.Quantity</td>
                             <td>@cartItem.Price.ToString("#,## đ")</td>
                             <td class="col-lg-3 col-md-4 col-6 text-center">
                                 <a type="submit" class="btn btn-outline-primary"

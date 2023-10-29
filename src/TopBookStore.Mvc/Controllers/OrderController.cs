@@ -1,23 +1,32 @@
 using System.Security.Claims;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.DTOs;
+using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
+using TopBookStore.Domain.Queries;
 using TopBookStore.Infrastructure.Identity;
 using TopBookStore.Infrastructure.Persistence;
-using TopBookStore.Mvc.Models;
 
 namespace TopBookStore.Mvc.Controllers;
 
+[Authorize]
 public class OrderController : Controller
 {
     private readonly TopBookStoreContext _context;
     private readonly ITopBookStoreUnitOfWork _data;
+    private readonly IOrderService _service;
+    private readonly IMapper _mapper;
 
-    public OrderController(TopBookStoreContext context, ITopBookStoreUnitOfWork data)
+    public OrderController(TopBookStoreContext context, ITopBookStoreUnitOfWork data,
+        IOrderService service, IMapper mapper)
     {
         _context = context;
         _data = data;
+        _service = service;
+        _mapper = mapper;
     }
 
     public async Task<IActionResult> Index(int id)
@@ -30,30 +39,84 @@ public class OrderController : Controller
         Customer customer = await _data.Customers.GetAsync(user.CustomerId) ??
             throw new Exception("Customer not found.");
 
-        Cart? cart = await _data.Carts.GetAsync(id);
+        Cart? cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
+        {
+            Includes = "CartItems.Book",
+
+        });
         if (cart is null)
         {
             return NotFound();
         }
 
-        OrderDto orderDto = new()
-        {
-            Name = user.UserName,
-            PhoneNumber = user?.PhoneNumber ?? string.Empty,
-            TotalAmount = cart.TotalAmount,
-            Address = customer.Address,
-            Ward = customer.Ward,
-            District = customer.District,
-            City = customer.City,
-            CustomerId = customer.CustomerId
-        };
+        Order? order = await _service.GetOrderByCustomerIdAsync(customer.CustomerId);
 
-        OrderIndexViewModel vm = new()
+        if (order is null)
         {
-            OrderDto = orderDto,
-            Cart = cart
-        };
+            order = new Order()
+            {
+                Name = customer.FullName,
+                PhoneNumber = user.PhoneNumber ?? string.Empty,
+                OrderDate = DateTime.Now,
+                ShippingDate = DateTime.Now.AddDays(2),
+                Address = customer.Address,
+                Ward = customer.Ward,
+                District = customer.District,
+                City = customer.City,
+                CustomerId = customer.CustomerId
+            };
 
-        return View(vm);
+            await _service.AddOrderAsync(order);
+        }
+
+        // Add or Update order total amount here
+        order.TotalAmount = cart.TotalAmount;
+
+        // Add or Update order details
+        List<OrderDetail> orderDetails = new();
+
+        foreach (CartItem cartItem in cart.CartItems)
+        {
+            OrderDetail? existingOrderDetail = await _data.OrderDetails.GetAsync(
+                new QueryOptions<OrderDetail>
+                {
+                    Where = od => od.BookId == cartItem.BookId
+                });
+
+            if (existingOrderDetail is not null)
+            {
+                // Update existing order detail
+                existingOrderDetail.Quantity = cartItem.Quantity;
+                existingOrderDetail.Price = cartItem.Price;
+            }
+            else
+            {
+                // Create new order detail
+                OrderDetail orderDetail = new()
+                {
+                    BookId = cartItem.BookId,
+                    Book = cartItem.Book,
+                    Quantity = cartItem.Quantity,
+                    Price = cartItem.Price,
+                    OrderId = order.OrderId
+                };
+
+                orderDetails.Add(orderDetail);
+            }
+        }
+
+        // Remove order details for cart items that were removed
+        List<OrderDetail> removedOrderDetails = order.OrderDetails
+            .Where(od => !cart.CartItems.Any(ci => ci.BookId == od.BookId))
+            .ToList();
+
+        _data.OrderDetails.RemoveRange(removedOrderDetails);
+
+        _data.OrderDetails.AddRange(orderDetails);
+        await _data.SaveAsync();
+
+        OrderDto orderDto = _mapper.Map<OrderDto>(order);
+
+        return View(orderDto);
     }
 }

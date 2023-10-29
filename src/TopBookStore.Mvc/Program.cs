@@ -54,6 +54,7 @@ builder.Services.AddTransient<IPublisherService, PublisherService>();
 builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICartItemService, CartItemService>();
 builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
