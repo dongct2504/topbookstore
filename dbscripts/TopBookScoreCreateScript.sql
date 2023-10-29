@@ -369,10 +369,10 @@ create table Customers
    FirstName nvarchar(50) not null,
    LastName nvarchar(50) not null,
    Debt money not null,
-   Street nvarchar(50) null,
+   Address nvarchar(128) null,
+   Ward nvarchar(50) null,
    District nvarchar(30) null,
    City nvarchar(30) null,
-   Country nvarchar(60) null,
    constraint PK_CUSTOMERS primary key (CustomerId)
 )
 go
@@ -459,10 +459,10 @@ create table Orders
    OrderStatus varchar(20) null,
    PaymentStatus varchar(20) null,
    TransactionId varchar(256) not null,
-   Street nvarchar(50) null,
+   Address nvarchar(128) null,
+   Ward nvarchar(50) null,
    District nvarchar(30) null,
    City nvarchar(30) null,
-   Country nvarchar(60) null,
    constraint PK_ORDERS primary key (OrderId),
    constraint FK_ORDERS_ORDERCUST_CUSTOMER foreign key (CustomerId)
       references Customers (CustomerId)

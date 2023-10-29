@@ -62,10 +62,10 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Debt = table.Column<decimal>(type: "money", nullable: false),
-                    Street = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Ward = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     District = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true)
+                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -175,10 +175,10 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     OrderStatus = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
                     PaymentStatus = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
                     TransactionId = table.Column<string>(type: "varchar(256)", unicode: false, maxLength: 256, nullable: false),
-                    Street = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Ward = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     District = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true)
+                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true)
                 },
                 constraints: table =>
                 {

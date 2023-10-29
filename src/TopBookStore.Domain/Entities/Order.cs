@@ -50,17 +50,17 @@ public partial class Order
     [Unicode(false)]
     public string TransactionId { get; set; } = null!;
 
+    [StringLength(128)]
+    public string? Address { get; set; }
+
     [StringLength(50)]
-    public string? Street { get; set; }
+    public string? Ward { get; set; }
 
     [StringLength(30)]
     public string? District { get; set; }
 
     [StringLength(30)]
     public string? City { get; set; }
-
-    [StringLength(60)]
-    public string? Country { get; set; }
 
     [ForeignKey("CustomerId")]
     [InverseProperty("Orders")]

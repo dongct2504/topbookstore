@@ -334,13 +334,13 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<string>("City")
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Country")
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
 
                     b.Property<decimal>("Debt")
                         .HasColumnType("money");
@@ -359,7 +359,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Street")
+                    b.Property<string>("Ward")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -376,6 +376,10 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<string>("Carrier")
                         .HasMaxLength(128)
                         .IsUnicode(false)
@@ -384,10 +388,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.Property<string>("City")
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Country")
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
@@ -422,10 +422,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     b.Property<DateTime>("ShippingDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("Street")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("money");
 
@@ -439,6 +435,10 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasMaxLength(256)
                         .IsUnicode(false)
                         .HasColumnType("varchar(256)");
+
+                    b.Property<string>("Ward")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("OrderId");
 

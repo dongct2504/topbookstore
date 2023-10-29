@@ -31,7 +31,6 @@ public partial class TopBookStoreContext : IdentityTopBookStoreDbContext
 
     public virtual DbSet<Publisher> Publishers { get; set; }
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -20,17 +20,17 @@ public partial class Customer
     [Column(TypeName = "money")]
     public decimal Debt { get; set; }
 
+    [StringLength(128)]
+    public string? Address { get; set; }
+
     [StringLength(50)]
-    public string? Street { get; set; }
+    public string? Ward { get; set; }
 
     [StringLength(30)]
     public string? District { get; set; }
 
     [StringLength(30)]
     public string? City { get; set; }
-
-    [StringLength(60)]
-    public string? Country { get; set; }
 
     [InverseProperty("Customer")]
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
