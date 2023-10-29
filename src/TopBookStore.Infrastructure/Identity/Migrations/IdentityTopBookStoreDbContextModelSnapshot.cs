@@ -431,7 +431,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasColumnType("varchar(128)");
 
                     b.Property<string>("TransactionId")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .IsUnicode(false)
                         .HasColumnType("varchar(256)");

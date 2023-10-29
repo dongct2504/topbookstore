@@ -75,6 +75,8 @@ public class Repository<T> : IRepository<T> where T : class
     }
 
     public void Add(T entity) => _dbset.Add(entity);
+    public void AddRange(List<T> values) => _dbset.AddRange(values);
+
     public void Remove(T entity) => _dbset.Remove(entity);
     public void RemoveRange(T entity) => _dbset.RemoveRange(entity);
 }

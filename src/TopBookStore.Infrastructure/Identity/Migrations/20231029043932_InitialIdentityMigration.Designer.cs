@@ -12,7 +12,7 @@ using TopBookStore.Infrastructure.Identity;
 namespace TopBookStore.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(IdentityTopBookStoreDbContext))]
-    [Migration("20231029012700_InitialIdentityMigration")]
+    [Migration("20231029043932_InitialIdentityMigration")]
     partial class InitialIdentityMigration
     {
         /// <inheritdoc />
@@ -434,7 +434,6 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                         .HasColumnType("varchar(128)");
 
                     b.Property<string>("TransactionId")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .IsUnicode(false)
                         .HasColumnType("varchar(256)");

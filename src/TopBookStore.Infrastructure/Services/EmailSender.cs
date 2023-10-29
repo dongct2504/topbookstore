@@ -32,8 +32,8 @@ public class EmailSender : IEmailSender
 
         TransactionalEmailsApi apiInstance = new();
 
-        string senderName = "Dong";
-        string senderEmail = "admin@gmail.com";
+        string senderName = "TopBookStore - Cay Trieu Dong";
+        string senderEmail = "dongminhcho0987@gmail.com";
         SendSmtpEmailSender smtpEmailFrom = new(senderName, senderEmail);
 
         string ToEmail = email;

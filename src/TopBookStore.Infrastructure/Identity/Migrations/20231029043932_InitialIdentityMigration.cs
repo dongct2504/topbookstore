@@ -174,7 +174,7 @@ namespace TopBookStore.Infrastructure.Identity.Migrations
                     Carrier = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: true),
                     OrderStatus = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
                     PaymentStatus = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
-                    TransactionId = table.Column<string>(type: "varchar(256)", unicode: false, maxLength: 256, nullable: false),
+                    TransactionId = table.Column<string>(type: "varchar(256)", unicode: false, maxLength: 256, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     Ward = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     District = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
