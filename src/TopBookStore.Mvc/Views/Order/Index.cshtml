@@ -3,12 +3,12 @@
     ViewData["Title"] = "Đặt hàng";
 }
 
-<form method="post" asp-action="Payment" >
+<form method="post" asp-action="Payment">
     <div class="card">
         <div class="card-header">
             <div class="row">
                 <div class="col-6 d-flex align-items-center">
-                    <span class="fas fa-shopping-cart"></span>&nbsp;Giỏ hàng của bạn
+                    <span class="fas fa-file-invoice"></span>&nbsp;Đơn đặt hàng của bạn
                 </div>
                 <div class="col-6 text-end">
                     <a class="btn btn-info" asp-controller="Cart"
@@ -22,14 +22,12 @@
         <div class="card-body">
             <div class="rounded p-2">
                 <div class="row">
-                    <div class="col-md-6 col-12 pb-4">
-                        <div class="row">
-                            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="text-info">Nhập thông tin người nhận</span>
-                            </h4>
-                        </div>
+                    <div class="col-lg-6 col-12 pb-4">
+                        <h4 class="mb-4">
+                            <span class="text-info">Thông tin người nhận</span>
+                        </h4>
 
-                        <div class="mb-3 row">
+                        <div class="row my-2">
                             <div class="col-md-3">
                                 <label class="form-label">Tên</label>
                             </div>
@@ -39,7 +37,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-3 row">
+                        <div class="row my-2">
                             <div class="col-md-3">
                                 <label class="form-label">Số điện thoại</label>
                             </div>
@@ -49,45 +47,55 @@
                             </div>
                         </div>
 
-                        <div class="mb-3 row">
+                        <div class="row my-2">
                             <div class="col-md-3">
-                                <label class="form-label">Đường</label>
+                                <label class="form-label">Địa chỉ</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="OrderDto.Street" />
-                                <span class="text-danger" asp-validation-for="OrderDto.Street"></span>
+                                <input class="form-control" asp-for="OrderDto.Address"
+                                       placeholder="108/2 Đường Hoàng Hoa Thám" />
+                                <span class="text-danger" asp-validation-for="OrderDto.Address"></span>
                             </div>
                         </div>
 
-                        <div class="mb-3 row">
+                        <div class="row my-2">
+                            <div class="col-md-3">
+                                <label class="form-label">Phường</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input class="form-control" asp-for="OrderDto.Ward"
+                                       placeholder="Phường Tân Thới Hiệp" />
+                                <span class="text-danger" asp-validation-for="OrderDto.Ward"></span>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
                             <div class="col-md-3">
                                 <label class="form-label">Quận</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="OrderDto.District" />
+                                <input class="form-control" asp-for="OrderDto.District"
+                                       placeholder="Quận Tân Bình" />
                                 <span class="text-danger" asp-validation-for="OrderDto.District"></span>
                             </div>
                         </div>
 
-                        <div class="mb-3 row">
+                        <div class="row my-2">
                             <div class="col-md-3">
                                 <label class="form-label">Thành phố</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="OrderDto.City" />
+                                <input class="form-control" asp-for="OrderDto.City"
+                                       placeholder="Hồ Chí Minh" />
                                 <span class="text-danger" asp-validation-for="OrderDto.City"></span>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="mb-3 row">
-                            <div class="col-md-3">
-                                <label class="form-label">Quốc gia</label>
-                            </div>
-                            <div class="col-md-9">
-                                <input class="form-control" asp-for="OrderDto.Country" />
-                                <span class="text-danger" asp-validation-for="OrderDto.Country"></span>
-                            </div>
-                        </div>
+                    <div class="col-lg-5 col-12 offset-lg-1">
+                        <h4 class="mb-4">
+                            <span class="text-info">Đơn đặt hàng của bạn</span>
+                        </h4>
                     </div>
                 </div>
             </div>

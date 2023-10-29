@@ -44,9 +44,13 @@ public class OrderDto
     [Unicode(false)]
     public string TransactionId { get; set; } = null!;
 
-    [Required(ErrorMessage = "Vui lòng nhập tên đường.")]
+    [Required(ErrorMessage = "Vui lòng nhập địa chỉ.")]
     [StringLength(50)]
-    public string? Street { get; set; }
+    public string? Address { get; set; }
+
+    [Required(ErrorMessage = "Vui lòng nhập tên phường.")]
+    [StringLength(50)]
+    public string? Ward { get; set; }
 
     [Required(ErrorMessage = "Vui lòng nhập tên quận.")]
     [StringLength(30)]
@@ -55,8 +59,4 @@ public class OrderDto
     [Required(ErrorMessage = "Vui lòng nhập tên thành phố.")]
     [StringLength(30)]
     public string? City { get; set; }
-
-    [Required(ErrorMessage = "Vui lòng nhập quốc gia.")]
-    [StringLength(60)]
-    public string? Country { get; set; }
 }

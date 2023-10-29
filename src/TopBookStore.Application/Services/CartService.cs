@@ -125,7 +125,12 @@ public class CartService : ICartService
         {
             Includes = "CartItems",
             Where = c => c.CustomerId == customerId
-        }) ?? throw new Exception("Cart not found");
+        });
+
+        if (cart is null)
+        {
+            return 0;
+        }
 
         int count = 0;
         foreach (CartItem cartItem in cart.CartItems)

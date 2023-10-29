@@ -41,10 +41,10 @@ public class OrderController : Controller
             Name = user.UserName,
             PhoneNumber = user?.PhoneNumber ?? string.Empty,
             TotalAmount = cart.TotalAmount,
-            Street = customer.Street,
+            Address = customer.Address,
+            Ward = customer.Ward,
             District = customer.District,
             City = customer.City,
-            Country = customer.Country,
             CustomerId = customer.CustomerId
         };
 

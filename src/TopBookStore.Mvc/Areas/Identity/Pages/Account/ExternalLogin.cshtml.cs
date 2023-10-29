@@ -33,6 +33,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityTopBookStoreUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ICustomerService _service;
 
         public ExternalLoginModel(
@@ -41,6 +42,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             IUserStore<IdentityTopBookStoreUser> userStore,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager,
             ICustomerService service)
         {
             _signInManager = signInManager;
@@ -49,6 +51,7 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
             _service = service;
         }
 
@@ -198,6 +201,19 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    if (!await _roleManager.RoleExistsAsync(RoleConstants.RoleCustomer))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(RoleConstants.RoleCustomer));
+                    }
+                    if (!await _roleManager.RoleExistsAsync(RoleConstants.RoleLibrarian))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(RoleConstants.RoleLibrarian));
+                    }
+                    if (!await _roleManager.RoleExistsAsync(RoleConstants.RoleAdmin))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(RoleConstants.RoleAdmin));
+                    }
+
                     await _userManager.AddToRoleAsync(user, RoleConstants.RoleCustomer);
 
                     result = await _userManager.AddLoginAsync(user, info);
