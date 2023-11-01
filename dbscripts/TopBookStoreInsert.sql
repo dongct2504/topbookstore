@@ -22,6 +22,12 @@ from Carts;
 select *
 from CartItems;
 
+select *
+from OrderDetails;
+
+select *
+from Orders;
+
 -- select statement for TopBookStore Identity tables
 select *
 from AspNetUsers;
