@@ -71,13 +71,11 @@
                     <a asp-controller="Book" asp-action="Details" asp-route-id="@book.BookId">
                         @if (book.ImageUrl is not null)
                         {
-                            <img src="@book.ImageUrl" class="card-img-top image
-                                image-fluid rounded" />
+                            <img src="@book.ImageUrl" class="card-img-top img-fluid rounded" />
                         }
                         else
                         {
-                            <img src="~/imgs/books/default.jpg" class="card-img-top image
-                                image-fluid rounded" />
+                            <img src="~/imgs/books/default.jpg" class="card-img-top img-fluid rounded" />
                         }
                     </a>
                     <div class="card-body">

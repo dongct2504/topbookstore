@@ -103,7 +103,7 @@
                                 <li class="list-group-item d-flex justify-content-between">
                                     <div>
                                         <h6>@orderDetail.Book.Title</h6>
-                                        <small class="text-muted">Giá: @orderDetail.Book.Price.ToString("#,## đ")</small>
+                                        <small class="text-muted">Giá: @orderDetail.Book.DiscountPrice.ToString("#,## đ")</small>
                                     </div>
                                     <div>
                                         <h6 class="text-muted">Tổng: @orderDetail.Price.ToString("#,## đ")</h6>
@@ -123,10 +123,10 @@
 
         <div class="card-footer">
             <div class="row">
-                <div class="col-lg-5 col-12 offset-lg-7">
-                    <button class="btn btn-primary form-control">
+                <div class="col-lg-4 offset-lg-8 col-md-6 offset-md-6">
+                    <a class="btn btn-primary form-control" asp-controller="Order" asp-action="Index">
                         Thanh toán
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
