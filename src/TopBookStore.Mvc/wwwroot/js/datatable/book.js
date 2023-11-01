@@ -28,11 +28,11 @@ $(document).ready(() => {
                 "render": (data) => {
                     return `
                         <div class="text-center">
-                            <a class="btn btn-success text-white mb-2 mt-2"
+                            <a class="btn btn-success text-white mb-1 mt-2"
                                 href="/admin/book/upsert/${data}">
                                 <span class="fas fa-edit"></span>&nbsp;Sửa
                             </a>
-                            <a class="btn btn-danger text-white mb-2 mt-2"
+                            <a class="btn btn-danger text-white mb-2 mt-1"
                                 onclick=Delete("/admin/book/deleteBook/${data}")>
                                 <span class="fas fa-trash-alt"></span>&nbsp;Xóa
                             </a>

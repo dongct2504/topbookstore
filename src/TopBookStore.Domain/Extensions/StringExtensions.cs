@@ -26,7 +26,19 @@ public static class StringExtensions
         return int.TryParse(str, out int value) ? value : 0;
     }
 
-    public static string Capitalize(this string str) =>
-        // str?.Substring(0, 1)?.ToUpper() + str?.Substring(1)?.ToLower();
-        str?[..1]?.ToUpper() + str?[1..].ToLower();
+    public static string Capitalize(this string str)
+    {
+        // return str?.Substring(0, 1)?.ToUpper() + str?.Substring(1)?.ToLower();
+        return str[..1]?.ToUpper() + str[1..].ToLower();
+    }
+
+    public static string DisplayTitle(this string str)
+    {
+        return str.Length > 28 ? str[..28] + "..." : str;
+    }
+
+    public static string DisplayDescription(this string str)
+    {
+        return str.Length > 160 ? str[..160] + "..." : str;
+    }
 }

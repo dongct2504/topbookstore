@@ -80,7 +80,7 @@
                     </a>
                     <div class="card-body">
                         <a asp-controller="Book" asp-action="Details" asp-route-id="@book.BookId">
-                            <h6 class="card-title">@book.Title</h6>
+                            <h6 class="card-title">@book.Title.DisplayTitle()</h6>
                         </a>
                         <p class="card-price">
                             Giá: <b>@book.DiscountPrice.ToString("#,## đ")</b><br />
