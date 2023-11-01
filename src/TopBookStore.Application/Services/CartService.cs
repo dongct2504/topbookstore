@@ -52,13 +52,13 @@ public class CartService : ICartService
 
         // Check if there are already have a cartItem or that cartItem have book
         // then update it's quantity
-        CartItem? cartItemFromDb = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
+        CartItem? existingCartItem = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
         {
             Includes = "Book",
             Where = ci => ci.CartItemId == cartItem.CartItemId
         });
 
-        if (cartItemFromDb is null) // add
+        if (existingCartItem is null) // add
         {
             cartItem.CartId = cart.CartId;
 
@@ -78,18 +78,18 @@ public class CartService : ICartService
         {
             if (cartItem.Quantity > 0)
             {
-                cart.TotalAmount -= cartItemFromDb.Price;
+                cart.TotalAmount -= existingCartItem.Price;
 
-                cartItemFromDb.Quantity = cartItem.Quantity;
+                existingCartItem.Quantity = cartItem.Quantity;
 
-                cartItemFromDb.Price = cartItemFromDb.Book.DiscountPrice * cartItemFromDb.Quantity;
+                existingCartItem.Price = existingCartItem.Book.DiscountPrice * existingCartItem.Quantity;
 
-                cart.TotalAmount += cartItemFromDb.Price;
+                cart.TotalAmount += existingCartItem.Price;
             }
             else
             {
-                cart.TotalAmount -= cartItemFromDb.Price;
-                _data.CartItems.Remove(cartItemFromDb);
+                cart.TotalAmount -= existingCartItem.Price;
+                _data.CartItems.Remove(existingCartItem);
             }
         }
 
