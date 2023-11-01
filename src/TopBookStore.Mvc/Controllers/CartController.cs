@@ -33,9 +33,9 @@ public class CartController : Controller
 
         HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey,
             await _cartService.GetTotalCartItemsCountAsync(user.CustomerId));
-        
+
         Cart cart = await _cartService.GetCartByCustomerAsync(user.CustomerId) ?? new Cart();
-        
+
         cart.CartItems = (await _cartItemService.GetAllCartItemsByCartIdAsync(cart.CartId)).ToList();
 
         return View(cart);
@@ -46,8 +46,8 @@ public class CartController : Controller
     {
         ClaimsIdentity? claimsIdentity = User.Identity as ClaimsIdentity;
         Claim? claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
-        IdentityTopBookStoreUser user = await _context.Users.FindAsync(claim?.Value) ??
-            throw new Exception("User not found.");
+        IdentityTopBookStoreUser? user = await _context.Users.FindAsync(claim?.Value)
+            ?? throw new Exception("User not found.");
 
         await _cartService.AddCartItemAsync(user.CustomerId, cartItem);
 
@@ -59,8 +59,8 @@ public class CartController : Controller
     {
         ClaimsIdentity? claimsIdentity = User.Identity as ClaimsIdentity;
         Claim? claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
-        IdentityTopBookStoreUser user = await _context.Users.FindAsync(claim?.Value) ??
-            throw new Exception("User not found.");
+        IdentityTopBookStoreUser? user = await _context.Users.FindAsync(claim?.Value)
+            ?? throw new Exception("User not found.");
 
         CartItem? cartItem = await _cartItemService.GetCartItemByIdAsync(id);
         if (cartItem is null)

@@ -31,8 +31,8 @@ public class HomeController : Controller
         Claim? claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
         if (claim is not null) // user have login, retrieve the cart item quantity
         {
-            IdentityTopBookStoreUser? user = await _context.Users.FindAsync(claim.Value) ??
-                throw new Exception("User not found.");
+            IdentityTopBookStoreUser? user = await _context.Users.FindAsync(claim.Value)
+                ?? throw new Exception("User not found.");
 
             HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey,
                 await _cartService.GetTotalCartItemsCountAsync(user.CustomerId));

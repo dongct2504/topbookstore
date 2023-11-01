@@ -9,6 +9,8 @@ public class CartItemDto
     // minimal amount of data needed to restore data from database.
     public int CartItemId { get; set; }
 
+    public int CartId { get; set; }
+
     public int BookId { get; set; }
 
     public Book Book { get; set; } = null!;

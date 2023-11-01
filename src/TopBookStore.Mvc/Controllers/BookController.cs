@@ -7,6 +7,9 @@ using TopBookStore.Mvc.Models;
 using TopBookStore.Application.Interfaces;
 using TopBookStore.Domain.Interfaces;
 using System.Security.Claims;
+using TopBookStore.Infrastructure.Identity;
+using TopBookStore.Infrastructure.Persistence;
+using TopBookStore.Application.Services;
 
 namespace TopBookStore.Mvc.Controllers;
 
@@ -14,11 +17,14 @@ public class BookController : Controller
 {
     private readonly IBookService _service;
     private readonly ITopBookStoreUnitOfWork _data;
+    private readonly TopBookStoreContext _context;
 
-    public BookController(IBookService service, ITopBookStoreUnitOfWork data)
+    public BookController(IBookService service, ITopBookStoreUnitOfWork data,
+        TopBookStoreContext context)
     {
         _service = service;
         _data = data;
+        _context = context;
     }
 
     public async Task<IActionResult> Index(BookGridDto values)
@@ -60,18 +66,31 @@ public class BookController : Controller
             Quantity = 1
         };
 
-        if (User.Identity?.IsAuthenticated ?? false) // user have login, retrieve the cart item quantity
+        ClaimsIdentity? claimsIdentity = User.Identity as ClaimsIdentity;
+        Claim? claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+        if (claim is not null) // user have login, retrieve the cart item quantity
         {
-            CartItem? cartItemFromDb = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
+            IdentityTopBookStoreUser? user = await _context.Users.FindAsync(claim.Value)
+                ?? throw new Exception("User not found.");
+
+            Cart? cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
             {
-                Where = ci => ci.BookId == cartItemDto.BookId
+                Where = c => c.CustomerId == user.CustomerId
+            }) ?? throw new Exception("Cart not found");
+
+            // first, it need to be exist in cart
+            // second, what book in the cart
+            CartItem? existingCartItem = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
+            {
+                Where = ci => ci.CartId == cart.CartId && ci.BookId == book.BookId
             });
 
             // Already have one in db
-            if (cartItemFromDb is not null)
+            if (existingCartItem is not null)
             {
-                cartItemDto.CartItemId = cartItemFromDb.CartItemId;
-                cartItemDto.Quantity = cartItemFromDb.Quantity;
+                cartItemDto.CartId = existingCartItem.CartId;
+                cartItemDto.CartItemId = existingCartItem.CartItemId;
+                cartItemDto.Quantity = existingCartItem.Quantity;
             }
         }
 
