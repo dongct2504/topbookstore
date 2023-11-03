@@ -76,21 +76,24 @@ public class BookController : Controller
             Cart? cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
             {
                 Where = c => c.CustomerId == user.CustomerId
-            }) ?? throw new Exception("Cart not found");
-
-            // first, it need to be exist in cart
-            // second, what book in the cart
-            CartItem? existingCartItem = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
-            {
-                Where = ci => ci.CartId == cart.CartId && ci.BookId == book.BookId
             });
 
-            // Already have one in db
-            if (existingCartItem is not null)
+            if (cart is not null)
             {
-                cartItemDto.CartId = existingCartItem.CartId;
-                cartItemDto.CartItemId = existingCartItem.CartItemId;
-                cartItemDto.Quantity = existingCartItem.Quantity;
+                // first, it need to be exist in cart
+                // second, what book in the cart
+                CartItem? existingCartItem = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
+                {
+                    Where = ci => ci.CartId == cart.CartId && ci.BookId == book.BookId
+                });
+
+                // Already have one in db
+                if (existingCartItem is not null)
+                {
+                    cartItemDto.CartId = existingCartItem.CartId;
+                    cartItemDto.CartItemId = existingCartItem.CartItemId;
+                    cartItemDto.Quantity = existingCartItem.Quantity;
+                }
             }
         }
 
