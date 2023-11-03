@@ -77,10 +77,13 @@ public class OrderController : Controller
 
         foreach (CartItem cartItem in cart.CartItems)
         {
+            // this is also the same as cart in Details action in Book controller
+            // first check the order detail belong to what order
+            // then get the order details has associate with a book
             OrderDetail? existingOrderDetail = await _data.OrderDetails.GetAsync(
                 new QueryOptions<OrderDetail>
                 {
-                    Where = od => od.BookId == cartItem.BookId
+                    Where = od => od.OrderId == order.OrderId && od.BookId == cartItem.BookId
                 });
 
             if (existingOrderDetail is null)

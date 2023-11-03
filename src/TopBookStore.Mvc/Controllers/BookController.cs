@@ -80,7 +80,7 @@ public class BookController : Controller
 
             if (cart is not null)
             {
-                // first, it need to be exist in cart
+                // first, it need to be exist in cart (belong to what cart)
                 // second, what book in the cart
                 CartItem? existingCartItem = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
                 {
