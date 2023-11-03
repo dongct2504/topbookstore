@@ -42,7 +42,7 @@ public class OrderController : Controller
         Cart? cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
         {
             Includes = "CartItems.Book",
-
+            Where = c => c.CartId == id
         });
         if (cart is null)
         {
@@ -83,13 +83,7 @@ public class OrderController : Controller
                     Where = od => od.BookId == cartItem.BookId
                 });
 
-            if (existingOrderDetail is not null)
-            {
-                // Update existing order detail
-                existingOrderDetail.Quantity = cartItem.Quantity;
-                existingOrderDetail.Price = cartItem.Price;
-            }
-            else
+            if (existingOrderDetail is null)
             {
                 // Create new order detail
                 OrderDetail orderDetail = new()
@@ -102,6 +96,12 @@ public class OrderController : Controller
                 };
 
                 orderDetails.Add(orderDetail);
+            }
+            else
+            {
+                // Update existing order detail
+                existingOrderDetail.Quantity = cartItem.Quantity;
+                existingOrderDetail.Price = cartItem.Price;
             }
         }
 

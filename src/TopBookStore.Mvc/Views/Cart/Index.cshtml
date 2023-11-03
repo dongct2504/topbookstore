@@ -104,7 +104,8 @@
         <div class="card-footer">
             <div class="row">
                 <div class="col-lg-4 offset-lg-8 col-md-6 offset-md-6">
-                    <a class="btn btn-primary form-control" asp-controller="Order" asp-action="Index">
+                    <a class="btn btn-primary form-control" asp-controller="Order" asp-action="Index"
+                       asp-route-id="@Model.CartId">
                         Xác nhận
                     </a>
                 </div>
