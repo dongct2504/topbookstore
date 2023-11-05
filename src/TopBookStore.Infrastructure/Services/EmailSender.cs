@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using sib_api_v3_sdk.Api;
 using sib_api_v3_sdk.Client;
 using sib_api_v3_sdk.Model;
+using TopBookStore.Domain.Common;
 
 namespace TopBookStore.Infrastructure.Services;
 

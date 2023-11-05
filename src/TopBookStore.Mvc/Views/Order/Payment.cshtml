@@ -1,9 +1,15 @@
-@model OrderDto
+@model OrderIndexViewModel
+@using Microsoft.Extensions.Options
+@using TopBookStore.Domain.Common
+
+@* Inject it just like with EmailSender so we can access its key *@
+@inject IOptions<StripeSettings> Stripe
+
 @{
     ViewData["Title"] = "Đặt hàng";
 }
 
-<form method="post" asp-action="Payment">
+<form asp-action="Payment" method="post">
     <div class="card">
         <div class="card-header">
             <div class="row">
@@ -23,6 +29,10 @@
             <div class="rounded p-2">
                 <div class="row">
                     <div class="col-lg-6 col-12 pb-4">
+                        <input type="hidden" asp-for="OrderDto.OrderId" />
+                        <input type="hidden" asp-for="CartDto.CartId" />
+                        <input type="hidden" asp-for="CartDto.TotalAmount" />
+
                         <h4 class="mb-4">
                             <span class="text-info">Thông tin người nhận</span>
                         </h4>
@@ -32,8 +42,8 @@
                                 <label class="form-label">Tên</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="Name" />
-                                <span class="text-danger" asp-validation-for="Name"></span>
+                                <input class="form-control" asp-for="OrderDto.Name" />
+                                <span class="text-danger" asp-validation-for="OrderDto.Name"></span>
                             </div>
                         </div>
 
@@ -42,8 +52,8 @@
                                 <label class="form-label">Số điện thoại</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="PhoneNumber" />
-                                <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                                <input class="form-control" asp-for="OrderDto.PhoneNumber" />
+                                <span class="text-danger" asp-validation-for="OrderDto.PhoneNumber"></span>
                             </div>
                         </div>
 
@@ -52,9 +62,9 @@
                                 <label class="form-label">Địa chỉ</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="Address"
+                                <input class="form-control" asp-for="OrderDto.Address"
                                        placeholder="108/2 Đường Hoàng Hoa Thám" />
-                                <span class="text-danger" asp-validation-for="Address"></span>
+                                <span class="text-danger" asp-validation-for="OrderDto.Address"></span>
                             </div>
                         </div>
 
@@ -63,9 +73,9 @@
                                 <label class="form-label">Phường</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="Ward"
+                                <input class="form-control" asp-for="OrderDto.Ward"
                                        placeholder="Phường Tân Thới Hiệp" />
-                                <span class="text-danger" asp-validation-for="Ward"></span>
+                                <span class="text-danger" asp-validation-for="OrderDto.Ward"></span>
                             </div>
                         </div>
 
@@ -74,9 +84,9 @@
                                 <label class="form-label">Quận</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="District"
+                                <input class="form-control" asp-for="OrderDto.District"
                                        placeholder="Quận Tân Bình" />
-                                <span class="text-danger" asp-validation-for="District"></span>
+                                <span class="text-danger" asp-validation-for="OrderDto.District"></span>
                             </div>
                         </div>
 
@@ -85,9 +95,9 @@
                                 <label class="form-label">Thành phố</label>
                             </div>
                             <div class="col-md-9">
-                                <input class="form-control" asp-for="City"
+                                <input class="form-control" asp-for="OrderDto.City"
                                        placeholder="Hồ Chí Minh" />
-                                <span class="text-danger" asp-validation-for="City"></span>
+                                <span class="text-danger" asp-validation-for="OrderDto.City"></span>
                             </div>
                         </div>
                     </div>
@@ -98,22 +108,31 @@
                         </h4>
 
                         <ul class="list-group mb-3">
-                            @foreach (OrderDetail orderDetail in Model.OrderDetails)
+                            @foreach (CartItem cartItem in Model.CartDto.CartItems)
                             {
                                 <li class="list-group-item d-flex justify-content-between">
                                     <div>
-                                        <h6>@orderDetail.Book.Title</h6>
-                                        <small class="text-muted">Giá: @orderDetail.Book.DiscountPrice.ToString("#,## đ")</small>
+                                        <h6>@cartItem.Book.Title</h6>
+                                        <small class="text-muted">
+                                            Giá: @cartItem.Book.DiscountPrice.ToString("#,## đ")
+                                        </small>
                                     </div>
                                     <div>
-                                        <h6 class="text-muted">Tổng: @orderDetail.Price.ToString("#,## đ")</h6>
-                                        <small class="text-muted">Số lượng: @orderDetail.Quantity</small>
+                                        <h6 class="text-muted">
+                                            Tổng: @cartItem.Price.ToString("#,## đ")
+                                        </h6>
+                                        <small class="text-muted">
+                                            Số lượng: @cartItem.Quantity
+                                        </small>
                                     </div>
                                 </li>
                             }
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <li class="list-group-item d-flex justify-content-between
+                                       align-items-center bg-light">
                                 <h6 class="text-info">Tổng (VND)</h6>
-                                <h5 class="text-info">@Model.TotalAmount.ToString("#,## đ")</h5>
+                                <h5 class="text-info">
+                                    <strong>@Model.CartDto.TotalAmount.ToString("#,## đ")</strong>
+                                </h5>
                             </li>
                         </ul>
                     </div>
@@ -123,10 +142,23 @@
 
         <div class="card-footer">
             <div class="row">
-                <div class="col-lg-4 offset-lg-8 col-md-6 offset-md-6">
-                    <a class="btn btn-primary form-control" asp-controller="Order" asp-action="Index">
+                <div class="col-lg-4 offset-lg-8 col-6 offset-6">
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="@Stripe.Value.PublishableKey"
+                            data-amount="@Model.CartDto.TotalAmount"
+                            data-template-name="TopBookStore"
+                            data-label="Thanh toán"
+                            data-description="Mua thỏa thích"
+                            data-currency="VND"
+                            data-locale="auto" @* data-locale="auto" will determine base on broswer *@
+                            data-allow-remember-me="false">
+                    </script>
+                    <script>
+                        document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
+                    </script>
+                    <button type="submit" class="btn btn-primary form-control">
                         Thanh toán
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>

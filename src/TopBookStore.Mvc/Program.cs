@@ -11,6 +11,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using TopBookStore.Infrastructure.Services;
+using TopBookStore.Domain.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,10 +56,10 @@ builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICartItemService, CartItemService>();
 builder.Services.AddTransient<ICartService, CartService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
-
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.Configure<EmailOptions>(builder.Configuration);
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 // string fbAppId = Environment.
 //     GetEnvironmentVariable("FACEBOOK_APP_ID", EnvironmentVariableTarget.User) ?? string.Empty;
@@ -101,6 +102,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+//// set api key add Stripe to middleware
+//Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
 
 app.UseSession();
 

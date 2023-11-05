@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TopBookStore.Application.DTOs;
 using TopBookStore.Application.Interfaces;
+using TopBookStore.Domain.Constants;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Domain.Interfaces;
 using TopBookStore.Domain.Queries;
 using TopBookStore.Infrastructure.Identity;
 using TopBookStore.Infrastructure.Persistence;
+using TopBookStore.Mvc.Models;
 
 namespace TopBookStore.Mvc.Controllers;
 
@@ -29,7 +31,8 @@ public class OrderController : Controller
         _mapper = mapper;
     }
 
-    public async Task<IActionResult> Index(int id)
+    [HttpGet]
+    public async Task<IActionResult> Payment(int id)
     {
         ClaimsIdentity? claimsIdentity = User.Identity as ClaimsIdentity;
         Claim? claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
@@ -49,50 +52,67 @@ public class OrderController : Controller
             return NotFound();
         }
 
-        Order? order = await _service.GetOrderByCustomerIdAsync(customer.CustomerId);
-
-        if (order is null)
+        OrderDto orderDto = new()
         {
-            order = new Order()
+            Name = customer.FullName,
+            PhoneNumber = user.PhoneNumber ?? string.Empty
+        };
+
+        OrderIndexViewModel vm = new()
+        {
+            OrderDto = orderDto,
+            CartDto = _mapper.Map<CartDto>(cart)
+        };
+
+        return View(vm);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Payment(OrderIndexViewModel vm)
+    {
+        if (ModelState.IsValid)
+        {
+            ClaimsIdentity? claimsIdentity = User.Identity as ClaimsIdentity;
+            Claim? claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+            IdentityTopBookStoreUser user = await _context.Users.FindAsync(claim?.Value) ??
+                throw new Exception("User not found.");
+
+            Customer customer = await _data.Customers.GetAsync(user.CustomerId) ??
+                throw new Exception("Customer not found.");
+
+            Order order = new()
             {
                 Name = customer.FullName,
                 PhoneNumber = user.PhoneNumber ?? string.Empty,
+                OrderStatus = StatusConstants.StatusPending,
+                PaymentStatus = StatusConstants.PaymentStatusPending,
                 OrderDate = DateTime.Now,
                 ShippingDate = DateTime.Now.AddDays(2),
-                Address = customer.Address,
-                Ward = customer.Ward,
-                District = customer.District,
-                City = customer.City,
+                TotalAmount = vm.CartDto.TotalAmount,
+                Address = vm.OrderDto.Address,
+                Ward = vm.OrderDto.Ward,
+                District = vm.OrderDto.District,
+                City = vm.OrderDto.City,
                 CustomerId = customer.CustomerId
             };
 
             await _service.AddOrderAsync(order);
-        }
 
-        // Add or Update order total amount here
-        order.TotalAmount = cart.TotalAmount;
+            Cart existingCart = await _data.Carts.GetAsync(new QueryOptions<Cart>
+            {
+                Includes = "CartItems",
+                Where = c => c.CartId == vm.CartDto.CartId
+            }) ?? throw new Exception("Cart not found.");
 
-        // Add or Update order details
-        List<OrderDetail> orderDetails = new();
+            List<OrderDetail> orderDetails = new();
 
-        foreach (CartItem cartItem in cart.CartItems)
-        {
-            // this is also the same as cart in Details action in Book controller
-            // first check the order detail belong to what order
-            // then get the order details has associate with a book
-            OrderDetail? existingOrderDetail = await _data.OrderDetails.GetAsync(
-                new QueryOptions<OrderDetail>
-                {
-                    Where = od => od.OrderId == order.OrderId && od.BookId == cartItem.BookId
-                });
-
-            if (existingOrderDetail is null)
+            foreach (CartItem cartItem in existingCart.CartItems)
             {
                 // Create new order detail
                 OrderDetail orderDetail = new()
                 {
                     BookId = cartItem.BookId,
-                    Book = cartItem.Book,
                     Quantity = cartItem.Quantity,
                     Price = cartItem.Price,
                     OrderId = order.OrderId
@@ -100,26 +120,35 @@ public class OrderController : Controller
 
                 orderDetails.Add(orderDetail);
             }
-            else
-            {
-                // Update existing order detail
-                existingOrderDetail.Quantity = cartItem.Quantity;
-                existingOrderDetail.Price = cartItem.Price;
-            }
+
+            _data.OrderDetails.AddRange(orderDetails);
+            await _data.SaveAsync();
+
+            _data.Carts.Remove(existingCart); // remove cart and it's cart items
+            HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey, 0);
+
+            return RedirectToAction("OrderConfirmation", "Order", new { id = order.OrderId });
         }
 
-        // Remove order details for cart items that were removed
-        List<OrderDetail> removedOrderDetails = order.OrderDetails
-            .Where(od => !cart.CartItems.Any(ci => ci.BookId == od.BookId))
-            .ToList();
+        Cart cart = await _data.Carts.GetAsync(new QueryOptions<Cart>
+        {
+            Includes = "CartItems.Book",
+            Where = c => c.CartId == vm.CartDto.CartId
+        }) ?? throw new Exception("Cart not found.");
 
-        _data.OrderDetails.RemoveRange(removedOrderDetails);
+        vm.CartDto = _mapper.Map<CartDto>(cart);
 
-        _data.OrderDetails.AddRange(orderDetails);
-        await _data.SaveAsync();
+        return View(vm);
+    }
 
-        OrderDto orderDto = _mapper.Map<OrderDto>(order);
+    public async Task<IActionResult> OrderConfirmation(int id)
+    {
+        Order? order = await _service.GetOrderByIdAsync(id);
+        if (order is null)
+        {
+            return NotFound();
+        }
 
-        return View(orderDto);
+        return View(order);
     }
 }

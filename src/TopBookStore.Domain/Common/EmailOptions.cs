@@ -1,4 +1,4 @@
-namespace TopBookStore.Infrastructure.Services;
+namespace TopBookStore.Domain.Common;
 
 public class EmailOptions
 {
