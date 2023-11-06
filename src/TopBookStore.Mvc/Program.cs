@@ -103,8 +103,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//// set api key add Stripe to middleware
-//Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
+// set api key add Stripe to middleware
+Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
 
 app.UseSession();
 

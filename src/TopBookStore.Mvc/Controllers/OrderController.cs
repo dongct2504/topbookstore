@@ -69,7 +69,7 @@ public class OrderController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Payment(OrderIndexViewModel vm)
+    public async Task<IActionResult> Payment(OrderIndexViewModel vm, string stripeToken)
     {
         if (ModelState.IsValid)
         {
@@ -87,8 +87,8 @@ public class OrderController : Controller
                 PhoneNumber = user.PhoneNumber ?? string.Empty,
                 OrderStatus = StatusConstants.StatusPending,
                 PaymentStatus = StatusConstants.PaymentStatusPending,
-                OrderDate = DateTime.Now,
-                ShippingDate = DateTime.Now.AddDays(2),
+                OrderDate = new DateTime(1999, 1, 1),
+                ShippingDate = new DateTime(1999, 1, 1),
                 TotalAmount = vm.CartDto.TotalAmount,
                 Address = vm.OrderDto.Address,
                 Ward = vm.OrderDto.Ward,
@@ -106,7 +106,6 @@ public class OrderController : Controller
             }) ?? throw new Exception("Cart not found.");
 
             List<OrderDetail> orderDetails = new();
-
             foreach (CartItem cartItem in existingCart.CartItems)
             {
                 // Create new order detail
@@ -120,12 +119,55 @@ public class OrderController : Controller
 
                 orderDetails.Add(orderDetail);
             }
-
             _data.OrderDetails.AddRange(orderDetails);
-            await _data.SaveAsync();
 
             _data.Carts.Remove(existingCart); // remove cart and it's cart items
+
+            await _data.SaveAsync();
+
+            // after add order details, remove existing Cart and save changes, remember
+            // to set cart item's quantity in session to 0
             HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey, 0);
+
+            if (stripeToken is null)
+            {
+                throw new ArgumentNullException(nameof(stripeToken));
+            }
+            else
+            {
+                // because Stripe namespace, specificly Stripe.Customer is dulicated with
+                // entity Customer, I have to do this.
+                Stripe.ChargeCreateOptions options = new()
+                {
+                    Amount = (long)order.TotalAmount,
+                    Currency = "VND",
+                    Description = "Order Id: " + order.OrderId,
+                    Source = stripeToken
+                };
+
+                Stripe.ChargeService service = new();
+                // will make a call to create transaction
+                Stripe.Charge charge = await service.CreateAsync(options);
+
+                if (charge.BalanceTransactionId is null)
+                {
+                    order.PaymentStatus = StatusConstants.PaymentStatusRejected;
+                }
+                else
+                {
+                    order.TransactionId = charge.BalanceTransactionId;
+                }
+
+                if (charge.Status.ToLower() == "succeeded")
+                {
+                    order.PaymentStatus = StatusConstants.PaymentStatusApproved;
+                    order.OrderStatus = StatusConstants.StatusApproved;
+                    order.OrderDate = DateTime.Now;
+                    order.ShippingDate = DateTime.Now.AddDays(2);
+                }
+
+                await _data.SaveAsync();
+            }
 
             return RedirectToAction("OrderConfirmation", "Order", new { id = order.OrderId });
         }
