@@ -1,10 +1,10 @@
 ﻿using TopBookStore.Application.DTOs;
+using TopBookStore.Domain.Entities;
 
 namespace TopBookStore.Mvc.Models;
 
-public class OrderIndexViewModel
+public class BookDetailsViewModel
 {
-    public OrderDto OrderDto { get; set; } = new();
-    public CartDto CartDto { get; set; } = new();
     public CartItemDto CartItemDto { get; set; } = new();
+    public Book Book { get; set; } = new();
 }

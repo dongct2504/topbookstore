@@ -31,6 +31,59 @@ public class OrderController : Controller
         _mapper = mapper;
     }
 
+    // Note: I have to use CartItemDto because in details I have BookDetailsVM
+    // have CartItemDto so it will pass CartItemDto
+    [HttpGet]
+    public async Task<IActionResult> PaymentForOneItem(CartItemDto cartItemDto)
+    {
+        Book? book = await _data.Books.GetAsync(cartItemDto.BookId);
+        if (book is null)
+        {
+            return NotFound();
+        }
+
+        ClaimsIdentity? claimsIdentity = User.Identity as ClaimsIdentity;
+        Claim? claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+        IdentityTopBookStoreUser user = await _context.Users.FindAsync(claim?.Value)
+            ?? throw new Exception("User not found.");
+
+        Customer customer = await _data.Customers.GetAsync(user.CustomerId) ??
+            throw new Exception("Customer not found.");
+
+        // remember to set price
+        cartItemDto.Price = book.DiscountPrice * cartItemDto.Quantity;
+
+        List<CartItem> cartItems = new()
+        {
+            new CartItem()
+            {
+                BookId = book.BookId,
+                Book = book,
+                Quantity = cartItemDto.Quantity,
+                Price = cartItemDto.Price
+            }
+        };
+
+        OrderDto orderDto = new()
+        {
+            Name = customer.FullName,
+            PhoneNumber = user.PhoneNumber ?? string.Empty
+        };
+
+        OrderIndexViewModel vm = new()
+        {
+            OrderDto = orderDto,
+            CartDto = new CartDto
+            {
+                CartItems = cartItems,
+                TotalAmount = book.DiscountPrice * cartItemDto.Quantity
+            },
+            CartItemDto = cartItemDto
+        };
+
+        return View("Payment", vm);
+    }
+
     [HttpGet]
     public async Task<IActionResult> Payment(int id)
     {
@@ -81,6 +134,18 @@ public class OrderController : Controller
             Customer customer = await _data.Customers.GetAsync(user.CustomerId) ??
                 throw new Exception("Customer not found.");
 
+            Cart? existingCart = await _data.Carts.GetAsync(new QueryOptions<Cart>
+            {
+                Includes = "CartItems",
+                Where = c => c.CartId == vm.CartDto.CartId
+            });
+
+            // if it not has cart, it should have item in CartItemDto so better check it
+            if (existingCart is null && vm.CartItemDto.BookId == 0)
+            {
+                throw new Exception("Cart and item not found.");
+            }
+
             Order order = new()
             {
                 Name = customer.FullName,
@@ -99,29 +164,37 @@ public class OrderController : Controller
 
             await _service.AddOrderAsync(order);
 
-            Cart existingCart = await _data.Carts.GetAsync(new QueryOptions<Cart>
+            if (existingCart is null)
             {
-                Includes = "CartItems",
-                Where = c => c.CartId == vm.CartDto.CartId
-            }) ?? throw new Exception("Cart not found.");
-
-            List<OrderDetail> orderDetails = new();
-            foreach (CartItem cartItem in existingCart.CartItems)
-            {
-                // Create new order detail
                 OrderDetail orderDetail = new()
                 {
-                    BookId = cartItem.BookId,
-                    Quantity = cartItem.Quantity,
-                    Price = cartItem.Price,
+                    BookId = vm.CartItemDto.BookId,
+                    Quantity = vm.CartItemDto.Quantity,
+                    Price = vm.CartItemDto.Price,
                     OrderId = order.OrderId
                 };
-
-                orderDetails.Add(orderDetail);
+                _data.OrderDetails.Add(orderDetail);
             }
-            _data.OrderDetails.AddRange(orderDetails);
+            else
+            {
+                List<OrderDetail> orderDetails = new();
+                foreach (CartItem cartItem in existingCart.CartItems)
+                {
+                    // Create new order detail
+                    OrderDetail orderDetail = new()
+                    {
+                        BookId = cartItem.BookId,
+                        Quantity = cartItem.Quantity,
+                        Price = cartItem.Price,
+                        OrderId = order.OrderId
+                    };
 
-            _data.Carts.Remove(existingCart); // remove cart and it's cart items
+                    orderDetails.Add(orderDetail);
+                }
+                _data.OrderDetails.AddRange(orderDetails);
+
+                _data.Carts.Remove(existingCart); // remove cart and it's cart items
+            }
 
             await _data.SaveAsync();
 
@@ -129,6 +202,7 @@ public class OrderController : Controller
             // to set cart item's quantity in session to 0
             HttpContext.Session.SetInt32(SessionCookieConstants.CartItemQuantityKey, 0);
 
+            // making payment
             if (stripeToken is null)
             {
                 throw new ArgumentNullException(nameof(stripeToken));

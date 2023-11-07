@@ -62,7 +62,6 @@ public class BookController : Controller
         CartItemDto cartItemDto = new()
         {
             BookId = book.BookId,
-            Book = book,
             Quantity = 1
         };
 
@@ -81,7 +80,7 @@ public class BookController : Controller
             if (cart is not null)
             {
                 // first, it need to be exist in cart (belong to what cart)
-                // second, what book in the cart
+                // second, does it match the book we need to find in the cart?
                 CartItem? existingCartItem = await _data.CartItems.GetAsync(new QueryOptions<CartItem>
                 {
                     Where = ci => ci.CartId == cart.CartId && ci.BookId == book.BookId
@@ -97,7 +96,13 @@ public class BookController : Controller
             }
         }
 
-        return View(cartItemDto);
+        BookDetailsViewModel vm = new()
+        {
+            CartItemDto = cartItemDto,
+            Book = book
+        };
+
+        return View(vm);
     }
 
     public RedirectToActionResult FilterBooks(string[] filter, bool clear = false)

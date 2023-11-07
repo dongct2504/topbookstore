@@ -29,9 +29,13 @@
             <div class="rounded p-2">
                 <div class="row">
                     <div class="col-lg-6 col-12 pb-4">
-                        <input type="hidden" asp-for="OrderDto.OrderId" />
                         <input type="hidden" asp-for="CartDto.CartId" />
                         <input type="hidden" asp-for="CartDto.TotalAmount" />
+
+                        @* If they buy single item *@
+                        <input type="hidden" asp-for="CartItemDto.BookId" />
+                        <input type="hidden" asp-for="CartItemDto.Quantity" />
+                        <input type="hidden" asp-for="CartItemDto.Price" />
 
                         <h4 class="mb-4">
                             <span class="text-info">Thông tin người nhận</span>

@@ -1,4 +1,4 @@
-@model CartItemDto
+@model BookDetailsViewModel
 @{
     ViewData["Title"] = "Chi Tiết Sách";
 }
@@ -9,13 +9,13 @@
     <div class="col-lg-3 col-md-5">
         @if (Model.Book.ImageUrl is not null)
         {
-            <img class="image image-fluid rounded" 
-                src="@Model.Book.ImageUrl" id="previewImage" width="230" />
+            <img class="image image-fluid rounded"
+                 src="@Model.Book.ImageUrl" id="previewImage" width="230" />
         }
         else
         {
-            <img class="image image-fluid rounded" 
-                src="~/imgs/books/default.jpg" id="previewImage" width="230" />
+            <img class="image image-fluid rounded"
+                 src="~/imgs/books/default.jpg" id="previewImage" width="230" />
         }
     </div>
 
@@ -33,14 +33,15 @@
             <tr>
                 <td>Giá</td>
                 <td>
-                    @Model.Book.DiscountPrice.ToString("#,## đ") - 
+                    @Model.Book.DiscountPrice.ToString("#,## đ") -
                     Đã giảm @Model.Book.DiscountAmount.ToString("#,## đ")
                 </td>
             </tr>
             <tr>
                 <td>Tác giả</td>
                 <td>
-                    <a asp-controller="Author" asp-action="Details">
+                    <a asp-controller="Author" asp-action="Details"
+                       asp-route-id="@Model.Book.AuthorId">
                         @Model.Book.Author.FullName
                     </a>
                 </td>
@@ -65,29 +66,29 @@
                 </td>
             </tr>
         </table>
-        
+
         <form method="get">
-            @* This is important, remember to add a book to a cartItem *@
-            <input type="hidden" asp-for="BookId" />
-            <input type="hidden" asp-for="CartItemId" />
+            @* This is important, remember to add a book to a cartItem, not Book.BookId *@
+            <input type="hidden" asp-for="CartItemDto.BookId" />
+            <input type="hidden" asp-for="CartItemDto.CartItemId" />
 
             <div class="row align-items-center mb-3">
                 <div class="col-auto">
-                    <label class="control-label" asp-for="Quantity">Số lượng</label>
+                    <label class="control-label" asp-for="CartItemDto.Quantity">Số lượng</label>
                 </div>
                 <div class="col-6">
-                    <input class="form-control" asp-for="Quantity" />
-                    <span class="text-danger" asp-validation-for="Quantity"></span>
+                    <input class="form-control" asp-for="CartItemDto.Quantity" />
+                    <span class="text-danger" asp-validation-for="CartItemDto.Quantity"></span>
                 </div>
             </div>
 
             <div class="mb-3">
-                <button class="btn btn-success" type="submit" asp-controller="Order" 
-                    asp-action="BuyItem">
+                <button class="btn btn-success" type="submit" asp-controller="Order"
+                        asp-action="PaymentForOneItem">
                     Mua Ngay
                 </button>
-                <button class="btn btn-primary" type="submit" asp-controller="Cart" 
-                    asp-action="AddCartItem">
+                <button class="btn btn-primary" type="submit" asp-controller="Cart"
+                        asp-action="AddCartItemForBookDetails">
                     Thêm Vào Giỏ
                 </button>
             </div>
@@ -99,5 +100,5 @@
 </div>
 
 @section Scripts {
-   <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }
