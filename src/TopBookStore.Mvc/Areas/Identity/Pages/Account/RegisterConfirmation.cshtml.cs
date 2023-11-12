@@ -62,7 +62,8 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
             Email = email;
             // Once you add a real email sender, you should remove this code that 
             // lets you confirm the account
-            DisplayConfirmAccountLink = Email == "admin@gmail.com";
+            DisplayConfirmAccountLink = Email == "admin1@gmail.com" || Email == "admin2@gmail.com"
+                || Email == "admin3@gmail.com";
             if (DisplayConfirmAccountLink)
             {
                 var userId = await _userManager.GetUserIdAsync(user);

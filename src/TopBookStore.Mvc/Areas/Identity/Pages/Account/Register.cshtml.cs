@@ -194,9 +194,8 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                     }
 
                     // Assign role for user, only for testing
-                    if (customer.FirstName == "Dong" || customer.FirstName == "Duc" ||
-                        customer.FirstName == "Duy" || customer.FirstName == "Giap" ||
-                        customer.FirstName == "Diep")
+                    if (customer.FirstName == "admin1" || customer.FirstName == "admin2" ||
+                        customer.FirstName == "admin3")
                     {
                         await _userManager.AddToRoleAsync(user, RoleConstants.RoleAdmin);
                     }
@@ -213,9 +212,8 @@ namespace TopBookStore.Mvc.Areas.Identity.Pages.Account
                     }
 
                     // Generate email confirmation, again only for testing
-                    if (customer.FirstName != "Dong" || customer.FirstName != "Duc" ||
-                        customer.FirstName != "Duy" || customer.FirstName != "Giap" ||
-                        customer.FirstName != "Diep")
+                    if (customer.FirstName == "admin1" || customer.FirstName == "admin2" ||
+                        customer.FirstName == "admin3")
                     {
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
