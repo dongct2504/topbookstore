@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TopBookStore.Domain.Entities;
 using TopBookStore.Infrastructure.Identity;
 
