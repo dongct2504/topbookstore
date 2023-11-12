@@ -54,7 +54,7 @@ namespace TopBookStore.Mvc.Areas.Admin.Controllers
 
                 dataWareHouseChild.Where(x => x.id == book.PublisherId).First().data
                     = books.Where(x => x.PublisherId == book.PublisherId)
-                        .Select(x => (new List<Object> { x.Title, x.Inventory }).ToList());
+                        .Select(x => (new List<object> { x.Title, x.Inventory }).ToList());
                 dataWareHouseParent.Where(x => x.drilldown == book.PublisherId).First().y += book.Inventory;
 
                 if (dataSoldChild.ElementAtOrDefault(book.PublisherId) == null)
@@ -68,7 +68,7 @@ namespace TopBookStore.Mvc.Areas.Admin.Controllers
 
                 dataSoldChild.Where(x => x.id == book.PublisherId).First().data
                     = books.Where(x => x.PublisherId == book.PublisherId)
-                        .Select(x => (new List<Object> { x.Title, x.OrderDetails.Sum(x => x.Quantity) }).ToList());
+                        .Select(x => (new List<object> { x.Title, x.OrderDetails.Sum(x => x.Quantity) }).ToList());
                 dataSoldParent.Where(x => x.drilldown == book.PublisherId).First().y += book.OrderDetails.Sum(x => x.Quantity);
             }
 
