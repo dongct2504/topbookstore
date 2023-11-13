@@ -9,7 +9,6 @@ using TopBookStore.Domain.Interfaces;
 using System.Security.Claims;
 using TopBookStore.Infrastructure.Identity;
 using TopBookStore.Infrastructure.Persistence;
-using TopBookStore.Application.Services;
 
 namespace TopBookStore.Mvc.Controllers;
 
@@ -128,4 +127,17 @@ public class BookController : Controller
 
         return RedirectToAction(nameof(Index), gridBuilder.CurrentRoute);
     }
+
+
+    #region APIS CALL
+
+    [HttpGet]
+    public async Task<IActionResult> SearchBooks(string term)
+    {
+        IEnumerable<Book> books = await _service.GetBooksByTerm(term);
+
+        return Json(books.Select(b => new { id = b.BookId, label = b.Title }));
+    }
+
+    #endregion
 }

@@ -42,6 +42,16 @@ public class BookService : IBookService
         return await _data.Books.ListAllAsync(options);
     }
 
+    public async Task<IEnumerable<Book>> GetBooksByTerm(string term)
+    {
+        QueryOptions<Book> options = new()
+        {
+            Where = b => b.Title.Contains(term)
+        };
+
+        return await _data.Books.ListAllAsync(options);
+    }
+
     public async Task<Book?> GetBookByIdAsync(int id)
     {
         QueryOptions<Book> options = new()

@@ -1,8 +1,8 @@
 $(() => {
-    $('#author-name').autocomplete({
+    $('#book-title').autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "/admin/author/searchAuthors",
+                url: "/book/searchBooks",
                 data: {
                     "term": request.term
                 },
@@ -13,7 +13,7 @@ $(() => {
         },
         minLength: 1,
         select: function (event, ui) {
-            $('#author-id').val(ui.item.id);
+            $('#book-id').val(ui.item.id);
         }
     });
 });

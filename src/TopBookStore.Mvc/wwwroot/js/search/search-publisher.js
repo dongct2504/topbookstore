@@ -1,5 +1,5 @@
 $(() => {
-    $('#publisherName').autocomplete({
+    $('#publisher-name').autocomplete({
         source: (request, response) => {
             $.ajax({
                 url: "/admin/publisher/searchPublishers",
@@ -14,7 +14,7 @@ $(() => {
         },
         minLength: 1,
         select: (event, ui) => {
-            $('#publisherId').val(ui.item.id);
+            $('#publisher-id').val(ui.item.id);
         }
     });
 });
