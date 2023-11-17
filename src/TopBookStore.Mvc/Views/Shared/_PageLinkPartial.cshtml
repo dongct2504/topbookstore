@@ -1,16 +1,22 @@
 @{
     // Calculate the starting and ending page numbers to display
     int startPage = Math.Max(1, Model.PageNumber - 2); // Show 2 pages before the current page
-    int endPage = Math.Min(Model.TotalPages, startPage + 5); // Show 5 pages in total
+    int endPage = Math.Min(Model.TotalPages, startPage + 5); // Show 6 pages in total
 
     RouteDictionary routes = Model.CurrentRoute.Clone();
+
+    routes.PageNumber = 1;
+    <a class="btn btn-outline-primary" asp-action="Index" asp-all-route-data="@routes">
+        Trang đầu
+    </a>
 
     // Previous page link
     if (Model.PageNumber > 1)
     {
         routes.PageNumber = Model.PageNumber - 1;
-        <a asp-action="Index" asp-all-route-data="@routes"
-           class="btn btn-outline-primary">Trang trước</a>
+        <a class="btn btn-outline-primary" asp-action="Index" asp-all-route-data="@routes">
+            Trang trước
+        </a>
     }
 
     // Middle link
@@ -18,9 +24,9 @@
     {
         routes.PageNumber = i;
         string active = @Nav.Active(i, Model.PageNumber);
-        <a asp-action="Index" asp-all-route-data="@routes"
-           class="btn btn-outline-primary @active">
-           @i
+        <a class="btn btn-outline-primary @active"
+           asp-action="Index" asp-all-route-data="@routes">
+            @i
         </a>
     }
 
@@ -28,7 +34,13 @@
     if (Model.PageNumber < Model.TotalPages)
     {
         routes.PageNumber = Model.PageNumber + 1;
-        <a asp-action="Index" asp-all-route-data="@routes"
-           class="btn btn-outline-primary">Trang sau</a>
+        <a class="btn btn-outline-primary" asp-action="Index" asp-all-route-data="@routes">
+            Trang sau
+        </a>
     }
+
+    routes.PageNumber = Model.TotalPages;
+    <a class="btn btn-outline-primary" asp-action="Index" asp-all-route-data="@routes">
+        Trang cuối
+    </a>
 }

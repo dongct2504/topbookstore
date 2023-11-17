@@ -1,8 +1,75 @@
-﻿
+﻿@model Order
 @{
     ViewData["Title"] = "OrderConfirmation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Giao dịch thành công</h1>
+<h1 class="text-center text-success">Giao dịch thành công</h1>
 
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <h3 class="text-primary">Thông tin giao dịch</h3>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <strong>Ngày giao dịch:</strong> @Model.OrderDate.ToString("dd-MM-yyyy")
+            </li>
+            <li class="list-group-item">
+                <strong>Ước tính ngày nhận hàng:</strong> @Model.ShippingDate.ToString("dd-MM-yyyy")
+            </li>
+            <li class="list-group-item">
+                <strong>Tên khách hàng:</strong> @Model.Name
+            </li>
+            <li class="list-group-item">
+                <strong>Số điện thoại:</strong> @Model.PhoneNumber
+            </li>
+            <li class="list-group-item">
+                <strong>Tổng:</strong> @Model.TotalAmount.ToString("#,## đ")
+            </li>
+            <li class="list-group-item">
+                <strong>Địa chỉ:</strong> @Model.Address
+            </li>
+            <li class="list-group-item">
+                <strong>Phường:</strong> @Model.Ward
+            </li>
+            <li class="list-group-item">
+                <strong>Quận:</strong> @Model.District
+            </li>
+            <li class="list-group-item">
+                <strong>Thành phố:</strong> @Model.City
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h3 class="text-primary">Thông tin những sách bạn đã mua</h3>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Tiêu đề</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var orderDetail in Model.OrderDetails)
+                {
+                    <tr>
+                        <td>@orderDetail.Book.Title</td>
+                        <td>@orderDetail.Price.ToString("#,## đ")</td>
+                        <td>@orderDetail.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="list-group-item d-flex justify-content-between align-items-center bg-light
+                    offset-5">
+            <h6 class="text-info">Tổng (VND)</h6>
+            <h5 class="text-info">
+                <strong>@Model.TotalAmount.ToString("#,## đ")</strong>
+            </h5>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <a class="btn btn-primary" href="/">Về trang chủ</a>
+</div>
