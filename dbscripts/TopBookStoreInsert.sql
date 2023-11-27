@@ -96,16 +96,30 @@ values
 insert into Categories
     (Name)
 values
-    (N'Tình Cảm'),
-    (N'Hành Động'),
-    (N'Phiêu Lưu'),
-    (N'Khoa Học'),
-    (N'Trinh Thám'),
-    (N'Chính Trị'),
-    (N'Kinh Doanh'),
-    (N'Tâm Lý'),
-    (N'Truyện Ngắn'),
-    (N'Hài Hước');
+    (N'Tiểu thuyết'),
+    (N'Khoa học viễn tưởng'),
+    (N'Kinh doanh và tài chính'),
+    (N'Hồi ký và tự truyện'),
+    (N'Tiểu sử'),
+    (N'Hài hước'),
+    (N'Tiểu thuyết lịch sử'),
+    (N'Khoa học'),
+    (N'Phiêu lưu'),
+    (N'Tâm lý học'),
+    (N'Huyền bí và siêu nhiên'),
+    (N'Trinh thám'),
+    (N'Lãng mạn'),
+    (N'Kỹ năng sống'),
+    (N'Lịch sử'),
+    (N'Văn học trẻ em'),
+    (N'Công nghệ và khoa học máy tính'),
+    (N'Tôn giáo và tư tưởng'),
+    (N'Y học và sức khỏe'),
+    (N'Nghệ thuật và thiết kế'),
+    (N'Văn hóa và xã hội'),
+    (N'Tự nhiên và địa lý'),
+    (N'Âm nhạc'),
+    (N'Thể thao và thể dục');
 
 -- Inserting data into Publishers table
 insert into Publishers
