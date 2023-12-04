@@ -118,7 +118,20 @@ public class BookController : Controller
     [HttpGet]
     public async Task<IActionResult> GetAllBooks()
     {
-        return Json(new { data = await _service.GetAllBooksAsync() });
+        IEnumerable<Book> books = await _service.GetAllBooksAsync();
+
+        return Json(new
+        {
+            data = books.Select(b => new
+            {
+                b.BookId,
+                b.Title,
+                b.Price,
+                b.NumberOfPages,
+                Author = b.Author.FullName,
+                Categories = b.Categories.Select(c => c.Name)
+            })
+        });
     }
 
     [HttpDelete]

@@ -7,7 +7,11 @@
 
 <h1>Tất cả sách</h1>
 
-<div class="row pb-3">
+<div class="text-end mb-3">
+    <partial name="_PageLinkPartial" />
+</div>
+
+<div class="row mb-3">
     @foreach (Book book in Model.Books)
     {
         <div class="col-lg-2 col-4">
@@ -16,11 +20,11 @@
                     <a asp-controller="Book" asp-action="Details" asp-route-id="@book.BookId">
                         @if (book.ImageUrl is not null)
                         {
-                            <img src="@book.ImageUrl" class="card-img-top img-fluid rounded" />
+                            <img src="@book.ImageUrl" class="card-img-top rounded" height="290" />
                         }
                         else
                         {
-                            <img src="~/imgs/books/default.jpg" class="card-img-top img-fluid rounded" />
+                            <img src="~/imgs/books/default.jpg" class="card-img-top rounded" height="290" />
                         }
                     </a>
                     <div class="card-body">

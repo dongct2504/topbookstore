@@ -27,12 +27,11 @@ $(document).ready(() => {
 
                 const ratio = imageHeight / imageWidth;
 
-                if (ratio < 1.2 || ratio > 1.8) {
+                if (ratio < 1.3 || ratio > 1.8) {
                     Swal.fire({
                         icon: "error",
                         title: "Lỗi!!!",
-                        text: "Vui lòng nhập ảnh có tỉ lệ chiều cao/chiều rộng lớn" +
-                            " hơn 1.2 và nhỏ hơn 1.8.",
+                        text: "Vui lòng nhập ảnh có tỉ lệ lớn hơn 1.3:1 và bé hơn 1.8:1"
                     })
                     imageInput.val(null);
                 } else {

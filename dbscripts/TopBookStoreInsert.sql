@@ -1,89 +1,5 @@
 use TopBookStore;
 
--- select statement for TopBookStore tables
-select *
-from Customers;
-
-select *
-from Categories;
-
-select *
-from Books;
-
-select *
-from BookCategory;
-
-select *
-from Authors;
-
-select *
-from Carts;
-
-select *
-from CartItems;
-
-select *
-from OrderDetails;
-
-select *
-from Orders;
-
--- select statement for TopBookStore Identity tables
-select *
-from AspNetUsers;
-
-select *
-from AspNetRoles;
-
-select *
-from AspNetUserRoles;
-
-
--- ********** Delete zone ********** --
-
--- delete from BookCategory;
-
--- delete from Books;
--- dbcc CHECKIDENT (Books, RESEED, 0);
-
--- delete from OrderDetails;
--- dbcc CHECKIDENT (OrderDetails, RESEED, 0);
-
--- delete from CartItems;
--- dbcc CHECKIDENT (CartItems, RESEED, 0);
-
--- delete from Orders;
--- dbcc CHECKIDENT (Orders, RESEED, 0);
-
--- -- delete Customers
--- delete from Customers
--- where FirstName != 'Dong';
--- dbcc CHECKIDENT (Customers, RESEED, 1);
-
--- delete from Customers;
--- dbcc CHECKIDENT (Customers, RESEED, 0);
-
--- delete from Carts;
--- dbcc CHECKIDENT (Carts, RESEED, 0);
-
--- delete from Categories;
--- dbcc CHECKIDENT (Categories, RESEED, 0);
-
--- delete from Publishers;
--- dbcc CHECKIDENT (Publishers, RESEED, 0);
-
--- delete from Authors;
--- dbcc CHECKIDENT (Authors, RESEED, 0);
-
--- -- delete AspNetUsers
--- delete from AspNetUsers
--- where UserName != 'admin@gmail.com';
-
--- delete from AspNetUsers;
-
--- ********** Delete zone ********** --
-
-
 -- Inserting data into Authors table
 insert into Authors
     (FirstName, LastName, PhoneNumber)
@@ -91,6 +7,14 @@ values
     (N'Nguyễn', N'Trần', '0987654321'),
     (N'Lê', N'Phạm', '0912345678'),
     (N'Trần', N'Nguyễn', null);
+
+-- Inserting data into Publishers table
+insert into Publishers
+    (Name)
+values
+    (N'Nhà xuất bản Kim Đồng'),
+    (N'Nhà xuất bản Trẻ'),
+    (N'Nhà xuất bản Văn học');
 
 -- Inserting data into Categories table
 insert into Categories
@@ -121,44 +45,82 @@ values
     (N'Âm nhạc'),
     (N'Thể thao và thể dục');
 
--- Inserting data into Publishers table
-insert into Publishers
-    (Name)
-values
-    (N'Nhà xuất bản Kim Đồng'),
-    (N'Nhà xuất bản Trẻ'),
-    (N'Nhà xuất bản Văn học');
-
 -- Inserting data into Books table
 insert into Books
     (AuthorId, PublisherId, Title, Description, Isbn13, Inventory, Price, DiscountPercent, NumberOfPages, PublicationDate)
 values
-    -- Inserting 10 additional records
-    (1, 1, N'Những Ngày Cuối Cùng', N'Một hành trình khám phá về cuộc sống trước ngày tận thế.', '9787654321098', 25, 95000, 0.15, 180, '2022-05-28'),
-    (2, 2, N'Bí Mật Của Ngọn Đồi Xanh', N'Trinh thám hấp dẫn với những bí mật tại một ngôi làng nhỏ.', '9786543210987', 40, 110000, 0.12, 220, '2022-11-05'),
-    (3, 3, N'Tiếng Gọi Của Biển Cả', N'Một hành trình phiêu lưu đầy kỳ bí qua đại dương.', '9789876543210', 15, 135000, 0.2, 300, '2023-07-15'),
-    (1, 1, N'Bí Ẩn Trong Rừng Cổ', N'Khám phá bí mật của rừng cổ, nơi ẩn chứa những điều kỳ bí nhất.', '9783210987654', 28, 88000, 0.18, 190, '2022-03-02'),
-    (2, 2, N'Cuộc Phiêu Lưu Của Alice', N'Một câu chuyện kỳ ảo với những nhân vật độc đáo.', '9781098765432', 35, 105000, 0.25, 160, '2023-01-20'),
+    (1, 1, N'Những Ngày Cuối Cùng Của Hitler', N'Một hành trình khám phá về cuộc sống trước ngày tận thế.', '9787654321098', 25, 95000, 0.15, 180, '2022-05-28'),
+    (2, 2, N'Đời Sống Bí Ẩn Của Cây', N'Trinh thám hấp dẫn với những bí mật tại một ngôi làng nhỏ.', '9786543210987', 40, 110000, 0.12, 220, '2022-11-05'),
+    (3, 3, N'Ông già và biển cả', N'Một hành trình phiêu lưu đầy kỳ bí qua đại dương.', '9789876543210', 15, 135000, 0.2, 300, '2023-07-15'),
+    (1, 1, N'Bí Ẩn Khu Rừng Già', N'Khám phá bí mật của rừng cổ, nơi ẩn chứa những điều kỳ bí nhất.', '9783210987654', 28, 88000, 0.18, 190, '2022-03-02'),
+    (2, 2, N'Alice ở xứ sở diệu kỳ', N'Một câu chuyện kỳ ảo với những nhân vật độc đáo.', '9781098765432', 35, 105000, 0.25, 160, '2023-01-20'),
     (3, 3, N'Hành Trình Đến Kỳ Quan Thế Giới', N'Khám phá về những kỳ quan nổi tiếng trên thế giới.', '9785432109876', 22, 125000, 0.1, 240, '2022-08-10'),
     (1, 1, N'Tình Yêu Bất Tận', N'Một câu chuyện tình lãng mạn đẹp như tranh.', '9782109876543', 18, 99000, 0.22, 200, '2023-04-18'),
-    (2, 2, N'Hòn Đảo Hoang Sơ', N'Cuộc phiêu lưu kỳ thú trên hòn đảo hoang sơ.', '9784321098765', 32, 115000, 0.17, 170, '2021-12-30'),
     (3, 3, N'Đêm Trăng Lạnh', N'Một câu chuyện buồn về tình yêu và lạc lõng.', '9787654321098', 20, 102000, 0.2, 210, '2023-02-14'),
     (1, 1, N'Trở Về Quê Hương', N'Hành trình tìm kiếm gốc rễ và quê hương.', '9786543210987', 25, 95000, 0.15, 180, '2022-06-05'),
-    (2, 2, N'Góc Nhìn Từ Tương Lai', N'Nhìn nhận về thế giới thông qua góc nhìn của tương lai.', '9788765432109', 18, 98000, 0.2, 220, '2023-09-15'),
-    (3, 3, N'Bước Chân Trên Mặt Trăng', N'Khám phá về cuộc phiêu lưu đầu tiên lên mặt trăng.', '9787654321098', 30, 115000, 0.12, 180, '2022-04-02'),
     (1, 1, N'Tiếng Hát Từ Khu Rừng Sâu', N'Một câu chuyện về âm nhạc và tình bạn trong rừng sâu.', '9786543210987', 25, 105000, 0.18, 200, '2023-05-20'),
-    (2, 2, N'Trò Chơi Của Thời Gian', N'Một thế giới mà thời gian không còn ràng buộc.', '9781098765432', 22, 110000, 0.15, 250, '2022-10-10'),
-    (3, 3, N'Đại Dương Vô Tận', N'Khám phá về đại dương với những sinh vật kỳ diệu.', '9789876543210', 28, 120000, 0.2, 280, '2023-03-08'),
-    (1, 1, N'Đêm Trước Giáng Sinh', N'Một câu chuyện ấm áp về tình yêu và hy vọng.', '9783210987654', 20, 95000, 0.22, 190, '2022-12-24'),
-    (2, 2, N'Hành Trình Đến Vương Quốc Phép Thuật', N'Một cuộc phiêu lưu đến vương quốc phép thuật đầy màu sắc.', '9786543210987', 35, 115000, 0.1, 210, '2022-07-12'),
-    (3, 3, N'Chạm Nhẹ Quá Khứ', N'Một hành trình nhìn lại quá khứ để tìm hiểu về bản thân.', '9785432109876', 15, 98000, 0.25, 170, '2023-01-05'),
-    (1, 1, N'Trên Đỉnh Thế Giới', N'Đạt đến đỉnh thế giới với những khám phá mới.', '9782109876543', 32, 125000, 0.15, 240, '2022-08-28'),
-    (2, 2, N'Cuộc Chiến Giữa Các Vì Sao', N'Cuộc chiến không gian giữa các hành tinh.', '9784321098765', 18, 99000, 0.2, 200, '2023-06-17'),
-    (3, 3, N'Đường Mây Trên Cánh Đồng', N'Một hành trình tìm kiếm niềm vui giữa thiên nhiên.', '9787654321098', 28, 102000, 0.18, 180, '2022-02-08'),
-    (1, 1, N'Thế Giới Cổ Tích', N'Một cuộc phiêu lưu qua các câu chuyện cổ tích.', '9786543210987', 20, 95000, 0.22, 210, '2023-04-02'),
-    (2, 2, N'Trở Về Nơi Bắt Đầu', N'Hành trình trở về nơi mà mọi thứ bắt đầu.', '9781098765432', 22, 110000, 0.15, 180, '2022-11-15'),
-    (3, 3, N'Đại Lộ Sách Vào Tương Lai', N'Khám phá về cách sách thay đổi cuộc sống trong tương lai.', '9789876543210', 25, 105000, 0.2, 220, '2023-07-01'),
-    (1, 1, N'Góc Nhìn Từ Dưới Biển', N'Cuộc phiêu lưu dưới đáy biển với những sinh vật biển độc đáo.', '9783210987654', 30, 120000, 0.12, 200, '2022-05-10');
+    (2, 2, N'Darkly Dreaming Dexter', N'Thế giới lạ lùng của con quái vật Dexter', '9781098765432', 22, 110000, 0.15, 250, '2022-10-10');
+
+INSERT INTO Books
+    (AuthorId, PublisherId, Title, Description, Isbn13, Inventory, Price, DiscountPercent, NumberOfPages, PublicationDate, ImageUrl)
+VALUES
+    (1, 1, N'Clean Code', N'Cuốn sách này giúp độc giả hiểu về các nguyên tắc và kỹ thuật viết code sạch, dễ đọc và dễ bảo trì trong phát triển phần mềm.', '1234567890123', 10, 150000, 0.10, 400, '2023-01-01', NULL),
+    (2, 2, N'Clean Architecture', N'Cuốn sách này giúp độc giả hiểu về kiến trúc phần mềm sạch, tách biệt và dễ bảo trì, giúp tăng tính linh hoạt và khả năng mở rộng của hệ thống.', '2345678901234', 15, 180000, 0.15, 300, '2023-02-01', NULL),
+    (3, 3, N'Đắc Nhân Tâm', N'Cuốn sách kinh điển này giúp độc giả hiểu về tâm lý con người và cung cấp những nguyên tắc để giao tiếp và tương tác hiệu quả với người khác.', '3456789012345', 12, 120000, 0.05, 350, '2023-03-01', NULL),
+    (1, 2, N'Dế Mèn Phiêu Lưu Ký', N'Truyện kể về cuộc phiêu lưu của chú Dế Mèn và những người bạn, mang đến những bài học về tình bạn và lòng dũng cảm.', '4567890123456', 8, 90000, 0.20, 250, '2023-04-01', NULL),
+    (2, 3, N'Giáo Trình Triết Học Mác - Lênin', N'Cuốn giáo trình này giúp độc giả hiểu về triết học Mác - Lênin và tư tưởng chủ nghĩa xã hội.', '5678901234567', 20, 135000, 0.10, 280, '2023-05-01', NULL),
+    (3, 1, N'Bí Mật Của Phụ Nữ', N'Cuốn sách này khám phá về cách hiểu và tôn trọng phụ nữ, cung cấp những gợi ý và lời khuyên để tạo ra một mối quan hệ tốt đẹp', '6789012345678', 15, 110000, 0.15, 200, '2023-06-01', NULL),
+    (1, 2, N'Chiếc Lược Ngà', N'Truyện kể về cuộc phiêu lưu của một người đàn ông tìm kiếm chiếc lược ngà huyền thoại trong một thế giới ma thuật.', '7890123456789', 10, 80000, 0.10, 150, '2023-07-01', NULL),
+    (2, 3, N'Alibaba và 40 Tên Cướp', N'Truyện kể về cuộc phiêu lưu của Alibaba và nhóm 40 tên cướp, đặt trong bối cảnh của câu chuyện nổi tiếng "Ngàn và một đêm".', '8901234567890', 18, 140000, 0.20, 320, '2023-08-01', NULL),
+    (3, 1, N'Tắt Đèn', N'Tác phẩm được xem là một trong những tiểu thuyết quan trọng nhất trong văn học Việt Nam, kể về cuộc đời và tình yêu của nhân vật chính.', '9012345678901', 13, 100000, 0.10, 280, '2023-09-01', NULL),
+    (1, 2, N'Cho Tôi Xin Một Vé Đi Tuổi Thơ', N'Cuốn sách này đưa độc giả trở lại tuổi thơ và mang đến những kỷ niệm đáng nhớ qua câu chuyện và hình ảnh.', '0123456789012', 9, 75000, 0.15, 200, '2023-10-01', NULL),
+    (2, 3, N'Trí Tuệ Do Thái', N'Cuốn sách này tìm hiểu về lịch sử và văn hóa của người Do Thái, cung cấp cái nhìn sâu sắc về trí tuệ và thành công của họ.', '1234567890123', 15, 130000, 0.05, 350, '2023-11-01', NULL),
+    (3, 1, N'Truyện Kiều', N'Tác phẩm của nhà thơ Nguyễn Du, kể về cuộc đời và tình yêu đầy bi thương của nữ nhân vật Kiều.', '2345678901234', 12, 95000, 0.10, 320, '2023-12-01', NULL);
+
+INSERT INTO Books
+    (AuthorId, PublisherId, Title, Description, Isbn13, Inventory, Price, DiscountPercent, NumberOfPages, PublicationDate, ImageUrl)
+VALUES
+    (1, 1, N'Designing Machine Learning Systems', N'This book provides an in-depth understanding of designing machine learning systems, covering various concepts and best practices for building robust and scalable ML systems.', '3456789012345', 20, 180000, 0.10, 400, '2023-01-01', NULL),
+    (2, 2, N'Xách Ba Lô Lên Và Đi', N'Truyện kể về hành trình phiêu lưu của một nhóm bạn trẻ, khám phá thế giới và tìm hiểu về cuộc sống.', '4567890123456', 15, 150000, 0.15, 300, '2023-02-01', NULL),
+    (3, 3, N'Giấc Mơ Mỹ - Đường Đến Stanford', N'Cuốn sách này kể về câu chuyện cuộc sống và hành trình đến Mỹ, từ việc chuẩn bị cho học bổng đến việc thích nghi với môi trường học tập mới.', '5678901234567', 12, 120000, 0.05, 350, '2023-03-01', NULL),
+    (1, 2, N'Đi Tìm Lẽ Sống', N'Cuốn sách này khám phá về ý nghĩa của cuộc sống và cung cấp những gợi ý và lời khuyên để tìm ra lẽ sống của riêng mình.', '6789012345678', 8, 90000, 0.20, 250, '2023-04-01', NULL),
+    (2, 3, N'Bố Già', N'Cuốn sách kể về câu chuyện của một người đàn ông trưởng thành, cung cấp những bài học về gia đình, tình yêu và cuộc sống.', '7890123456789', 20, 135000, 0.10, 280, '2023-05-01', NULL),
+    (3, 1, N'Mắt Biếc', N'Truyện kể về tình yêu và cuộc sống của nhân vật chính trong một ngôi làng miền Trung xưa.', '8901234567890', 15, 110000, 0.15, 200, '2023-06-01', NULL),
+    (1, 2, N'Ngày Xưa Có Một Chuyện Tình', N'Truyện kể về một câu chuyện tình yêu lãng mạn, với những biến cố và thử thách đầy cảm xúc.', '9012345678901', 10, 80000, 0.10, 150, '2023-07-01', NULL),
+    (2, 3, N'Đồi Gió Hú', N'Truyện kể về cuộc sống và tình yêu của nhân vật chính trong một thôn xóm miền núi.', '0123456789012', 18, 140000, 0.20, 320, '2023-08-01', NULL),
+    (3, 1, N'Thiên Tài Bên Trái, Kẻ Điên Bên Phải', N'Cuốn sách khám phá về sự khác biệt và tầm quan trọng của trí tuệ đa dạng trong xã hội.', '1234567890123', 13, 100000, 0.10, 280, '2023-09-01', NULL);
+
+INSERT INTO Books
+    (AuthorId, PublisherId, Title, Description, Isbn13, Inventory, Price, DiscountPercent, NumberOfPages, PublicationDate, ImageUrl)
+VALUES
+    (1, 1, N'Head First Java', N'A beginner-friendly book that introduces the Java programming language in an interactive and engaging way.', '9780596009205', 10, 150000, 0.15, 500, '2021-07-01', NULL),
+    (2, 2, N'Head First Design Patterns', N'A guide to understanding and implementing design patterns in software development.', '9780596007126', 8, 120000, 0.10, 400, '2022-03-01', NULL),
+    (3, 3, N'Nhà giả kim', N'Cuốn sách nổi tiếng của Paulo Coelho về tìm kiếm ý nghĩa cuộc sống và sự trưởng thành cá nhân.', '9780062315007', 15, 90000, 0.20, 250, '2020-09-01', NULL),
+    (1, 1, N'Người Giàu Có Nhất Thành Babylon', N'Một cuốn sách kinh điển về cách làm giàu và quản lý tài chính.', '9781604591870', 5, 80000, 0.10, 200, '2019-05-01', NULL),
+    (2, 2, N'English Grammar in Use', N'A comprehensive guide to English grammar for learners of all levels.', '9781108457651', 12, 95000, 0.15, 300, '2018-11-01', NULL),
+    (3, 3, N'Thao túng tâm lý', N'Tổng hợp các phương pháp thao túng tâm lý và tư duy của con người.', '9786041085410', 7, 70000, 0.05, 150, '2020-02-01', NULL),
+    (1, 1, N'Làm Bạn Với Bầu Trời', N'Cuốn sách tâm lý học giúp bạn thấu hiểu bản thân và tìm kiếm ý nghĩa trong cuộc sống.', '9786042043307', 3, 60000, 0.10, 100, '2021-10-01', NULL),
+    (2, 2, N'Hiểu Bản Thân, Quên Bản Thân', N'Cuốn sách tâm lý học giúp bạn hiểu rõ bản thân và thúc đẩy quá trình phát triển cá nhân.', '9786042073793', 9, 75000, 0.20, 250, '2019-07-01', NULL),
+    (2, 1, N'Kính Vạn Hoa', N'Mô tả cho Kính Vạn Hoa', '3456789012345', 10, 150000, 0.00, 400, '2023-01-01', NULL),
+    (3, 3, N'Cánh Đồng Bất Tận', N'Mô tả cho Cánh Đồng Bất Tận', '4567890123456', 15, 180000, 0.00, 350, '2023-02-01', NULL),
+    (1, 2, N'Tâm trí tội phạm', N'Mô tả cho Tâm trí tội phạm', '5678901234567', 20, 200000, 0.00, 300, '2023-03-01', NULL),
+    (1, 3, N'Harry Potter Và Phòng Chứa Bí Mật', N'Mô tả cho Harry Potter Và Phòng Chứa Bí Mật', '6789012345678', 25, 250000, 0.00, 500, '2023-04-01', NULL);
+
+INSERT INTO Books
+    (AuthorId, PublisherId, Title, Description, Isbn13, Inventory, Price, DiscountPercent, NumberOfPages, PublicationDate, ImageUrl)
+VALUES
+    (1, 1, N'Eloquent JavaScript', N'Mô tả cho Eloquent JavaScript', '1234567890123', 10, 100000, 0.00, 300, '2022-01-01', NULL),
+    (2, 2, N'Don''t Make Me Think', N'Mô tả cho Don''t Make Me Think', '2345678901234', 15, 150000, 0.00, 250, '2022-02-01', NULL),
+    (3, 3, N'Code Dạo Ký Sự', N'Mô tả cho Code Dạo Ký Sự', '3456789012345', 20, 200000, 0.00, 200, '2022-03-01', NULL),
+    (1, 2, N'Hello Các Bạn Mình Là Tôi Đi Code Dạo', N'Mô tả cho Hello Các Bạn Mình Là Tôi Đi Code Dạo', '4567890123456', 12, 120000, 0.00, 350, '2022-04-01', NULL),
+    (2, 3, N'Cây Cam Ngọt Của Tôi', N'Mô tả cho Cây Cam Ngọt Của Tôi', '5678901234567', 18, 180000, 0.00, 280, '2022-05-01', NULL),
+    (3, 1, N'Tôi Thấy Hoa Vàng Trên Cỏ Xanh', N'Mô tả cho Tôi Thấy Hoa Vàng Trên Cỏ Xanh', '6789012345678', 25, 250000, 0.00, 320, '2022-06-01', NULL),
+    (1, 2, N'Mười Cô Gái Ngã ba Đồng Lộc', N'Mô tả cho Mười Cô Gái Ngã ba Đồng Lộc', '7890123456789', 14, 140000, 0.00, 290, '2022-07-01', NULL),
+    (2, 3, N'Bên Nhau Trọn Đời', N'Mô tả cho Bên Nhau Trọn Đời', '8901234567890', 22, 220000, 0.00, 270, '2022-08-01', NULL),
+    (3, 1, N'Giọt Lệ Trên Đời', N'Mô tả cho Giọt Lệ Trên Đời', '9012345678901', 16, 160000, 0.00, 310, '2022-09-01', NULL),
+    (1, 2, N'Đất Rừng Phương Nam', N'Mô tả cho Đất Rừng Phương Nam', '0123456789012', 21, 210000, 0.00, 260, '2022-10-01', NULL),
+    (2, 3, N'Khi Lỗi Thuộc Về Những Vì Sao', N'Mô tả cho Khi Lỗi Thuộc Về Những Vì Sao', '1234567890123', 17, 170000, 0.00, 330, '2022-11-01', NULL),
+    (3, 1, N'Những Cô Gái Năm Ấy Chúng Ta Cùng Theo Đuổi', N'Mô tả cho Những Cô Gái Năm Ấy Chúng Ta Cùng Theo Đuổi', '2345678901234', 19, 190000, 0.00, 240, '2022-12-01', NULL);
 
 -- Inserting data into BookCategory table
 insert into BookCategory

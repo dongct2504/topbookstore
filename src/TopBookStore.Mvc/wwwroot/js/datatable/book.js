@@ -10,19 +10,8 @@ $(document).ready(() => {
             { "data": "title", "width": "20%" },
             { "data": "price", "width": "10%" },
             { "data": "numberOfPages", "width": "10%" },
-            { "data": "author.fullName", "width": "20%" },
-            {
-                "data": "categories",
-                "render": (data) => {
-                    let categories = '';
-                    data.forEach(category => {
-                        categories += category.name + ', ';
-                    });
-                    categories = categories.slice(0, -2);
-                    return categories;
-                },
-                "width": "25%"
-            },
+            { "data": "author", "width": "20%" },
+            { "data": "categories", "width": "25%" },
             {
                 "data": "bookId",
                 "render": (data) => {
